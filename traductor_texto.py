@@ -1,21 +1,20 @@
 import subprocess
 import sys
+import os
 
-'''
 def instalar_paquete(paquete):
     try:
-        # code inside the try block
-    except:
-        # code inside the except block
-        #verificamos si el paquete esta instalado
         __import__(paquete)
+        print(f"El paquete {paquete} ya está instalado.")
     except ImportError:
-        #si no esta instalado lo instalamos
-        print("Instalando paquete {paquete}")
+        print(f"Instalando paquete {paquete}...")
         subprocess.check_call([sys.executable, "-m", "pip", "install", f"{paquete}==4.0.0-rc1"])
-        
+    except Exception as e:
+        print(f"Ocurrió un error: {e}")
+
+# Ejemplo de uso:
 instalar_paquete("googletrans")
-'''
+
 from googletrans import Translator
 def translate_text(text, idioma_destino):
   
