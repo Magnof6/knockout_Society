@@ -2,6 +2,7 @@ import subprocess
 import sys
 import os
 
+# Instalador de paquetes google traductor
 def instalar_paquete(paquete):
     try:
         __import__(paquete)
@@ -26,7 +27,6 @@ def translate_text(text, idioma_destino):
     print("texto original : ", text)
     print("Traducido al texto traducido : ", traduccion.text)
    
-
 # Definimos los idiomas disponibles para el usuario
 idiomas_disponibles = {
     "es":"español",
@@ -36,8 +36,6 @@ idiomas_disponibles = {
     "de":"aleman",
     "pt":"portugues"
 }
-
-#definimos los idiomas disponibles(sin mostrar al usuario)
 
 # Función para mostrar los idomas disponibles
 def mostrar_idiomas_disponibles():
@@ -54,32 +52,6 @@ nombre_a_codigo = {
     "aleman": "de",
     "portugues": "pt"
 }
-
-#añadimos para que el usuarioa al no introducir el cogigo se cambie automaticamente
-'''
-if idioma_elegido == "español":
-    idioma_elegido = "es"
-elif idioma_elegido == "ingles":
-    idioma_elegido = "en"
-elif idioma_elegido == "frances":
-    idioma_elegido = "fr"
-elif idioma_elegido == "italiano":
-    idioma_elegido = "it"
-elif idioma_elegido == "aleman":
-    idioma_elegido = "de"
-elif idioma_elegido == "portugues":
-    idioma_elegido = "pt"
-    
-# Convertimos el nombre del idioma elegido a su código correspondiente
-idioma_elegido = nombre_a_codigo.get(idioma_elegido, idioma_elegido)
-
-# Verificamos si el idioma elegido esta en la lista de idiomas disponibles
-# Si esta en la lista de idiomas disponibles, traducimos el texto
-if idioma_elegido in idiomas_disponibles:
-    translate_text(texto_a_traducir,idioma_elegido)
-else:
-    print("Codigo no valido, intentelo otra vez")
-'''
     
 def main():
     while True:
