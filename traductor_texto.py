@@ -1,78 +1,67 @@
 import subprocess
 import sys
 import os
-
-# Instalador de paquetes google traductor
-def instalar_paquete(paquete):
-    try:
-        __import__(paquete)
-        print(f"El paquete {paquete} ya está instalado.")
-    except ImportError:
-        print(f"Instalando paquete {paquete}...")
-        subprocess.check_call([sys.executable, "-m", "pip", "install", f"{paquete}==4.0.0-rc1"])
-    except Exception as e:
-        print(f"Ocurrió un error: {e}")
-
-# Ejemplo de uso:
-instalar_paquete("googletrans")
-
+import pyaudio
+import wave
 from googletrans import Translator
-def translate_text(text, idioma_destino):
-  
-    translator = Translator()   
-    traduccion= translator.translate(text, dest=idioma_destino)
-        
-        
-    # Mostramos la traduccion
-    print("texto original : ", text)
-    print("Traducido al texto traducido : ", traduccion.text)
-   
-# Definimos los idiomas disponibles para el usuario
-idiomas_disponibles = {
-    "es":"español",
-    "en":"ingles",
-    "fr":"frances",
-    "it":"italiano",
-    "de":"aleman",
-    "pt":"portugues"
-}
 
-# Función para mostrar los idomas disponibles
-def mostrar_idiomas_disponibles():
-    print("Idiomas disponibles:")
-    for codigo, idioma in idiomas_disponibles.items():
-        print(f"{codigo}: {idioma}")
+class TraductorTexto:
+    def __init__(self):
+        # Diccionarios para los idiomas disponibles
+        self.idiomas_disponibles = {
+            "es": "español",
+            "en": "inglés",
+            "fr": "francés",
+            "it": "italiano",
+            "de": "alemán",
+            "pt": "portugués"
+        }
 
-#Diccionario para convertir el nombre del idioma a su código correspondiente
-nombre_a_codigo = {
-    "español": "es",
-    "ingles": "en",
-    "frances": "fr",
-    "italiano": "it",
-    "aleman": "de",
-    "portugues": "pt"
-}
+        self.nombre_a_codigo = {
+            "español": "es",
+            "ingles": "en",
+            "frances": "fr",
+            "italiano": "it",
+            "aleman": "de",
+            "portugues": "pt"
+        }
+        
+    def mostrar_idiomas_disponibles(self):
+        """Muestra los idiomas disponibles."""
+        print("Idiomas disponibles:")
+        for codigo, idioma in self.idiomas_disponibles.items():
+            print(f"{codigo}: {idioma}")
+
+    def traducir_texto(self, text, idioma_destino):
+        """Traduce un texto al idioma especificado."""
+        translator = Translator()
+        traduccion = translator.translate(text, dest=idioma_destino)
+        
+        # Mostrar la traducción
+        print("Texto original:", text)
+        print(f"Traducido al {self.idiomas_disponibles[idioma_destino]}: {traduccion.text}")
     
-def main():
-    while True:
-        mostrar_idiomas_disponibles()
-        
-        # Pedimos al usuario que ingrese el texto a traducir
-        texto_a_traducir = input("Ingrese el texto a traducir (o 'salir' para terminar): ")
-        if texto_a_traducir.lower() == 'salir':
-            break
-        
-        idioma_elegido = input("Ingrese el idioma al que desea traducir: ").lower()
-        
-        # Convertimos el nombre del idioma elegido a su código correspondiente
-        idioma_elegido = nombre_a_codigo.get(idioma_elegido, idioma_elegido)
-        
-        # Verificamos si el idioma elegido esta en la lista de idiomas disponibles
-        # Si esta en la lista de idiomas disponibles, traducimos el texto
-        if idioma_elegido in idiomas_disponibles:
-            translate_text(texto_a_traducir, idioma_elegido)
-        else:
-            print("Código no válido, inténtelo otra vez")
+    def ejecutar(self):
+        """Ejecuta el proceso de traducción interactivo."""
+        while True:
+            self.mostrar_idiomas_disponibles()
+            
+            # Pedir al usuario que ingrese el texto a traducir
+            texto_a_traducir = input("Ingrese el texto a traducir (o 'salir' para terminar): ")
+            if texto_a_traducir.lower() == 'salir':
+                break
+            
+            idioma_elegido = input("Ingrese el idioma al que desea traducir: ").lower()
+            
+            # Convertir el nombre del idioma elegido a su código correspondiente
+            idioma_elegido = self.nombre_a_codigo.get(idioma_elegido, idioma_elegido)
+            
+            # Verificar si el idioma elegido está en la lista de idiomas disponibles
+            if idioma_elegido in self.idiomas_disponibles:
+                self.traducir_texto(texto_a_traducir, idioma_elegido)
+            else:
+                print("Código no válido, inténtelo otra vez.")
 
 if __name__ == "__main__":
-    main()
+    traductor = TraductorTexto()
+    traductor.ejecutar()
