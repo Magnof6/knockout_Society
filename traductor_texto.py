@@ -61,7 +61,3 @@ class TraductorTexto:
                 self.traducir_texto(texto_a_traducir, idioma_elegido)
             else:
                 print("Código no válido, inténtelo otra vez.")
-
-if __name__ == "__main__":
-    traductor = TraductorTexto()
-    traductor.ejecutar()
