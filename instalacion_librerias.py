@@ -12,16 +12,15 @@ def instalar_paquete(paquete):
     except Exception as e:
         print(f"Ocurrió un error: {e}")
         
-def instalar_paquete_pyaudio(paquete):
+def instalar_paquete_audio(paquete):
     try:
         __import__(paquete)
         print(f"El paquete {paquete} ya está instalado.")
     except ImportError:
         print(f"Instalando paquete {paquete}...")
-        subprocess.check_call([sys.executable, "-m", "pip", "install", f"{paquete}"])
+        subprocess.check_call([sys.executable, "-m", "pip", "install", paquete])
     except Exception as e:
         print(f"Ocurrió un error: {e}")
 
-instalar_paquete("googletrans")
-instalar_paquete_pyaudio("pyaudio SpeechRecognition")
+
 
