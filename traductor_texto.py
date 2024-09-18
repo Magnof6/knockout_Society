@@ -35,7 +35,14 @@ class TraductorTexto:
     def traducir_texto(self, text, idioma_destino):
         """Traduce un texto al idioma especificado."""
         translator = Translator()
-        traduccion = translator.translate(text, dest=idioma_destino)
+        idioma_origen = translator.detect(text).lang
+        
+        # Si el idioma detectado es igual al idioma de destino, forzar la traducción
+        if idioma_origen == idioma_destino:
+            print(f"El texto ya está en el idioma que deseas traducir.")
+            return
+        
+        traduccion = translator.translate(text, src=idioma_origen, dest=idioma_destino)
         
         # Mostrar la traducción
         print("Texto original:", text)

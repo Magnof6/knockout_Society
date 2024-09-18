@@ -1,12 +1,14 @@
 # Archivo: main ejecutable
+from instalacion_librerias import instalar_paquete
 from traductor_texto import TraductorTexto
-from instalacion_librerias import instalar_paquete , instalar_paquete_audio
 class Main:
     def __init__(self):
+        instalar_paquete("googletrans" , "4.0.0-rc1")
+        instalar_paquete("pyaudio")
+        instalar_paquete("SpeechRecognition")
+        instalar_paquete("pytesseract")
+        instalar_paquete("Pillow")
         self.traductor = TraductorTexto()
-        instalar_paquete("googletrans")
-        instalar_paquete_audio("pyaudio")
-        instalar_paquete_audio("SpeechRecognition")
         
     
     def run(self):
