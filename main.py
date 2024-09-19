@@ -1,6 +1,5 @@
 # Archivo: main ejecutable
 from instalacion_librerias import instalar_paquete
-from traductor_texto import TraductorTexto
 import asyncio
 
 class Main:
@@ -10,13 +9,14 @@ class Main:
         self.traducir()
 
     async def instalar_dependencias(self):
-        await instalar_paquete("googletrans", "4.0.0-rc1")
-        await instalar_paquete("pyaudio")
-        await instalar_paquete("SpeechRecognition")
-        await instalar_paquete("pytesseract")
-        await instalar_paquete("Pillow")
+        instalar_paquete("googletrans", "4.0.0-rc1")
+        instalar_paquete("pyaudio")
+        instalar_paquete("SpeechRecognition")
+        instalar_paquete("pytesseract")
+        instalar_paquete("Pillow")
 
     def traducir(self):
+        from traductor_texto import TraductorTexto
         self.traductor = TraductorTexto()
         self.traductor.ejecutar()
 
