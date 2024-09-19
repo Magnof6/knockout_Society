@@ -28,7 +28,3 @@ def instalar_paquete(paquete, version=None):
             print(f"Ocurrió un error al instalar {paquete}: {e}")
     except Exception as e:
         print(f"Ocurrió un error al instalar {paquete}: {e}")
-
-# Ejecutar la verificación del entorno y la instalación
-if __name__ == "__main__":
-    verificar_entorno_python()
