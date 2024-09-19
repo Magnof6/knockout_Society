@@ -36,3 +36,5 @@ _REQUISITOS_
   -Actualización automática de diccionarios y modelos de lenguaje. 
   
   -Aplicación valida tanto para teléfonos como para ordenadores con la UI para todas las funciones. 
+
+  -La aplicación debe de tener una interfaz que nos permita seleccionar una opción de traducción entre las opciones disponibles.
