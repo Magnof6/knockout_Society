@@ -4,10 +4,10 @@ import java.sql.*;
 
 public class MySQLConnection {
 
-    public static Connection establecerConexion() {
+    public static Connection establecerConexion(String user, String password) {
         String url = "";
-        String user = "";
-        String password = "";
+        user = "";
+        password = "";
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(url, user, password);

@@ -6,7 +6,7 @@ package Funciones;
  */
 public class Funciones {
 
-    public void CrearUsuarioNuevo() {
+    public void CrearUsuarioNuevo(String usuario, String password) {
         /**
          * El ususario meterá su nombre de usuario, contraseña y correo
          * iniciaremos sesion en la bbdd con un admin que solo cree usuarios
@@ -14,7 +14,7 @@ public class Funciones {
          */
     }
 
-    public void InicioUsuario() {
+    public void InicioUsuario(String usuario, String password) {
         /**
          * Se iniciará sesion con el usuario, meterá el usuario o el correo y
          * contraseña Si mete el correo buscaremos en la bbdd el usuario que
