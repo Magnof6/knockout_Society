@@ -1,0 +1,29 @@
+Modalidades y reglas Knockout Society:
+
+-Boxeo: 
+	1 solo Juez
+	3 - 8 - 12 Rounds
+	Reglas de boxeo tradicional
+	Guantes de x onzas según diferencias de peso
+	Se pueden incluir disfraces
+-MMA:
+	1 solo Juez
+	3 - 5 Rounds
+	Reglas de MMA al estilo UFC
+	Se pueden incluir disfraces
+-Sin Reglas:
+	1 solo Juez, aunque se recomiendan más
+	3 - 5 Rounds
+	Guantes o no Guantes
+	No se permiten: arañazos, golpes bajos, dedos en los ojos y golpear a alguien que se haya rendido o este en situación de KO
+	NO se pueden incluir disfraces
+-Bofetones:
+	1 solo Juez
+	3 - 5 rondas, un bofetón cada uno por ronda
+	No se permite golpear en la oreja, ni en la barbilla por debajo
+	Será necesario aplicar polvo de magnesio, por lo menos a partir de cierta puntuación
+	Se gana si el rival se rinde, queda KO o por decisión del juez
+
+	
+	
+
