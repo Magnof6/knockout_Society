@@ -6,7 +6,7 @@ package Funciones;
  */
 public class Funciones {
 
-    public void CrearUsuarioNuevo(String usuario, String password) {
+    public void CrearUsuarioNuevo(String usuario, String password, String correo) {
         /**
          * El ususario meterá su nombre de usuario, contraseña y correo
          * iniciaremos sesion en la bbdd con un admin que solo cree usuarios
@@ -14,13 +14,38 @@ public class Funciones {
          */
     }
 
-    public void InicioUsuario(String usuario, String password) {
+    public void InicioUsuario(String usuario, String password, String correo) {
+        try {
+            // Excepción si no se introduce usuario o correo
+            if ((usuario == null || usuario.isEmpty()) && (correo == null || correo.isEmpty())) {
+                throw new IllegalArgumentException("Error: Debes proporcionar al menos un usuario o correo.");
+            }
+            
+            if (usuario != null && !usuario.isEmpty()) {
+                // Si se proporciona un usuario válido, se usa para iniciar sesión
+                System.out.println("Iniciando sesión con usuario y contraseña");
+            } else {
+                // Si no se proporciona usuario, se usa el correo para iniciar sesión
+                System.out.println("Iniciando sesión con correo y contraseña");
+            }
+
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            
+        } catch (Exception e) { // Excepción genérica
+            System.out.println("Error inesperado: " + e.getMessage());
+        }
+    }    
+    
+    /**
+    public void InicioUsuario(String usuario, String password, String correo) {
         /**
          * Se iniciará sesion con el usuario, meterá el usuario o el correo y
          * contraseña Si mete el correo buscaremos en la bbdd el usuario que
          * tiene ese correo y se iniciará sesion
-         */
+         
     }
+    */
 
     public void ActualizarUsuario() {
 
