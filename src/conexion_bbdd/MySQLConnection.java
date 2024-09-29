@@ -4,11 +4,15 @@ import java.sql.*;
 
 public class MySQLConnection {
 
-    public static Connection establecerConexion() {
+    public static Connection connection;
+
+    public static Connection establecerConexion(String user, String password) {
         String url = "jdbc:postgresql://aws-0-eu-west-3.pooler.supabase.com:6543/postgres?";
-        String user = "postgres.guoehkemwuuvfxnkzvfq";
-        String password = "PeleaDown666$";
-        Connection connection = null;
+        // String user = "postgres.guoehkemwuuvfxnkzvfq";
+        //user = "admin1.guoehkemwuuvfxnkzvfq";
+        //password = "PeleaDown666$";
+        user = user + ".guoehkemwuuvfxnkzvfq";
+        connection = null;
         try {
             connection = DriverManager.getConnection(url, user, password);
             if (connection != null) {
@@ -21,7 +25,7 @@ public class MySQLConnection {
         return connection;
     }
 
-    public static void cerrarConexion(Connection connection) {
+    public static void cerrarConexion() {
 
         if (connection != null) {
             try {
@@ -34,7 +38,7 @@ public class MySQLConnection {
     }
 
     public static ResultSet ejecutarConsulta(String consulta) {
-        Connection connection = establecerConexion();
+        // = establecerConexion();
         ResultSet resultSet = null;
 
         try {
@@ -65,8 +69,8 @@ public class MySQLConnection {
     }
 
     public static void main(String args[]) {
-        Connection conexion = MySQLConnection.establecerConexion();
-        String consulta = "SELECT * FROM usuario";  // Reemplaza por la consulta SQL que quieras ejecutar
+        establecerConexion("postgres", "PeleaDown666$");
+        String consulta = "SELECT * FROM pg_user;";  // Reemplaza por la consulta SQL que quieras ejecutar
 
         // Ejecutar la consulta
         ResultSet resultados = ejecutarConsulta(consulta);
@@ -75,7 +79,7 @@ public class MySQLConnection {
         procesarResultados(resultados);
 
         // Cerrar la conexión
-        cerrarConexion(establecerConexion());
+        cerrarConexion();
     }
 
 }
