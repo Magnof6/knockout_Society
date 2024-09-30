@@ -72,44 +72,41 @@ public class Funciones {
          */
     }
 
-    public class ClasificacionPeso {
-
-        public static void clasificarPeso(String sexo, double peso) {
-            if (sexo.equalsIgnoreCase("hombre")) {
-                if (peso < 52.2) {
-                    System.out.println("Peso Mosca (Hombre)");
-                } else if (peso >= 52.2 && peso < 56.7) {
-                    System.out.println("Peso Gallo (Hombre)");
-                } else if (peso >= 56.7 && peso < 61.2) {
-                    System.out.println("Peso Pluma (Hombre)");
-                } else if (peso >= 61.2 && peso < 66.7) {
-                    System.out.println("Peso Ligero (Hombre)");
-                } else if (peso >= 66.7 && peso < 72.6) {
-                    System.out.println("Peso Welter (Hombre)");
-                } else if (peso >= 72.6 && peso < 79.4) {
-                    System.out.println("Peso Mediano (Hombre)");
-                } else if (peso >= 79.4 && peso < 88.5) {
-                    System.out.println("Peso Semipesado (Hombre)");
-                } else {
-                    System.out.println("Peso Pesado (Hombre)");
-                }
-            } else if (sexo.equalsIgnoreCase("mujer")) {
-                if (peso < 45.4) {
-                    System.out.println("Peso Mosca (Mujer)");
-                } else if (peso >= 45.4 && peso < 49.0) {
-                    System.out.println("Peso Gallo (Mujer)");
-                } else if (peso >= 49.0 && peso < 53.5) {
-                    System.out.println("Peso Pluma (Mujer)");
-                } else if (peso >= 53.5 && peso < 57.2) {
-                    System.out.println("Peso Ligero (Mujer)");
-                } else if (peso >= 57.2 && peso < 66.7) {
-                    System.out.println("Peso Welter (Mujer)");
-                } else {
-                    System.out.println("Peso Pesado (Mujer)");
-                }
+    public static void clasificarPeso(String sexo, double peso) {
+        if (sexo.equalsIgnoreCase("hombre")) {
+            if (peso < 52.2) {
+                System.out.println("Peso Mosca (Hombre)");
+            } else if (peso >= 52.2 && peso < 56.7) {
+                System.out.println("Peso Gallo (Hombre)");
+            } else if (peso >= 56.7 && peso < 61.2) {
+                System.out.println("Peso Pluma (Hombre)");
+            } else if (peso >= 61.2 && peso < 66.7) {
+                System.out.println("Peso Ligero (Hombre)");
+            } else if (peso >= 66.7 && peso < 72.6) {
+                System.out.println("Peso Welter (Hombre)");
+            } else if (peso >= 72.6 && peso < 79.4) {
+                System.out.println("Peso Mediano (Hombre)");
+            } else if (peso >= 79.4 && peso < 88.5) {
+                System.out.println("Peso Semipesado (Hombre)");
             } else {
-                System.out.println("Sexo no válido. Por favor ingresa 'hombre' o 'mujer'.");
+                System.out.println("Peso Pesado (Hombre)");
             }
+        } else if (sexo.equalsIgnoreCase("mujer")) {
+            if (peso < 45.4) {
+                System.out.println("Peso Mosca (Mujer)");
+            } else if (peso >= 45.4 && peso < 49.0) {
+                System.out.println("Peso Gallo (Mujer)");
+            } else if (peso >= 49.0 && peso < 53.5) {
+                System.out.println("Peso Pluma (Mujer)");
+            } else if (peso >= 53.5 && peso < 57.2) {
+                System.out.println("Peso Ligero (Mujer)");
+            } else if (peso >= 57.2 && peso < 66.7) {
+                System.out.println("Peso Welter (Mujer)");
+            } else {
+                System.out.println("Peso Pesado (Mujer)");
+            }
+        } else {
+            System.out.println("Sexo no válido. Por favor ingresa 'hombre' o 'mujer'.");
         }
     }
 
