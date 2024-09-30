@@ -8,7 +8,7 @@ import conexion_bbdd.MySQLConnection;
  */
 public class Funciones {
 
-    public void CrearUsuarioNuevo(String usuario, String password, String correo, String nombre, String apellidos, String edad, String sexo) { //En sexo se introducira M o F
+    public static void CrearUsuarioNuevo(String usuario, String password, String correo, String nombre, String apellidos, String edad, String sexo) { //En sexo se introducira M o F
         /**
          * El ususario meterá su nombre de usuario, contraseña y correo
          * iniciaremos sesion en la bbdd con un admin que solo cree usuarios
@@ -26,10 +26,10 @@ public class Funciones {
         MySQLConnection.establecerConexion(usuario, password);
     }
 
-    public void InicioUsuario(String usuario, String password, String correo) {
+    public static void InicioUsuario(String usuario, String password) {
         try {
             // Excepción si no se introduce usuario o correo
-            if ((usuario == null || usuario.isEmpty()) && (correo == null || correo.isEmpty())) {
+            if ((usuario == null || usuario.isEmpty()) /*&& (correo == null || correo.isEmpty())*/) {
                 throw new IllegalArgumentException("Error: Debes proporcionar al menos un usuario o correo.");
             }
 
