@@ -1,5 +1,45 @@
 # Proyecto-Ingeniería-de-Software 
+_NUEVOS REQUISITOS IGNORAR LOS ANTERIORES O QUE ALGUIEN LOS BORRE SI LE MOLESTA PERO YO NO LOS VOY A TOCAR POR SI ACASO_
 
+# Pantalla de inicio
+Arriba a la derecha tiene Registrarse o iniciar sesión, si no tenés cuenta
+Menú que se abre desde la izquierda
+En el centro 
+Fondo de pantalla
+Que tenga el logo arriba a la derecha
+Que tenga un logo de Kick que te lleve a la página oficial de Kick.
+
+## Iniciar sesión
+Un botón arriba a la derecha para iniciar sesión que aparece solo si no haz iniciado la sesión. Te manda a la página de iniciar sesión
+
+## Registrarse
+Un botón al lado de iniciar sesión que te lleve al menú de registración
+
+## Página de iniciar sesión
+Te pide nombre de usuario o correo y contraseña. Tiene un botón para iniciar sesión y otro botón que te mande a la página de registración.
+
+## Página de registro
+Te pide nombre de usuario, correo, contraseña. Te pregunta si quieres ser luchador y si sí te manda al menú de registración de luchador
+
+## Página de registro luchador/Requisitos de luchador
+Para validar un luchador debe subir:
+* Sexo biológico
+* Peso
+* Modalidad preferida
+* Nivel (Principiante, Intermedio, Avanzado)
+* Fotografía
+* Grupo sanguíneo
+* Ubicación
+* Lateralidad (zurdo, diestro)
+
+## Menú de la izquierda
+Buscar pelea
+Mirar peleas
+Rankings
+
+
+
+-----
 _REQUISITOS_ 
 
   
