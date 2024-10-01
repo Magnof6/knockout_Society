@@ -48,9 +48,14 @@ body {
     z-index: 1000;
     padding: 10px; /* Agrega un poco de padding para que se vea mejor */
     border-radius: 5px; /* Opcional: bordes redondeados */
+    opacity: 0; /* Oculto por defecto */
+    transition: opacity 0.3s ease; /* Efecto de transición */
+    visibility: hidden; /*Para que no ocupe espacio en la página*/
 }
 .menu.open {  /* Clase que muestra el menú */
     display: block;
+    opacity: 1; /* Totalmente visible */
+    visibility: visible; /* Asegúrate de que sea visible */
 }
 
 .menu-icon.open {
