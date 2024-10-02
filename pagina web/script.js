@@ -14,13 +14,23 @@ function toggleMenu() {
 }
 
 function showRegisterForm() {
-    // Oculta otros elementos si es necesario y muestra el formulario de registro
+    hideLoginForm();  // Asegúrate de que el formulario de inicio de sesión esté oculto
     var registerForm = document.getElementById("register-form");
     registerForm.style.display = "block";
 }
 
 function hideRegisterForm() {
-    // Oculta el formulario de registro y vuelve a la vista inicial
     var registerForm = document.getElementById("register-form");
     registerForm.style.display = "none";
+}
+
+function showLoginForm() {
+    hideRegisterForm();  // Asegúrate de que el formulario de registro esté oculto
+    var loginForm = document.getElementById("login-form");
+    loginForm.style.display = "block";
+}
+
+function hideLoginForm() {
+    var loginForm = document.getElementById("login-form");
+    loginForm.style.display = "none";
 }

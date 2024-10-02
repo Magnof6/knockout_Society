@@ -131,3 +131,40 @@ body {
 .form-buttons button {
     width: 48%; /* Ajusta el ancho de los botones para que tengan el mismo tamaño */
 }
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-form h2 {
+    text-align: center;
+}
+
+.login-form label {
+    margin-top: 10px;
+}
+
+.login-form input {
+    padding: 10px;
+    margin-top: 5px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.login-form .form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.login-form .form-buttons button {
+    width: 48%;
+}
