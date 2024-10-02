@@ -1,0 +1,133 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.header{
+    position: relative;/*posicion relativa para que los hijos se posicionen bien*/
+    display: flex;/*flexbox para alinear elementos*/
+    justify-content: space-between;/*Distribuye el conenido de los elementos a los ladoss*/
+    align-items: center;/*Alinea los elementos verticalmente*/
+    padding: 20px 40px;/*Agrega padding a los lados*/
+    background-color: #f0f0f0;/*Color de fondo del encabezado*/
+}
+
+.auth-buttons{
+    display: flex;/*flexbox para alinear elementos*/
+    /*gap: 20px;/*Espacio entre los elementos*/
+}
+.login-button, .register-button{
+    background-color: #007bff; /* Color de fondo */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 10px 15px; /* Espaciado interno */
+    margin-left: 10px; /* Espaciado entre los botones */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    font-size: 16px; /* Tamaño del texto */
+}
+.login-button:hover, .register-button:hover{
+    background-color: #0056b3; /* Color de fondo al pasar el cursor */
+}
+.menu-icon {
+    font-size: 30px;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.menu {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    top: 60px;
+    left: 20px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    padding: 10px; /* Agrega un poco de padding para que se vea mejor */
+    border-radius: 5px; /* Opcional: bordes redondeados */
+    opacity: 0; /* Oculto por defecto */
+    transition: opacity 0.3s ease; /* Efecto de transición */
+    visibility: hidden; /*Para que no ocupe espacio en la página*/
+}
+.menu.open {  /* Clase que muestra el menú */
+    display: block;
+    opacity: 1; /* Totalmente visible */
+    visibility: visible; /* Asegúrate de que sea visible */
+}
+
+.menu-icon.open {
+    /* Cambia el icono de menú (hamburguesa) a una "X" cuando el menú está abierto */
+    content: "\00d7"; /* Código para "X" en HTML */
+    font-size: 36px; /* Tamaño del icono de cierre */
+}
+
+.menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 100px;
+    text-align: left;
+}
+
+.menu ul li {
+    margin: 20px 0;
+}
+
+.menu ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 24px;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.register-form h2 {
+    text-align: center;
+}
+
+.register-form label {
+    margin-top: 10px;
+}
+
+.register-form input, .register-form select {
+    padding: 10px;
+    margin-top: 5px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.register-form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-top: 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.register-form button:hover {
+    background-color: #0056b3;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between; /* Espacia los botones */
+    margin-top: 20px;
+}
+
+.form-buttons button {
+    width: 48%; /* Ajusta el ancho de los botones para que tengan el mismo tamaño */
+}
