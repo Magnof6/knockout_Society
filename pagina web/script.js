@@ -13,3 +13,14 @@ function toggleMenu() {
     }
 }
 
+function showRegisterForm() {
+    // Oculta otros elementos si es necesario y muestra el formulario de registro
+    var registerForm = document.getElementById("register-form");
+    registerForm.style.display = "block";
+}
+
+function hideRegisterForm() {
+    // Oculta el formulario de registro y vuelve a la vista inicial
+    var registerForm = document.getElementById("register-form");
+    registerForm.style.display = "none";
+}
