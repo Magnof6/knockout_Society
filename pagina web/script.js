@@ -34,3 +34,4 @@ function hideLoginForm() {
     var loginForm = document.getElementById("login-form");
     loginForm.style.display = "none";
 }
+

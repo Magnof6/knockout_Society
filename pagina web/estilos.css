@@ -168,3 +168,35 @@ body {
 .login-form .form-buttons button {
     width: 48%;
 }
+
+
+#Kick-floating-button{
+    width: 100px; /*Ancho del botón*/
+    height: 100px; /*Alto del botón*/
+    position: fixed; /*Mantiene la imagen fija*/
+    bottom: 20px; /*Alinea la imagen a 20px del borde inferior*/
+    right: 20px; /*Alinea la imagen a 20px del borde derecho*/
+    z-index: 1000; /*Asegura que la imagen esté por encima de otros elementos*/
+}
+#kick-floating-button img{
+    width: 60px; /*Ancho de la imagen*/
+    height: 60px; /*Alto de la imagen*/
+    border-radius: 50%; /*Bordes redondeados para hacer un círculo*/
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2)/*Sombra para dar profundidad a la imagen*/
+    transition: transform 0.3s ease; /*Efecto de transición*/
+}
+#kick-floating-button img:hover{
+    transform: scale(1.1); /*Efecto de escala al pasar el cursor*/
+}
+
+/*Fondo de pantalla*/
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('Imagenes/FondoPantalla.webp'); /* Ruta de la imagen */
+    background-size: cover; /* Hace que la imagen cubra todo el fondo */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    background-attachment: fixed; /* Fija el fondo para que no se mueva con el scroll */
+}
