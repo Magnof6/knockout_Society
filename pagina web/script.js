@@ -24,6 +24,16 @@ function hideRegisterForm() {
     registerForm.style.display = "none";
 }
 
+function showFighterRegistrationForm() {
+    var fighterForm = document.getElementById("fighter-registration-form");
+    fighterForm.style.display = "block";
+}
+
+function hideFighterRegistrationForm() {
+    var fighterForm = document.getElementById("fighter-registration-form");
+    fighterForm.style.display = "none";
+}
+
 function showLoginForm() {
     hideRegisterForm();  // Asegúrate de que el formulario de registro esté oculto
     var loginForm = document.getElementById("login-form");
@@ -35,3 +45,25 @@ function hideLoginForm() {
     loginForm.style.display = "none";
 }
 
+function handleRegister(event) {
+    event.preventDefault(); // Previene el envío del formulario
+    // Muestra la notificación de registro de luchador
+    if (confirm("¿Quieres registrarte como luchador?")) {
+        hideRegisterForm(); // Oculta el formulario de registro
+        showFighterRegistrationForm(); // Muestra el formulario de luchador
+    }
+}
+
+function handleRegister(event) {
+    event.preventDefault(); // Previene el envío del formulario
+    // Muestra la notificación de registro de luchador
+    if (confirm("¿Quieres registrarte como luchador?")) {
+        hideRegisterForm(); // Oculta el formulario de registro
+        showFighterRegistrationForm(); // Muestra el formulario de luchador
+    } else {
+        // Aquí puedes agregar la lógica para registrar al usuario normal
+        alert("Usuario registrado como normal."); // Notificación de registro normal
+        hideRegisterForm(); // Oculta el formulario de registro
+        // Aquí puedes hacer cualquier otra lógica que necesites para el registro normal
+    }
+}

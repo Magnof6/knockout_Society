@@ -44,7 +44,7 @@ body {
     left: 20px;
     width: 100%;
     height: 100%;
-    background-color: transparent;
+    background-color: rgba(0, 0, 0, 0.8);
     z-index: 1000;
     padding: 10px; /* Agrega un poco de padding para que se vea mejor */
     border-radius: 5px; /* Opcional: bordes redondeados */
@@ -185,6 +185,7 @@ body {
     box-shadow: 0 4px 8px rgba(0,0,0,0.2)/*Sombra para dar profundidad a la imagen*/
     transition: transform 0.3s ease; /*Efecto de transición*/
 }
+
 #kick-floating-button img:hover{
     transform: scale(1.1); /*Efecto de escala al pasar el cursor*/
 }

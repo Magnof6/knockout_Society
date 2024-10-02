@@ -21,18 +21,16 @@
             <li><a href="#">Servicios</a></li>
             <li><a href="#">Acerca de</a></li>
             <li><a href="#">Contacto</a></li>
-            <li> <a href="#">Buscar Pelea</a></li>
+            <li><a href="#">Buscar Pelea</a></li>
             <li><a href="#">Ver Peleas</a></li>
             <li><a href="#">Ranking</a></li>
-            
-
         </ul>
     </div>
 
     <!-- Formulario de registro oculto -->
     <div id="register-form" class="register-form" style="display: none;">
         <h2>Formulario de Registro</h2>
-        <form id="registrationForm">
+        <form id="registrationForm" onsubmit="return handleRegister(event)">
             <label for="nombre">Nombre:</label>
             <input type="text" id="nombre" name="nombre" required>
 
@@ -61,6 +59,45 @@
         </form>
     </div>
 
+    <!-- Formulario de registro de luchador -->
+    <div id="fighter-registration-form" class="register-form" style="display: none;">
+        <h2>Registro de Luchador</h2>
+        <form id="fighterForm" onsubmit="return handleFighterRegister(event)">
+            <label for="peso">Peso:</label>
+            <input type="text" id="peso" name="peso" required>
+
+            <label for="modalidad">Modalidad preferida:</label>
+            <input type="text" id="modalidad" name="modalidad" required>
+
+            <label for="nivel">Nivel:</label>
+            <select id="nivel" name="nivel" required>
+                <option value="Principiante">Principiante</option>
+                <option value="Intermedio">Intermedio</option>
+                <option value="Avanzado">Avanzado</option>
+            </select>
+
+            <label for="fotografia">Fotografía:</label>
+            <input type="file" id="fotografia" name="fotografia" accept="image/*" required>
+
+            <label for="grupo-sanguineo">Grupo sanguíneo:</label>
+            <input type="text" id="grupo-sanguineo" name="grupo-sanguineo" required>
+
+            <label for="ubicacion">Ubicación:</label>
+            <input type="text" id="ubicacion" name="ubicacion" required>
+
+            <label for="lateralidad">Lateralidad:</label>
+            <select id="lateralidad" name="lateralidad" required>
+                <option value="Zurdo">Zurdo</option>
+                <option value="Diestro">Diestro</option>
+            </select>
+
+            <div class="form-buttons">
+                <button type="submit">Registrar Luchador</button>
+                <button type="button" onclick="hideFighterRegistrationForm()">Cancelar</button>
+            </div>
+        </form>
+    </div>
+
     <!-- Formulario de inicio de sesión oculto -->
     <div id="login-form" class="login-form" style="display: none;">
         <h2>Iniciar Sesión</h2>
@@ -81,12 +118,11 @@
         </form>
     </div>
 
-    <!--Boton que te lleva a Kick, es un boton flotante con la imagen de kick-->
-    <a href="https://kick.com/knockoutsociety" target = "_blank" id="Kick-floating-button">
+    <!-- Boton que te lleva a Kick -->
+    <a href="https://kick.com/knockoutsociety" target="_blank" id="Kick-floating-button">
         <img src="imagenes/kick3.jpg" alt="imagen-kick-Icono Flotante">
     </a>
 
     <script src="script.js"></script>
 </body>
 </html>
-
