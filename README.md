@@ -85,3 +85,104 @@ _REQUISITOS_
 -Mapa de zonas activas 
 
 -Buscador de videos y clips 
+
+
+# Client Story
+
+## Pantalla de inicio
+Una aplicacion web en la que pueda iniciar sesión un usuario con ciertos parámetros.
+Opción de sign in y registrarte, abajo te aparecen cosas
+* Una vez iniciado que muestre tu perfil
+* Botón de ver peleas
+* Ver los rankings
+* Botón Mirar peleas
+## Botón Pelear
+"Buscar Pelea" En el menú de la izquierda, inicialmente está greyed out
+Si cliquea sin estar logueado, te pide crear una cuenta, si cliquea siendo usuario normal te pide rellenar información adicional para habilitarte para luchador y luego se habilita
+Que te permita modificar tu ubicación
+Te muestra tus datos
+* Nombre, Rango y datos de luchador
+* Ubicación
+* Botón Buscar Pelea "Buscar"
+Te tienen que aparecer opciones ordenadas por un criterio, 
+Criterio
+1. Sexo biológico
+2. Modalidad
+3. Cercanía (Si está lejos no va a pasar)
+4. Categoría de peso
+5. Edad
+6. Puntos
+
+// tinder de peleas??
+## Buscar peleas de otros
+* Te muestra las peleas a futuro
+* Por defecto lo más cercano al presente
+* Un buscador para buscar nombres
+* Peleas aparecen en formato "Nombre vs Nombre"
+
+| Nombre vs Nombre | Fecha de inicio | Estado (Finalizado/En progreso/En espera) | [+] Notificar |
+| ---------------- | --------------- | ----------------------------------------- | ------------- |
+
+## Registrarse
+Nombre
+o
+Correo
+Contraseña
+Luego te manda al inicio de nuevo.
+Segundo paso, te pregunta si vas a ser peleador, y ahi te pide la informacion
+
+## una vez iniciada la sesión
+Se cambia el botón de iniciar
+Aparece tu nombre y tu imagen
+Se 
+
+## Sin usuario
+* Podés buscar, y ver peleas normalmente
+* 
+## Usuario
+Poder seguir a luchadores y sus peleas (Te notifica sobre peleas por venir y actuales)
+* Podés marcar una pelea que está por realizarse para que te notifique cuando empiece.
+Tener un historial de las peleas que ya viste para poder volver a verla
+## Luchador
+Tras crear la cuenta, para poder luchar hay que rellenar información adicional, o sino está bloqueada la opción de luchar. Una vez que te validás como luchador, cambia la interfaz, arriba a la derecha al estar logueado aparece tu ranking. 
+Podés poner tu banner para tu coso de perfil.
+
+## Perfil (Propio)
+* Nombre de usuario y foto
+* Atributos menos contraseña (Sexo, edad, peso, etc. lo que ya tenemos)
+* Historial de peleas participadas (si aplica)
+* Historial de peleas visualizadas en el coso esew
+* Botón cambio de contraseña, cambio de correo esas cosas
+## Perfil ajeno
+* Nombre de usuario y foto
+* Atributos públicos (Los que interesan para pelear)
+* Historial de peleas participadas
+	* También peleas en espera, o peleas en progreso.
+* Botón para mensaje
+* Botón para seguir
+* Botón para bloquear
+
+## Bloquear
+* Deshabilita chat
+* No te encuentra pelea con esa persona
+
+## Review
+* Por datos fraudulentos
+* Reportar por 
+
+## Validación
+* Tras juntarse se sacan una foto para validar el combate
+
+## Pelea (al hacer clic en una pelea en una búsqueda)
+- Nombre vs nombre
+- Fecha
+- Estado
+* Foto de validación (privada para reportar)
+* Link al video
+* Review 
+
+
+## Grabacion de combates
+* Todos los combates se graban
+## Subida de rango
+Sistema Elo
