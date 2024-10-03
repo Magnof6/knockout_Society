@@ -182,7 +182,7 @@ body {
     width: 60px; /*Ancho de la imagen*/
     height: 60px; /*Alto de la imagen*/
     border-radius: 50%; /*Bordes redondeados para hacer un círculo*/
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2)/*Sombra para dar profundidad a la imagen*/
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /*Sombra para dar profundidad a la imagen*/
     transition: transform 0.3s ease; /*Efecto de transición*/
 }
 
