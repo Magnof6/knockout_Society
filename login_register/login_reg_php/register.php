@@ -76,8 +76,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
                     // Insert into luchador table
-                    $insert_fighter = $conn->prepare("INSERT INTO luchador (email, peso, altura, grupoSang, lateralidad) VALUES (?, ?, ?)");
-                    $insert_fighter->bind_param("sdd", $email, $height, $weight, $location, $bloodtype, $lateralidad);
+                    $insert_fighter = $conn->prepare("INSERT INTO luchador (email, peso, altura, victorias, derrotas, puntos, grupoSang, lateralidad, buscando_pelea) VALUES (?, ?, ?)");
+                    $insert_fighter->bind_param("sdd", $email, $weight, $height, $NULL, $NULL, $NULL, $location, $bloodtype, $lateralidad);
 
                     if (!$insert_fighter->execute()) {
                         $error_message = "Error registering fighter details: " . $insert_fighter->error;
