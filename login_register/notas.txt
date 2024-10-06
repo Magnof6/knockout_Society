@@ -1,1 +1,3 @@
+Varios archivos para cada pagina (index.php / register.php / login.php) Esto hara mas facil el codearlo. Pagina nueva de usuario cuando se inicia sesion. 
+Hay que descargar xampp en vuestros ordenadores para poder visualizar archivos php. Meter esta nueva carpeta en 'C://xampp/htdocs/', iniciar el panel de xampp y encender 'apache'.
 
