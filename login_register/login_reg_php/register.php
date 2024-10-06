@@ -146,6 +146,7 @@ if (!empty($success_message)) {
         <select name="lateralidad">
             <option value="Derecha">Derecha</option>
             <option value="Izquierda">Izquierda</option>
+        </select><br>
     </div>
     <input type="submit" value="Register">
 </form>
