@@ -72,8 +72,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
                     // mete en luchador
-                    $insert_fighter = $conn->prepare("INSERT INTO luchador (email, peso, altura, victorias, derrotas, puntos, grupoSang, lateralidad, buscando_pelea) VALUES (?, ?, ?)");
-                    $insert_fighter->bind_param("sdd", $email, $weight, $height, $NULL, $NULL, $NULL, $location, $bloodtype, $lateralidad);
+                    $insert_fighter = $conn->prepare("INSERT INTO luchador (email, peso, altura, grupoSang, ubicacion, lateralidad) VALUES (?, ?, ?, ?, ?, ?)");
+                    $insert_fighter->bind_param("siisss", $email, $weight, $height, $bloodtype, $location, $lateralidad);
 
                     if (!$insert_fighter->execute()) {
                         $error_message = "Error registering fighter details: " . $insert_fighter->error;
@@ -115,23 +115,23 @@ if (!empty($success_message)) {
 }
 ?>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-    Email: <input type="email" name="email" required><br>
+    Correo: <input type="email" name="email" required><br>
     Username: <input type="text" name="username" required><br>
     Password: <input type="password" name="password" required><br>
-    Name: <input type="text" name="name" required><br>
-    Last Name: <input type="text" name="lastname" required><br>
-    Age: <input type="number" name="age" required><br>
-    Gender:
+    Nombre: <input type="text" name="name" required><br>
+    Apellido: <input type="text" name="lastname" required><br>
+    Edad: <input type="number" name="age" required><br>
+    Sexo:
     <select name="gender" required>
         <option value="Masculino">Male</option>
         <option value="Femenino">Female</option>
     </select><br>
-    <input type="checkbox" id="is_fighter" name="is_fighter" onchange="toggleFighterFields()"> Register as a fighter?<br>
+    <input type="checkbox" id="is_fighter" name="is_fighter" onchange="toggleFighterFields()"> Registrar como usuario?<br>
     <div id="fighterFields" style="display: none;">
-        Height: <input type="number" step="0.01" name="height"><br>
-        Weight: <input type="number" step="0.1" name="weight"><br>
-        Location: <input type="text" name="location"><br>
-        Blood Type:
+        Altura: <input type="number" step="0.01" name="height"><br>
+        Peso: <input type="number" step="0.1" name="weight"><br>
+        Ubicacion: <input type="text" name="location"><br>
+        Grupo Sanguineo
         <select name="bloodtype">
             <option value="A+">A+</option>
             <option value="A-">A-</option>
@@ -144,8 +144,9 @@ if (!empty($success_message)) {
         </select><br>
         Lateralidad:
         <select name="lateralidad">
-            <option value="Derecha">Derecha</option>
-            <option value="Izquierda">Izquierda</option>
+            <option value="diestro">Derecha</option>
+            <option value="zurdo">Izquierda</option>
+            <option value="ambi">Ambidiestro</option>
         </select><br>
     </div>
     <input type="submit" value="Register">
@@ -155,5 +156,5 @@ if (!empty($success_message)) {
 </body>
 </html>
 <?php
-require_once 'db_close.php';
-?>
+/*require_once 'db_close.php';
+*/?>
