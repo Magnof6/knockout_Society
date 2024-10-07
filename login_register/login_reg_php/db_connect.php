@@ -1,7 +1,7 @@
 <?php
 $servername = "serverkn.ddns.net";
 $username = "root";
-$password = "1234";
+$password = "PeleaDown$666";
 $dbname = "knockout";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
