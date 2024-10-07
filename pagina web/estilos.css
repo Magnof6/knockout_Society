@@ -11,6 +11,47 @@ body {
     padding: 20px 40px;/*Agrega padding a los lados*/
     background-color: #f0f0f0;/*Color de fondo del encabezado*/
 }
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Fondo negro semi-transparente */
+    z-index: 10000; /* Asegura que esté por encima de otros elementos */
+    visibility: visible;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 80%;
+    max-width: 400px;
+}
+
+.modal button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal button:hover {
+    background-color: #0056b3;
+}
+
+.modal.hidden {
+    display: none; /* Oculta el modal */
+}
+
 
 .auth-buttons{
     display: flex;/*flexbox para alinear elementos*/
