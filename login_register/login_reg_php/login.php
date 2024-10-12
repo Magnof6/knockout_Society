@@ -62,9 +62,12 @@ if (!empty($error_message)) {
 </form>
 <p>Don't have an account? <a href="register.php">Register here</a></p>
 <div class="footer">
-    <a href="https://kick.com/knockoutsociety">
-        <img src="imagenes/kick3.jpg" alt="Footer Image">
-    </a>
-</div>
+        <!-- Boton que te lleva a Kick -->
+        <a href="https://kick.com/knockoutsociety" target="_blank" id="Kick-floating-button">
+            <img src="imagenes/kick3.jpg" alt="imagen-kick-Icono Flotante">
+        </a>
+    </div>
+    
+    <script src="script.js"></script>
 </body>
 </html>
