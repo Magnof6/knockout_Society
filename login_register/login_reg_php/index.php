@@ -29,7 +29,7 @@
     <div class="footer">
         <!-- Boton que te lleva a Kick -->
         <a href="https://kick.com/knockoutsociety" target="_blank" id="Kick-floating-button">
-            <img src="imagenes/kick3.jpg" alt="imagen-kick-Icono Flotante">
+            <img src="imagenes/kickkk.png" alt="imagen-kick-Icono Flotante">
         </a>
     </div>
     
