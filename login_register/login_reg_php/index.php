@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="navbar">
+    <div class="header">
         <div id="menu-icon" class="menu-icon" onclick="toggleMenu()">&#9776;</div>
-        <nav>
-            <a href="login.php">Login</a>
-            <a href="register.php">Register</a>
-        </nav>
+        <div class ="auth-buttons">
+            <a href="login.php"  class="login-button">Login</a>
+            <a href="register.php" class ="register-button">Register</a>
+        </div>
     </div>
     <div id="menu" class="menu">
             <ul>

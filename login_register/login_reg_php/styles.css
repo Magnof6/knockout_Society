@@ -16,11 +16,15 @@ h1, h2 {
 }
 
 /* barra navgacion */
-.navbar {
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 10px;
-    text-align: center;
+.header{
+    position: relative;/*posicion relativa para que los hijos se posicionen bien*/
+    display: flex;/*flexbox para alinear elementos*/
+    justify-content: space-between;/*Distribuye el conenido de los elementos a los ladoss*/
+    align-items: center;/*Alinea los elementos verticalmente*/
+    padding: 20px 40px;/*Agrega padding a los lados*/
+    background-color: rgb(245, 240, 240);/*Color de fondo del encabezado*/
 }
+
 
 .navbar a {
     text-decoration: none;
@@ -87,6 +91,8 @@ form input[type="submit"]:hover {
 .footer img:hover {
     opacity: 1;
 }
+
+/***************** Botón Kick *****************/
 #Kick-floating-button{
     width: 100px; /*Ancho del botón*/
     height: 100px; /*Alto del botón*/
@@ -106,6 +112,8 @@ form input[type="submit"]:hover {
 #kick-floating-button img:hover{
     transform: scale(1.1); /*Efecto de escala al pasar el cursor*/
 }
+
+/***************** Menú de navegación *****************/
 
 .menu-icon {
     font-size: 30px;
@@ -157,4 +165,21 @@ form input[type="submit"]:hover {
     color: white;
     text-decoration: none;
     font-size: 24px;
+}
+
+
+/***************** Botones de inicio de sesión y registro *****************/
+
+.login-button, .register-button{
+    background-color: #007bff; /* Color de fondo */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 10px 15px; /* Espaciado interno */
+    margin-left: 10px; /* Espaciado entre los botones */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    font-size: 16px; /* Tamaño del texto */
+}
+.login-button:hover, .register-button:hover{
+    background-color: #0056b3; /* Color de fondo al pasar el cursor */
 }

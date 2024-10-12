@@ -1,3 +1,15 @@
+window.onload = function() {
+    var modal = document.getElementById("warning-modal");
+    // Mantén el modal visible hasta que el usuario haga clic en "Aceptar"
+    modal.style.visibility = "visible";
+};
+
+function closeWarningModal() {
+    var modal = document.getElementById("warning-modal");
+    modal.classList.add("hidden"); // Oculta el modal
+}
+
+
 function toggleMenu() {
     var menu = document.getElementById("menu");
     var icon = document.getElementById("menu-icon");
@@ -12,3 +24,5 @@ function toggleMenu() {
         icon.innerHTML = "&#9776;";  // Cambia el icono a hamburguesa
     }
 }
+
+
