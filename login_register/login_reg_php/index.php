@@ -8,11 +8,13 @@
 </head>
 <body>
     <div class="header">
-        <div id="menu-icon" class="menu-icon" onclick="toggleMenu()">&#9776;</div>
-        <div class ="auth-buttons">
-            <a href="login.php"  class="login-button">Login</a>
-            <a href="register.php" class ="register-button">Register</a>
-        </div>
+        <div class="menu-container">
+    <div id="menu-icon" class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+    <div class="auth-buttons">
+        <a href="login.php" class="header-button">Login</a>
+        <a href="register.php" class="header-button">Register</a>
+    </div>
+</div>
     </div>
     <div id="menu" class="menu">
             <ul>

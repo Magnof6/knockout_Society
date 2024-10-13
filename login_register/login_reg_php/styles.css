@@ -59,7 +59,7 @@ form select {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
-
+/***************** Botón de envío  acceso y registro*****************/
 form input[type="submit"] {
     background-color: #007BFF;
     color: white;
@@ -67,10 +67,31 @@ form input[type="submit"] {
     padding: 10px;
     border-radius: 4px;
     cursor: pointer;
-    width: 100%;
+    width: 100%; /* Ocupa el 100% del ancho */
+    margin-bottom: 5px; /* Añade un espacio debajo */
+    font-size: 16px; /* Tamaño de fuente consistente */
+    text-align: center; /* Centra el texto horizontalmente */
 }
 
 form input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+form .cambio-registro{
+    display: block;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: calc(100% - 22px);
+    text-decoration: none;
+    text-align: center;
+    font-size: 16px; /* Asegura el mismo tamaño del texto */
+    line-height: 1.5; /* Alinea el texto verticalmente */
+    margin-top: 5px; /* Añade un espacio entre Login y Register */
+}
+form .cambio-registro:hover {
     background-color: #0056b3;
 }
 
@@ -79,7 +100,7 @@ form input[type="submit"]:hover {
     margin-top: auto;
     text-align: center;
     padding: 10px;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: transparent;
 }
 
 .footer img {
@@ -168,9 +189,9 @@ form input[type="submit"]:hover {
 }
 
 
-/***************** Botones de inicio de sesión y registro *****************/
+/***************** Botones de inicio de sesión y registro en pagina principal *****************/
 
-.login-button, .register-button{
+.header-button{
     background-color: #007bff; /* Color de fondo */
     color: white; /* Color del texto */
     border: none; /* Sin borde */
@@ -179,7 +200,8 @@ form input[type="submit"]:hover {
     margin-left: 10px; /* Espaciado entre los botones */
     cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
     font-size: 16px; /* Tamaño del texto */
+    text-decoration: none; /* Sin subrayado */
 }
-.login-button:hover, .register-button:hover{
+.header-button:hover{
     background-color: #0056b3; /* Color de fondo al pasar el cursor */
 }

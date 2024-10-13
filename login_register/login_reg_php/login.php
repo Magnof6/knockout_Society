@@ -44,9 +44,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="navbar">
+<div class="header">
     <nav>
-        <a href="index.php">Home</a>
+        <a href="index.php" class = "header-button">Home</a>
     </nav>
 </div>
 <h2>Login</h2>
@@ -59,12 +59,12 @@ if (!empty($error_message)) {
     Email: <input type="email" name="email" required><br>
     Password: <input type="password" name="password" required><br>
     <input type="submit" value="Login">
+    <a href="register.php" class = "cambio-registro">Register</a>
 </form>
-<p>Don't have an account? <a href="register.php">Register here</a></p>
 <div class="footer">
         <!-- Boton que te lleva a Kick -->
         <a href="https://kick.com/knockoutsociety" target="_blank" id="Kick-floating-button">
-            <img src="imagenes/kick3.jpg" alt="imagen-kick-Icono Flotante">
+            <img src="imagenes/kickkk.png" alt="imagen-kick-Icono Flotante">
         </a>
     </div>
     
