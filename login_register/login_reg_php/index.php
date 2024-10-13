@@ -9,27 +9,31 @@
 <body>
     <div class="header">
         <div class="menu-container">
-    <div id="menu-icon" class="menu-icon" onclick="toggleMenu()">&#9776;</div>
-    <div class="auth-buttons">
-        <a href="login.php" class="header-button">Login</a>
-        <a href="register.php" class="header-button">Register</a>
-    </div>
-</div>
-    </div>
-    <div id="menu" class="menu">
-            <ul>
-                <li><a href="#">Inicio</a></li>
-                <li><a href="#">Servicios</a></li>
-                <li><a href="#">Acerca de</a></li>
-                <li><a href="#">Contacto</a></li>
-                <li><a href="#">Buscar Pelea</a></li>
-                <li><a href="#">Ver Peleas</a></li>
-                <li><a href="#">Ranking</a></li>
-            </ul>
+            <div id="menu-icon" class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+            <div class="auth-buttons">
+                <a href="login.php" class="header-button">Login</a>
+                <a href="register.php" class="header-button">Register</a>
+            </div>
         </div>
+    </div>
+    
+    <!-- Menú de navegación -->
+    <div id="menu" class="menu">
+        <ul>
+            <li><a href="index.php">Inicio</a></li>
+            <li><a href="services.php">Servicios</a></li>
+            <li><a href="about.php">Acerca de</a></li>
+            <li><a href="contact.php">Contacto</a></li>
+            <li><a href="buscar.php">Buscar Pelea</a></li>
+            <li><a href="ver_peleas.php">Ver Peleas</a></li> <!-- Enlace añadido -->
+            <li><a href="ranking.php">Ranking</a></li>
+        </ul>
+    </div>
+    
     <h1>KNOCKOUT SOCIETY</h1>
+
+    <!-- Botón flotante de Kick -->
     <div class="footer">
-        <!-- Boton que te lleva a Kick -->
         <a href="https://kick.com/knockoutsociety" target="_blank" id="Kick-floating-button">
             <img src="imagenes/kickkk.png" alt="imagen-kick-Icono Flotante">
         </a>
