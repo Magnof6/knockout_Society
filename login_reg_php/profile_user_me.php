@@ -2,7 +2,7 @@
 // Datos de conexión a la base de datos
 $servername = "serverkn.ddns.net";
 $username = "root"; // Usuario de la base de datos
-$password = "PeleaDown$666"; // Contraseña de la base de datos
+$password = ""; // Contraseña de la base de datos
 $dbname = "knockout"; // Nombre de tu base de datos
 
 // Crear la conexión
