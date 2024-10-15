@@ -1,18 +1,5 @@
 <?php
-// Datos de conexión a la base de datos
-$servername = "serverkn.ddns.net";
-$username = "root"; // Usuario de la base de datos
-$password = "PeleaDown$666"; // Contraseña de la base de datos
-$dbname = "knockout"; // Nombre de tu base de datos
-
-// Crear la conexión
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Verificar la conexión
-if ($conn->connect_error) {
-    die("Error de conexión: " . $conn->connect_error);
-}
-
+require_once 'db_connect.php';
 // Consulta SQL para obtener nombre y apellido
 $sql = "SELECT nombre, apellido FROM usuario";
 $result = $conn->query($sql);
