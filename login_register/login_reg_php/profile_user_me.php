@@ -26,13 +26,20 @@ $result = $conn->query($sql);
     <title>Página con Menú Lateral y Perfil</title>
     <!-- Enlazar el archivo CSS externo -->
     <link rel="stylesheet" href="./styles.css?v=1.0">
+    <style>
+        /* Ocultar la lista de usuarios por defecto */
+        #userList {
+            display: none;
+        }
+    </style>
 </head>
 <body>
 
     <!-- Menú lateral izquierdo -->
     <div class="sidebar">
         <a href="#">Inicio</a>
-        <a href="#">Perfiles de otras personas</a>
+        <!-- Modificar el enlace para que active la visibilidad -->
+        <a href="#" onclick="toggleUserList()">Perfiles de otras personas</a>
         <a href="#">Proyectos</a>
         <a href="#">Configuración</a>
         <div class="search-section">
@@ -57,23 +64,38 @@ $result = $conn->query($sql);
     <!-- Contenido principal -->
     <div class="content">
         <h1>Lista de Usuarios</h1>
-        <table>
-            <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-            </tr>
-            <?php
-            if ($result->num_rows > 0) {
-                // Mostrar datos en filas
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr><td>" . $row["nombre"] . "</td><td>" . $row["apellido"] . "</td></tr>";
+        <!-- Envuelve la tabla en un div con id="userList" -->
+        <div id="userList">
+            <table>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                </tr>
+                <?php
+                if ($result->num_rows > 0) {
+                    // Mostrar datos en filas
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr><td>" . $row["nombre"] . "</td><td>" . $row["apellido"] . "</td></tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='2'>No hay resultados</td></tr>";
                 }
-            } else {
-                echo "<tr><td colspan='2'>No hay resultados</td></tr>";
-            }
-            ?>
-        </table>
+                ?>
+            </table>
+        </div>
     </div>
+
+    <script>
+        // Función para mostrar/ocultar la lista de usuarios
+        function toggleUserList() {
+            var userList = document.getElementById("userList");
+            if (userList.style.display === "none") {
+                userList.style.display = "block";
+            } else {
+                userList.style.display = "none";
+            }
+        }
+    </script>
 
 </body>
 </html>
