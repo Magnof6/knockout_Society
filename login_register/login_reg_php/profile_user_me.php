@@ -53,7 +53,7 @@ $result = $conn->query($sql);
         <div class="profile-dropdown">
             <button class="profile-button">Perfil ▼</button>
             <div class="profile-content">
-                <a href="#">Ver Perfil</a>
+                <a href="profile.php">Ver Perfil</a>
                 <a href="#">Configuraciones</a>
                 <a href="logout.php">Cerrar sesión</a>
             </div>

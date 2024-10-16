@@ -96,8 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['register_fighter'])) {
 <body>
 <div class="header">
     <nav>
-        <a href="index.php" class="header-button">Home</a>
-        <a href="logout.php" class="header-button">Logout</a>
+        <a href="profile_user_me.php" class="header-button">Atras</a>
     </nav>
 </div>
 
