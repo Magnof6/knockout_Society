@@ -16,7 +16,6 @@ $result = $conn->query($sql);
 
 ?>
 
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -27,7 +26,7 @@ $result = $conn->query($sql);
     <link rel="stylesheet" href="./styles.css?v=1.0">
     <style>
         /* Ocultar la lista de usuarios por defecto */
-        #userList {
+        #userSection {
             display: none;
         }
     </style>
@@ -38,9 +37,13 @@ $result = $conn->query($sql);
     <div class="sidebar">
         <a href="#">Inicio</a>
         <!-- Modificar el enlace para que active la visibilidad -->
-        <a href="#" onclick="toggleUserList()">Perfiles de otras personas</a>
-        <a href="#">Proyectos</a>
-        <a href="#">Configuración</a>
+        <a href="#" onclick="toggleUserSection()">Perfiles de otras personas</a>
+        <a href="services.php">Servicios</a>
+        <a href="about.php">Acerca de</a>
+        <a href="contact.php">Contacto</a>
+        <a href="buscar.php">Buscar Pelea</a>
+        <a href="ver_peleas.php">Ver Peleas</a>
+        <a href="ranking.php">Ranking</a>
         <div class="search-section">
             <label for="search">Buscar perfiles:</label>
             <input type="text" id="search" placeholder="Buscar...">
@@ -62,9 +65,9 @@ $result = $conn->query($sql);
 
     <!-- Contenido principal -->
     <div class="content">
-        <h1>Lista de Usuarios</h1>
-        <!-- Envuelve la tabla en un div con id="userList" -->
-        <div id="userList">
+        <!-- Envuelve el título y la tabla en un contenedor común con id="userSection" -->
+        <div id="userSection">
+            <h1>Lista de Usuarios</h1>
             <table>
                 <tr>
                     <th>Nombre</th>
@@ -85,13 +88,13 @@ $result = $conn->query($sql);
     </div>
 
     <script>
-        // Función para mostrar/ocultar la lista de usuarios
-        function toggleUserList() {
-            var userList = document.getElementById("userList");
-            if (userList.style.display === "none") {
-                userList.style.display = "block";
+        // Función para mostrar/ocultar la sección completa (título + tabla)
+        function toggleUserSection() {
+            var userSection = document.getElementById("userSection");
+            if (userSection.style.display === "none") {
+                userSection.style.display = "block";
             } else {
-                userList.style.display = "none";
+                userSection.style.display = "none";
             }
         }
     </script>
