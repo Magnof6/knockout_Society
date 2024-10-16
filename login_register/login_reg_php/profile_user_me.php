@@ -1,9 +1,21 @@
 <?php
 require_once 'db_connect.php';
+session_start();
 // Consulta SQL para obtener nombre y apellido
+if (isset($_SESSION['user_email'])) {
+    $user_email = $_SESSION['user_email'];
+    // Puedes usar $user_email en consultas o para mostrar el email
+} else {
+    // Si no hay sesión activa, redirige al usuario al login
+    header("Location: login.php");
+    exit();
+}
+
 $sql = "SELECT nombre, apellido FROM usuario";
 $result = $conn->query($sql);
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">

@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (password_verify($password, $row['password'])) {
                 $_SESSION['user_email'] = $row['email'];
                 $_SESSION['username'] = $row['username'];
-                header("Location: profile.php");
+                header("Location: profile_user_me.php");
                 exit();
             } else {
                 $error_message = "Invalid password.";
