@@ -279,3 +279,59 @@ form .cambio-registro {
 form .cambio-registro:hover {
     background-color: #0056b3;
 }
+
+.profile-container {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 800px;
+    width: 100%;
+}
+
+.fights-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.fights-table th, .fights-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.fights-table th {
+    background-color: #f2f2f2;
+}
+
+.fighter-form, .password-form {
+    margin-top: 20px;
+}
+
+.fighter-form input, .fighter-form select,
+.password-form input {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.fighter-form input[type="submit"],
+.password-form input[type="submit"] {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.fighter-form input[type="submit"]:hover,
+.password-form input[type="submit"]:hover {
+    background-color: #0056b3;
+}

@@ -68,7 +68,7 @@ if (!empty($success_message)) {
         <option value="Masculino">Male</option>
         <option value="Femenino">Female</option>
     </select><br>
-    <input type="checkbox" id="is_fighter" name="is_fighter" onchange="toggleFighterFields()"> Registrar como usuario?<br>
+    <input type="checkbox" id="is_fighter" name="is_fighter" onchange="toggleFighterFields()"> Registrar como luchador?<br>
     <div id="fighterFields" style="display: none;">
         Altura: <input type="number" step="0.01" name="height"><br>
         Peso: <input type="number" step="0.1" name="weight"><br>
