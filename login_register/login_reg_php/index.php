@@ -14,13 +14,14 @@
                 <a href="login.php" class="header-button">Login</a>
                 <a href="register.php" class="header-button">Register</a>
             </div>
+            <h1>KNOCKOUT SOCIETY</h1>
         </div>
     </div>
     
     <!-- Menú de navegación -->
     <div id="menu" class="menu">
         <ul>
-            <li><a href="index.php">Inicio</a></li>
+            <li><a href="#">Inicio</a></li>
             <li><a href="services.php">Servicios</a></li>
             <li><a href="about.php">Acerca de</a></li>
             <li><a href="contact.php">Contacto</a></li>
@@ -30,8 +31,6 @@
         </ul>
     </div>
     
-    <h1>KNOCKOUT SOCIETY</h1>
-
     <!-- Botón flotante de Kick -->
     <div class="footer">
         <a href="https://kick.com/knockoutsociety" target="_blank" id="Kick-floating-button">
