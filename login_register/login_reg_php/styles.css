@@ -25,6 +25,97 @@ h1, h2 {
     background-color: rgb(245, 240, 240);
 }
 
+.header h1{
+    color: black; /* Color del texto */
+    margin: 0; /* Elimina margen por defecto */
+    font-size: 36px; /* Tamaño del texto */
+    position: absolute; /* Posición absoluta para centrar */
+    left: 50%; /* Mueve a la mitad de la pantalla */
+    top: 25%;  /*A la mitad de lo blanco*/
+    transform: translateX(-50%); /* Centra horizontalmente */
+    text-align: center; /* Centra el texto */
+}
+/************ Menú de navegación ***************/
+.menu-icon {
+    font-size: 30px;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.menu {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    top: 60px;
+    left: 20px;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    z-index: 1000;
+    padding: 10px; /* Agrega un poco de padding para que se vea mejor */
+    border-radius: 5px; /* Opcional: bordes redondeados */
+    opacity: 0; /* Oculto por defecto */
+    transition: opacity 0.3s ease; /* Efecto de transición */
+    visibility: hidden; /*Para que no ocupe espacio en la página*/
+}
+.menu.open {  /* Clase que muestra el menú */
+    display: block;
+    opacity: 1; /* Totalmente visible */
+    visibility: visible; /* Asegúrate de que sea visible */
+}
+
+.menu-icon.open {
+    /* Cambia el icono de menú (hamburguesa) a una "X" cuando el menú está abierto */
+    content: "\00d7"; /* Código para "X" en HTML */
+    font-size: 36px; /* Tamaño del icono de cierre */
+}
+
+.menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 100px;
+    text-align: left;
+}
+
+.menu ul li {
+    margin: 20px 0;
+    
+}
+
+.menu ul li a {
+    color: rgb(248, 246, 246);
+    font-size: 24px;
+    text-decoration: none
+ /*   Efecto de transición*/
+}
+.menu ul li a:hover {
+    font-size: 28px; /* Aumenta el tamaño del texto */
+    color: #c2c8e2;
+    display: inline-block;
+    transform: scale(1.15); 
+}
+/************* Botones de inicio de sesión y registro ********************/
+.auth-buttons {
+    display: flex; /* Usa flexbox para alinear los botones */
+    align-items: center; /* Centra los botones verticalmente */
+}
+.header-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.header-button:hover {
+    background-color: #0056b3;
+}
+/****************Navbar******************/
 .navbar a {
     text-decoration: none;
     color: #fff;
@@ -36,7 +127,7 @@ h1, h2 {
     color: #007BFF;
 }
 
-/* Filtros */
+/*********************** Filtros *********************/
 .filtros-container {
     background-color: rgba(255, 255, 255, 0.8);
     padding: 20px;
@@ -65,7 +156,7 @@ h1, h2 {
     background-color: #0056b3;
 }
 
-/* Buscador */
+/************************** Buscador **************************/
 .buscador-container {
     text-align: center;
     margin: 20px;
@@ -91,7 +182,7 @@ h1, h2 {
     background-color: #0056b3;
 }
 
-/* Videos */
+/************** Videos *********************/
 .videos-container {
     margin: 20px;
     text-align: center;
@@ -128,7 +219,7 @@ video {
     opacity: 1;
 }
 
-/* Botón flotante de Kick */
+/********************** Botón flotante de Kick *********************/
 #kick-floating-button {
     position: fixed;
     bottom: 20px;
@@ -148,7 +239,7 @@ video {
     transform: scale(1.1);
 }
 
-/* Formularios */
+/****************** Formularios ************************/
 form {
     background-color: rgba(255, 255, 255, 0.8);
     padding: 20px;
@@ -189,75 +280,6 @@ form input[type="submit"]:hover {
     background-color: #0056b3;
 }
 
-/* Botones de inicio de sesión y registro */
-.header-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    margin-left: 10px;
-    cursor: pointer;
-    font-size: 16px;
-    text-decoration: none;
-}
-
-.header-button:hover {
-    background-color: #0056b3;
-}
-
-/* Menú de navegación */
-.menu-icon {
-    font-size: 30px;
-    cursor: pointer;
-    position: absolute;
-    top: 20px;
-    left: 20px;
-}
-
-.menu {
-    display: none;
-    position: fixed;
-    top: 60px;
-    left: 20px;
-    width: 100%;
-    height: 100%;
-    background-color: transparent;
-    z-index: 1000;
-    padding: 10px;
-    border-radius: 5px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    visibility: hidden;
-}
-
-.menu.open {
-    display: block;
-    opacity: 1;
-    visibility: visible;
-}
-
-.menu-icon.open {
-    content: "\00d7";
-    font-size: 36px;
-}
-
-.menu ul {
-    list-style-type: none;
-    padding: 0;
-    margin-top: 100px;
-    text-align: left;
-}
-
-.menu ul li {
-    margin: 20px 0;
-}
-
-.menu ul li a {
-    color: white;
-    text-decoration: none;
-    font-size: 24px;
-}
 
 /* Cambio de formulario entre Login y Registro */
 form .cambio-registro {
@@ -279,7 +301,7 @@ form .cambio-registro {
 form .cambio-registro:hover {
     background-color: #0056b3;
 }
-
+/*************************CSS PERFIL**********************/
 .profile-container {
     background-color: rgba(255, 255, 255, 0.8);
     padding: 20px;
@@ -289,7 +311,7 @@ form .cambio-registro:hover {
     max-width: 800px;
     width: 100%;
 }
-
+/*************************************Tablas Pelea************************/
 .fights-table {
     width: 100%;
     border-collapse: collapse;
@@ -342,7 +364,7 @@ body {
     background-color: #f4f4f4;
 }
 
-/* Menú lateral izquierdo */
+/******************* Menú lateral izquierdo ************************/
 .sidebar {
     height: 100%;
     width: 250px;
@@ -378,7 +400,7 @@ body {
     border-radius: 5px;
 }
 
-/* Barra superior (perfil en la derecha) */
+/***************** Barra superior (perfil en la derecha) ***************/
 .navbar {
     display: flex;
     justify-content: flex-end;
@@ -392,7 +414,7 @@ body {
     z-index: 1000;
 }
 
-/* Perfil desplegable en la esquina derecha */
+/*********** Perfil desplegable en la esquina derecha ****************/
 .profile-dropdown {
     position: relative;
     display: inline-block;
@@ -434,7 +456,7 @@ body {
     display: block;
 }
 
-/* Contenido principal */
+/************** Contenido principal ********************/
 .content {
     margin-left: 250px; /* Ajuste para dejar espacio al menú lateral */
     margin-top: 60px;
