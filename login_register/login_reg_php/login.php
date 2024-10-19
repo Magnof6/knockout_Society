@@ -36,38 +36,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-<div class="header">
-    <nav>
-        <a href="index.php" class = "header-button">Home</a>
-    </nav>
-</div>
-<h2>Login</h2>
-<?php
-if (!empty($error_message)) {
-    echo "<p style='color: red;'>$error_message</p>";
-}
-?>
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-    Email: <input type="email" name="email" required><br>
-    Password: <input type="password" name="password" required><br>
-    <input type="submit" value="Login">
-    <a href="register.php" class = "cambio-registro">Register</a>
-</form>
-<div class="footer">
-        <!-- Boton que te lleva a Kick -->
-        <a href="https://kick.com/knockoutsociety" target="_blank" id="Kick-floating-button">
-            <img src="imagenes/kickkk.png" alt="imagen-kick-Icono Flotante">
-        </a>
-    </div>
-    
-    <script src="script.js"></script>
-</body>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <div class="header">
+            <nav>
+                <a href="index.php" class = "header-button">Home</a>
+            </nav>
+        </div>
+        <h2>Login</h2>
+        <?php
+        if (!empty($error_message)) {
+            echo "<p style='color: red;'>$error_message</p>";
+        }
+        ?>
+        <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+            Email: <input type="email" name="email" required><br>
+            Password: <input type="password" name="password" required><br>
+            <input type="submit" value="Login">
+            <a href="register.php" class = "cambio-registro">Register</a>
+        </form>
+        <div class="footer">
+                <!-- Boton que te lleva a Kick -->
+            <a href="https://kick.com/knockoutsociety" target="_blank" id="Kick-floating-button">
+                <img src="imagenes/kickkk.png" alt="imagen-kick-Icono Flotante">
+            </a>
+        </div>
+            
+        <script src="script.js"></script>
+    </body>
 </html>
