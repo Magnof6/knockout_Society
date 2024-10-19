@@ -8,14 +8,23 @@
 </head>
 <body>
     <div class="header">
-            <div class="menu-container">
-                <div id="menu-icon" class="menu-icon" onclick="toggleMenu()">&#9776;</div>
-                <div class="auth-buttons">
-                    <a href="login.php" class="header-button">Login</a>
-                    <a href="register.php" class="header-button">Register</a>
-                </div>
-                <h1>Busqueda Pelea</h1>
+        <div class="menu-container">
+            <div id="menu-icon" class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+            <h1>Buscar Pelea</h1>
+        </div>
+        <div class="search-section">
+            <label for="search">Buscar perfiles:</label>
+            <input type="text" id="search" placeholder="Buscar...">
+        </div>
+            <!-- Perfil desplegable en la esquina derecha -->
+        <div class="profile-dropdown">
+            <button class="profile-button">Perfil ▼</button>
+            <div class="profile-content">
+                <a href="profile_user.php">Ver Perfil</a>
+                <a href="#">Configuraciones</a>
+                <a href="logout.php">Cerrar sesión</a>
             </div>
+        </div>
     </div>
     <div id="menu" class="menu">
             <ul>

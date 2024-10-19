@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (password_verify($password, $row['password'])) {
                 $_SESSION['user_email'] = $row['email'];
                 $_SESSION['username'] = $row['username'];
-                header("Location: profile_user_me.php");
+                header("Location: index.php");
                 exit();
             } else {
                 $error_message = "Invalid password.";
@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <body>
         <div class="header">
             <nav>
-                <a href="index.php" class = "header-button">Home</a>
+                <a href="Principio.php" class = "header-button">Back</a>
             </nav>
         </div>
         <h2>Login</h2>

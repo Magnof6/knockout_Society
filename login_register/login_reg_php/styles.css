@@ -15,7 +15,7 @@ h1, h2 {
     text-align: center;
 }
 
-/* Barra de navegación */
+/********************* Barra de cabedera ********************/
 .header{
     position: relative;
     display: flex;
@@ -23,6 +23,7 @@ h1, h2 {
     align-items: center;
     padding: 20px 40px;
     background-color: rgb(245, 240, 240);
+    flex-wrap: wrap;/*Para que se ajuste al tamaño de la pantalla*/
 }
 
 .header h1{
@@ -35,6 +36,36 @@ h1, h2 {
     transform: translateX(-50%); /* Centra horizontalmente */
     text-align: center; /* Centra el texto */
 }
+
+/************Barra de busquda en cabecera**************/
+.search-section {
+    margin: 10px;
+}
+
+.search-section label {
+    margin-right: 5px;
+    color: black; /* Asegúrate de que el texto sea visible */
+}
+
+.search-section input[type="text"] {
+    padding: 5px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+}
+
+/* Ajustar el contenedor para que se adapte al diseño */
+.menu-container {
+    display: flex;
+    align-items: center;
+}
+
+/* Ajuste de la posición de la barra de búsqueda en la cabecera */
+.header .search-section {
+    margin-left: auto; /* Para mover la búsqueda a la derecha */
+    margin-right: 20px;
+}
+
+
 /************ Menú de navegación ***************/
 .menu-icon {
     font-size: 30px;
@@ -204,7 +235,7 @@ video {
 /* Footer */
 .footer {
     margin-top: auto;
-    text-align: center;
+    text-align: right;
     padding: 10px;
     background-color: transparent;
 }
@@ -225,6 +256,7 @@ video {
     bottom: 20px;
     right: 20px;
     z-index: 1000;
+    right: 100%;
 }
 
 #kick-floating-button img {
@@ -388,17 +420,8 @@ body {
     background-color: #575757;
 }
 
-.sidebar .search-section {
-    margin-top: 30px;
-    padding: 15px 25px;
-}
 
-.sidebar input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-}
+
 
 /***************** Barra superior (perfil en la derecha) ***************/
 .navbar {
@@ -418,6 +441,8 @@ body {
 .profile-dropdown {
     position: relative;
     display: inline-block;
+    right: 0%;
+    top: 100%;
 }
 
 .profile-button {
@@ -488,5 +513,4 @@ th {
 tr:hover {
     background-color: rgba(0, 123, 255, 0.1); /* Color de fondo al pasar el mouse */
 }
-
 
