@@ -1,8 +1,8 @@
 <?php
 use PHPUnit\Framework\TestCase;
+require 'login_register\installs\vendor\autoload.php';
 
-class LoginTest extends TestCase
-{
+class LoginTest extends TestCase{
     protected $conn;
 
     protected function setUp(): void
@@ -46,3 +46,4 @@ class LoginTest extends TestCase
         $this->conn->close();
     }
 }
+?>
