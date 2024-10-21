@@ -1,4 +1,6 @@
 <?php
+
+
 use PHPUnit\Framework\TestCase;
 
 require __DIR__ . '/../installs/vendor/autoload.php'; // Solo este require es necesario
@@ -42,7 +44,7 @@ class LoginTest extends TestCase
             $this->conn->close();
         }
     }
-
+    
     public function testLoginFailed()
     {
         $email = 'invalido@example.com';

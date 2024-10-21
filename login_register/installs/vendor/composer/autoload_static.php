@@ -20,6 +20,10 @@ class ComposerStaticInit37f8d920fa704785e836b0e1db66a48b
         array (
             'Webmozart\\Assert\\' => 17,
         ),
+        'T' => 
+        array (
+            'Tests\\' => 6,
+        ),
         'P' => 
         array (
             'Prophecy\\' => 9,
@@ -45,6 +49,10 @@ class ComposerStaticInit37f8d920fa704785e836b0e1db66a48b
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
         ),
+        'Tests\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/tests',
+        ),
         'Prophecy\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpspec/prophecy/src/Prophecy',
@@ -69,10 +77,6 @@ class ComposerStaticInit37f8d920fa704785e836b0e1db66a48b
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
         ),
-    );
-
-    public static $fallbackDirsPsr4 = array (
-        0 => __DIR__ . '/../..' . '/login_register',
     );
 
     public static $classMap = array (
@@ -708,7 +712,6 @@ class ComposerStaticInit37f8d920fa704785e836b0e1db66a48b
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit37f8d920fa704785e836b0e1db66a48b::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit37f8d920fa704785e836b0e1db66a48b::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr4 = ComposerStaticInit37f8d920fa704785e836b0e1db66a48b::$fallbackDirsPsr4;
             $loader->classMap = ComposerStaticInit37f8d920fa704785e836b0e1db66a48b::$classMap;
 
         }, null, ClassLoader::class);
