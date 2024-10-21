@@ -1,21 +1,16 @@
 {
-    "name": "usuario/knockoutsociety",
-    "description": "a fighthing club web",
-    "type": "proyect",
-    "license": "MIT",
+    "name": "user/knockoutsociety",
+    "description": "Un sistema para gestionar y registrar peleas en línea",
+    "type": "project",
+    "require": {
+        "php": "^8.0", 
+        "phpunit/phpunit": "9.5" 
+    },
     "autoload": {
         "psr-4": {
-            "Usuario\\Knockoutsociety\\": "login_reg_php/"
+            "": "login_register/"
         }
     },
-    "authors": [
-        {
-            "name": "AlexRF14",
-            "email": "alejandro.rodriguezferrer@usp.ceu.es"
-        }
-    ],
-    "minimum-stability": "beta",
-    "require-dev": {
-        "phpunit/phpunit": "^9.6"
-    }
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

@@ -1,0 +1,1 @@
+C:37:"PHPUnit\Runner\DefaultTestResultCache":211:{a:2:{s:7:"defects";a:2:{s:30:"LoginTest::testLoginSuccessful";i:4;s:26:"LoginTest::testLoginFailed";i:4;}s:5:"times";a:2:{s:30:"LoginTest::testLoginSuccessful";d:0.05;s:26:"LoginTest::testLoginFailed";d:0.023;}}}
