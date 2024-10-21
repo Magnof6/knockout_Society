@@ -1,0 +1,21 @@
+{
+    "name": "usuario/knockoutsociety",
+    "description": "a fighthing club web",
+    "type": "proyect",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Usuario\\Knockoutsociety\\": "login_reg_php/"
+        }
+    },
+    "authors": [
+        {
+            "name": "AlexRF14",
+            "email": "alejandro.rodriguezferrer@usp.ceu.es"
+        }
+    ],
+    "minimum-stability": "beta",
+    "require-dev": {
+        "phpunit/phpunit": "^9.6"
+    }
+}
