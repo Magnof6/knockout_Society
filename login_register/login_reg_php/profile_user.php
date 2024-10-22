@@ -145,9 +145,14 @@ if ($is_fighter) {
             <!-- Si no es luchador, mostrar opciones adicionales -->
             <div class="button-container">
                 <button class="button" onclick="window.location.href='register_fighter.php'">Registrarse como Luchador</button>
-                <button class="button" onclick="window.location.href='change_password.php'">Cambiar Contraseña</button>
             </div>
         <?php endif; ?>
+
+        <!-- Botón "Cambiar Contraseña" siempre visible -->
+        <div class="button-container">
+            <button class="button" onclick="window.location.href='change_password.php'">Cambiar Contraseña</button>
+        </div>
+
     </div>
 
 </body>
