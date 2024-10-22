@@ -21,7 +21,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Página con Menú Lateral y Perfil</title>
+        <title>Home</title>
         <!-- Enlazar el archivo CSS externo -->
         <link rel="stylesheet" href="styles.css">
         <style>
@@ -57,7 +57,7 @@
                 <li><a href="#" onclick="toggleUserSection()">Perfiles de otras personas</a></li>
                 <li><a href="#">Inicio</a></li>
                 <li><a href="#">Acerca de</a></li>
-                <li><a href="Contacto.php">Contacto</a></li>
+                <li><a href="Contacto.php">Servicios</a></li>
                 <li><a href="Fight.php">Buscar Pelea</a></li>
                 <li><a href="Watch.php">Ver Peleas</a></li>
                 <li><a href="Ranking.php">Ranking</a></li>

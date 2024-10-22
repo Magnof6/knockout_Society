@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ranking</title>
+    <title>Servivios</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="contacto-page">
     <div class="header">
             <div class="menu-container">
                 <div id="menu-icon" class="menu-icon" onclick="toggleMenu()">&#9776;</div>
-                <h1>Contacto</h1>
+                <h1>Servicios</h1>
             </div>
             <div class="search-section">
                 <label for="search">Buscar perfiles:</label>
