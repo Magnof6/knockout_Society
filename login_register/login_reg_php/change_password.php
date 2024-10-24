@@ -8,6 +8,9 @@ if (!isset($_SESSION['user_email']) || !isset($_SESSION['username'])) {
     exit();
 }
 
+// Asigna el email de la sesión a una variable
+$user_email = $_SESSION['user_email'];
+
 $sql = "SELECT * FROM usuario WHERE email = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $user_email);
@@ -21,16 +24,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['change_password'])) {
     $new_password = $_POST['new_password'];
     $confirm_password = $_POST['confirm_password'];
 
+    // Verifica la contraseña actual con la almacenada
     if (password_verify($current_password, $user['password'])) {
         if ($new_password === $confirm_password) {
+            // Hashea la nueva contraseña
             $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+            
+            // Actualiza la contraseña en la base de datos
             $sql = "UPDATE usuario SET password = ? WHERE email = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("ss", $hashed_password, $user_email);
             if ($stmt->execute()) {
                 $password_message = "Password changed successfully.";
             } else {
-                $password_message = "Error changing password.";
+                $password_message = "Error changing password: " . $stmt->error;
             }
         } else {
             $password_message = "New passwords do not match.";
@@ -136,4 +143,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['change_password'])) {
 
 </body>
 </html>
-
