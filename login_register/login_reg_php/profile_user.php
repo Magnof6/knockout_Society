@@ -114,9 +114,15 @@ if ($is_fighter) {
         .fights-table th {
             background-color: #f2f2f2;
         }
+        
     </style>
 </head>
 <body>
+    <div class="header">
+        <nav class="boton-atras">
+            <a href="index.php" class="header-button">Atras</a>
+        </nav>
+    </div>
 
     <div class="profile-container">
         <h2>Bienvenido, <?php echo htmlspecialchars($user['nombre']) . " " . htmlspecialchars($user['apellido']); ?></h2>
