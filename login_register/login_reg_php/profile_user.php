@@ -108,6 +108,7 @@ if ($is_fighter) {
         .fights-table th, .fights-table td {
             border: 1px solid #ddd;
             padding: 8px;
+            color: black;
         }
 
         .fights-table th {
@@ -126,17 +127,21 @@ if ($is_fighter) {
             <?php if (empty($fights)): ?>
                 <p>Aún no has luchado.</p>
             <?php else: ?>
-                <table class="fights-table">
+                <table>
                     <tr>
                         <th>Fecha</th>
                         <th>Contrincante</th>
                         <th>Ganador</th>
+                        <th>Rondas</th>
+                        <th>Ubicacion</th>
                     </tr>
                     <?php foreach ($fights as $fight): ?>
                         <tr>
                             <td><?php echo htmlspecialchars($fight['fecha']); ?></td>
                             <td><?php echo htmlspecialchars($fight['id_luchador1'] == $user_email ? $fight['id_luchador2'] : $fight['id_luchador1']); ?></td>
                             <td><?php echo htmlspecialchars($fight['id_ganador']); ?></td>
+                            <td><?php echo htmlspecialchars($fight['num_rondas']); ?></td>
+                            <td><?php echo htmlspecialchars($fight['ubicacion']); ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </table>
