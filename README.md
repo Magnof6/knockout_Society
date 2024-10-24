@@ -1,16 +1,23 @@
 # Proyecto-Ingeniería-de-Software 
 
 ## Requisitos para demo del 25/10/2024
-* Menú sándwich accesible desde la pagina principal (index.php) con acceso a varias otras paginas de la pagina web
-* Página de usuario, accesible desde la página principal una vez iniciada sesión. Visible como botón circular arriba en la esquina derecha. 
+* Menú sándwich accesible desde la pagina principal con acceso a varias otras paginas de la pagina web
+* Página de usuario, accesible desde la página principal una vez iniciada sesión. Visible como botón arriba en la esquina derecha. 
 * Pagina de usuario que contiene la opción de:
-	* Alterar nombre de usuario y contraseña
+	* Alterar contraseña
 	* Ver historial de peleas (si el usuario es luchador)
 	* La opción de si no es luchador de registrarse como luchador
 * Pagina de peleas donde se pueden ver las peleas que han ocurrido (sacada de la db)
 * Registro de usuario no permite hacerlo si 'nombre de usuario' o 'correo' ya existe
 * Inicio de sesión avisa si no encuentra usuario/contraseña.
-#### Criterios de validacion bajo construccion
+#### Criterios de validacion:
+* Una vez iniciado sesión, en la página principal habrá un menú en el lado izquierdo superior que al pinchar sobre él desplegará siete opciones distintas: Perfiles de otras personas, Inicio, Acerca de, Servicios, Buscar pelea, Ver peleas y Ranking.
+* Botón en la esquina derecha, al pinchar sobre él se podrá ver 'Ver Perfil', 'Configuraciones' y 'Cerrar sesión'.
+* Dentro de ver perfil se puede apretar sobre el botón cambiar contraseñan que te llevará a un formulario para cambiar la contraseña funcional. En caso de ser un usuario que no es luchador, se tiene que poder registrar el usuario ya existente como luchador. Y, ver el registro de peleas donde el usuario ha sido luchador.
+* Al pinchar sobre el menú sándwich y concretamente sobre 'Ver peleas', saldrá una tabla con todas las peleas que se han registrado en el sistema. La tabla contendrá los siguientes campos: Luchador 1, Luchador 2, Categoria, Ganador, Número de rondas, Fecha, Hora de inicio, Hora Final, Estado y Ubicación.
+* Cuando una persona intenta registraste con el correo o usuario de una persona que ya se ha registrado, le saltará por pantalla el siguiente mensaje. 'User with that email already exists" o "User with that username already exists".
+* Si se inician con una contraseña errónea entonces saltará el mensaje de 'Invalid password'. En cambio, si se intenta iniciar sesión con el correo erróneo entonces saltará el mensaje de 'User not found'.
+
 
 
 # Pantalla de inicio
