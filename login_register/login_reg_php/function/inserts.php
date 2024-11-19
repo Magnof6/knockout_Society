@@ -88,22 +88,14 @@ Class Inserts{
     }
 
     // Crear una apuesta
-    public function crearApuesta($nombre_apuesta , $id_apuesta, $modalidad, $correo_Luchador_1 , $correo_Luchador_2, $Luchador_1_rank, $Luchador_2_rank, 
-    $total_victoria , $total_empate, $total_derrota, $resultado = Null){
-
-        
-        if (empty($nombre_apuesta) || empty($id_apuesta) || empty($modalidad) ||
-            empty($Luchador_1) || empty($Luchador_2) || empty($Luchador_1_elo) || empty($Luchador_2_elo)) {
+    public function crearApuesta($id_apuesta, $email_usuario , $id_lucha , $luchador_apostado, $w, $l, $d, $total = null){
+        if (empty($id_apuesta) || empty($email_usuario) || empty($id_lucha) || empty($luchador_apostado) || empty($w) || empty($l) || empty($d)) {
                 throw new Exception("Missing required fields.");
             }
 
         $insert_apuesta = $this->conn->prepare(
-            "INSERT INTO apuesta (nombre_apuesta , id_apuesta, modalidad, 
-            correo_Luchador_1 , correo_Luchador_2, Luchador_1_rank, Luchador_2_rank, 
-            total_victoria , total_empate, total_derrota, resultado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-        );
-        $insert_apuesta->bind_param("sisssiiiiii" , $nombre_apuesta , $id_apuesta, $modalidad, $correo_Luchador_1 , $correo_Luchador_2, $Luchador_1_rank, $Luchador_2_rank, 
-        $total_victoria , $total_empate, $total_derrota, $resultado);
+            "INSERT INTO apuesta ($id_apuesta, $email_usuario , $id_lucha , $luchador_apostado, $w, $l, $d, $total) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $insert_apuesta->bind_param("isisiiii" , $id_apuesta, $email_usuario , $id_lucha , $luchador_apostado, $w, $l, $d, $total);
 
         if ($insert_apuesta->execute()) {
             return true;
