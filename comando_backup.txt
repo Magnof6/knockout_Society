@@ -1,5 +1,5 @@
 COMANDO EXEC TEST:
-mysql -u root -p -h serverkn.ddns.net < C:/xampp/htdocs/knockout/knockout_Society/test.sql
+mysql -u root -p -h serverkn.ddns.net < C:/xampp/htdocs/knockout/test.sql
 
 COMANDO EXEC RESTORE DATOS PASADOS:
-mysql -u root -p -h serverkn.ddns.net < C:/xampp/htdocs/knockout/knockout_Society/knockout.sql
+mysql -u root -p -h serverkn.ddns.net < C:/xampp/htdocs/knockout/knockout.sql

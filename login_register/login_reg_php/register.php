@@ -1,62 +1,47 @@
 <?php
+    
     require_once 'db_connect.php';
-    $error_message = "";
-    $success_message = "";
+    require_once 'function/inserts.php';
+    
+    $insert = new Inserts($conn);
+    
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
         $email = $_POST['email'];
         $username = $_POST['username'];
-        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $password = $_POST['password'];
         $name = $_POST['name'];
         $lastname = $_POST['lastname'];
         $age = $_POST['age'];
         $gender = $_POST['gender'];
         $is_fighter = isset($_POST['is_fighter']) ? 1 : 0;
-
-        if (empty($email) || empty($username) || empty($_POST['password']) || empty($name) || empty($lastname) || empty($age) || empty($gender)) {
-            $error_message = "All fields are required.";
+    
+        $result = $insert->registerUser($email, $username, $password, $name, $lastname, $age, $gender, $is_fighter);
+    
+        if ($result['success']) {
+            $success_message = $result['message'];
         } else {
-            // mira si el usario existe
-            $check_user = $conn->prepare("SELECT email FROM usuario WHERE email = ?");
-            $check_user->bind_param("s", $email);
-            $check_user->execute();
-            $result = $check_user->get_result();
-
-            if ($result->num_rows > 0) {
-                $error_message = "User with this email already exists.";
-            } else {
-                // lo mete en la tabla usuario
-                $insert_user = $conn->prepare("INSERT INTO usuario (email, username, password, nombre, apellido, edad, sexo) VALUES (?, ?, ?, ?, ?, ?, ?)");
-                $insert_user->bind_param("sssssss", $email, $username, $password, $name, $lastname, $age, $gender);
-
-                if ($insert_user->execute()) {
-                    $success_message = "Registration successful!";
-                    // para luchadorr
-                    if ($is_fighter) {
-                        $height = $_POST['height'];
-                        $weight = $_POST['weight'];
-                        $location = $_POST['location'];
-                        $bloodtype = $_POST['bloodtype'];
-                        $lateralidad = $_POST['lateralidad'];
-
-
-                        // mete en luchador
-                        $insert_fighter = $conn->prepare("INSERT INTO luchador (email, peso, altura, grupoSang, ubicacion, lateralidad) VALUES (?, ?, ?, ?, ?, ?)");
-                        $insert_fighter->bind_param("siisss", $email, $weight, $height, $bloodtype, $location, $lateralidad);
-                        
-                        if (!$insert_fighter->execute()) {
-                            $error_message = "Error registering fighter details: " . $insert_fighter->error;
-                        }
-                        $insert_fighter->close();
-                    }
-                } else {
-                    $error_message = "Error: " . $insert_user->error;
-                }
-                $insert_user->close();
-            }
-            $check_user->close();
+            $error_message = $result['message'];
         }
     }
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['register_fighter'])) {
+        $email = $_POST['email']; // El email debe ser de un usuario ya registrado
+        $height = $_POST['height'];
+        $weight = $_POST['weight'];
+        $location = $_POST['location'];
+        $bloodtype = $_POST['bloodtype'];
+        $lateralidad = $_POST['lateralidad'];
+    
+        $result = $insert->registerFighter($email, $height, $weight, $location, $bloodtype, $lateralidad);
+    
+        if ($result['success']) {
+            $success_message = $result['message'];
+        } else {
+            $error_message = $result['message'];
+        }
+    }
+    
+    
 ?>
 <!DOCTYPE html>
     <html lang="en">
