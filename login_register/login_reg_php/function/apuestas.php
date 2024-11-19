@@ -1,16 +1,12 @@
 <?php
 
+use phpDocumentor\Reflection\Types\Null_;
+
 /**
 * Todavía en progreso, debo comprobar cual es la clave de la apuesta
 */
 
 class Apuestas{
-
-    public function crear_apuesta($nombre_apuesta , $id_apuesta, $modalidad, $Luchador_1 , $Luchador_2, $Luchador_1_elo, $Luchador_2_elo){
-        
-        return;
-    }
-
 
     public function algoritmo_apuestas($nombre_apuesta, $id_apuesta , $total_victoria , $total_empate, $total_derrota, $resultado){
         $total = $total_victoria + $total_derrota + $total_empate;

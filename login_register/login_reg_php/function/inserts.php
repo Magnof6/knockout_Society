@@ -81,9 +81,34 @@ Class Inserts{
         } else {
             $error_message = "Error registering fighter: " . $insert_fighter->error;
         }
-        
+
         $insert_fighter->close();
         return ["success" => isset($success_message), 
                 "message" => $success_message ?? $error_message];
+    }
+
+    // Crear una apuesta
+    public function crearApuesta($nombre_apuesta , $id_apuesta, $modalidad, $correo_Luchador_1 , $correo_Luchador_2, $Luchador_1_rank, $Luchador_2_rank, 
+    $total_victoria , $total_empate, $total_derrota, $resultado = Null){
+
+        
+        if (empty($nombre_apuesta) || empty($id_apuesta) || empty($modalidad) ||
+            empty($Luchador_1) || empty($Luchador_2) || empty($Luchador_1_elo) || empty($Luchador_2_elo)) {
+                throw new Exception("Missing required fields.");
+            }
+
+        $insert_apuesta = $this->conn->prepare(
+            "INSERT INTO apuesta (nombre_apuesta , id_apuesta, modalidad, 
+            correo_Luchador_1 , correo_Luchador_2, Luchador_1_rank, Luchador_2_rank, 
+            total_victoria , total_empate, total_derrota, resultado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        );
+        $insert_apuesta->bind_param("sisiiiiiiii" , $nombre_apuesta , $id_apuesta, $modalidad, $correo_Luchador_1 , $correo_Luchador_2, $Luchador_1_rank, $Luchador_2_rank, 
+        $total_victoria , $total_empate, $total_derrota, $resultado);
+
+        if ($insert_apuesta->execute()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
