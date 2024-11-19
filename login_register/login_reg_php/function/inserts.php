@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * Esta clase encapsula toda la lógica de inserts a las diferentes tablas,
+ * las que estan ahora mismo implementadas son las de usuario y luchador.
+ * 
+ * Si quereis insertar cualquier cosa hacedlo por aquí.
+ * 
+ */
+
+
+
 Class Inserts{
     public $conn;
 
@@ -60,6 +70,7 @@ Class Inserts{
             return ["success" => false, "message" => "All fighter fields are required."];
         }
 
+        // Insertar en la tabla luchador
         $insert_fighter = $this->conn->prepare(
             "INSERT INTO luchador (email, peso, altura, grupoSang, ubicacion, lateralidad) VALUES (?, ?, ?, ?, ?, ?)"
         );
@@ -70,7 +81,7 @@ Class Inserts{
         } else {
             $error_message = "Error registering fighter: " . $insert_fighter->error;
         }
-
+        
         $insert_fighter->close();
         return ["success" => isset($success_message), 
                 "message" => $success_message ?? $error_message];
