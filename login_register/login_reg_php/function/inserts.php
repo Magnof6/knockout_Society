@@ -102,7 +102,7 @@ Class Inserts{
             correo_Luchador_1 , correo_Luchador_2, Luchador_1_rank, Luchador_2_rank, 
             total_victoria , total_empate, total_derrota, resultado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
         );
-        $insert_apuesta->bind_param("sisiiiiiiii" , $nombre_apuesta , $id_apuesta, $modalidad, $correo_Luchador_1 , $correo_Luchador_2, $Luchador_1_rank, $Luchador_2_rank, 
+        $insert_apuesta->bind_param("sisssiiiiii" , $nombre_apuesta , $id_apuesta, $modalidad, $correo_Luchador_1 , $correo_Luchador_2, $Luchador_1_rank, $Luchador_2_rank, 
         $total_victoria , $total_empate, $total_derrota, $resultado);
 
         if ($insert_apuesta->execute()) {
