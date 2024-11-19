@@ -1,15 +1,18 @@
 <?php
 session_start();
-require_once 'db_connect.php'; // Asegúrate de tener la conexión a la base de datos
+require_once 'db_connect.php'; 
+require_once 'function/inserts.php'; 
 
-// Verifica si el usuario está logueado
 if (!isset($_SESSION['user_email']) || !isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
 
 $error_message = "";
+$success_message = "";
 $user_email = $_SESSION['user_email'];
+$insert = new Inserts($conn);
+
 
 // Verificar si el usuario ya es un luchador
 $sql = "SELECT * FROM luchador WHERE email = ?";
@@ -23,27 +26,24 @@ if ($result->num_rows > 0) {
     exit();
 }
 
+
+//Recolectamos datos del formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Obtener datos del formulario
     $altura = $_POST['altura'];
     $peso = $_POST['peso'];
     $ubicacion = $_POST['ubicacion'];
     $grupoSang = $_POST['grupoSang'];
     $lateralidad = $_POST['lateralidad'];
 
-    // Validar campos vacíos
     if (empty($altura) || empty($peso) || empty($ubicacion) || empty($grupoSang) || empty($lateralidad)) {
         $error_message = "Todos los campos son requeridos.";
     } else {
-        // Insertar en la base de datos
-        $sql_insert = "INSERT INTO luchador (email, altura, peso, ubicacion, grupoSang, lateralidad) VALUES (?, ?, ?, ?, ?, ?)";
-        $stmt_insert = $conn->prepare($sql_insert);
-        $stmt_insert->bind_param("sdssss", $user_email, $altura, $peso, $ubicacion, $grupoSang, $lateralidad);
-
-        if ($stmt_insert->execute()) {
-            echo "<p style='color: green;'>Registro exitoso como luchador.</p>";
+        $result = $insert->registerFighter($user_email, $altura, $peso, $ubicacion, $grupoSang, $lateralidad);
+        
+        if ($result['success']) {
+            $success_message = $result['message'];
         } else {
-            echo "<p style='color: red;'>Error al registrar como luchador. Intenta nuevamente.</p>";
+            $error_message = $result['message'];
         }
     }
 }
@@ -67,6 +67,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php
     if (!empty($error_message)) {
         echo "<p style='color: red;'>$error_message</p>";
+    }
+    if (!empty($success_message)) {
+        echo "<p style='color: green;'>$success_message</p>";
     }
     ?>
     <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">

@@ -3,12 +3,13 @@
 Class Inserts{
     public $conn;
 
-    public function __construct($dbConnection)
-    {
+    public function __construct($dbConnection){
         $this->conn = $dbConnection;
     }
-    public function registerUser($email, $username, $password, $name, $lastname, $age, $gender, $is_fighter)
-    {
+
+
+    // Registrar Usuario
+    public function registerUser($email, $username, $password, $name, $lastname, $age, $gender, $is_fighter){
         $error_message = "";
         $success_message = "";
 
@@ -36,8 +37,8 @@ Class Inserts{
 
         if ($insert_user->execute()) {
             $success_message = "User registration successful!";
+            // Si llama a $is_fighter
             if ($is_fighter) {
-                // Si el usuario marcó "Registrar como luchador", llamamos al método registerFighter
                 return $this->registerFighter($email, $_POST['height'], $_POST['weight'], $_POST['location'], $_POST['bloodtype'], $_POST['lateralidad']);
             }
         } else {
@@ -53,9 +54,8 @@ Class Inserts{
                 "message" => $success_message ?: $error_message];
     }
 
-    // Método independiente para registrar luchador
-    public function registerFighter($email, $height, $weight, $location, $bloodtype, $lateralidad)
-    {
+    // Registrar Luchador
+    public function registerFighter($email, $height, $weight, $location, $bloodtype, $lateralidad){
         if (empty($height) || empty($weight) || empty($location) || empty($bloodtype) || empty($lateralidad)) {
             return ["success" => false, "message" => "All fighter fields are required."];
         }
@@ -72,6 +72,7 @@ Class Inserts{
         }
 
         $insert_fighter->close();
-        return ["success" => isset($success_message), "message" => $success_message ?? $error_message];
+        return ["success" => isset($success_message), 
+                "message" => $success_message ?? $error_message];
     }
 }
