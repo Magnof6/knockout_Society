@@ -2,6 +2,7 @@
 
 use phpDocumentor\Reflection\Types\Null_;
 use PhpParser\Node\Stmt;
+use PHPUnit\TextUI\TestSuiteMapper;
 
 /**
 * Todavía en progreso, debo comprobar cual es la clave de la apuesta
@@ -68,9 +69,21 @@ class Apuestas{
         echo "Error";
         return false;
     }
+}
+    
 
+    public function algoritmo_apuestas($w_tt , $w_t, $l_tt , $l_t , $d_tt, $d_t, $t_tt, $resultado, $comision){
+        $prob_w = 1 + (1 - $w_tt / $t_tt);
+        $prob_l = 1 + (1 - $l_tt / $t_tt);
+        $prob_d = 1 + (1 - $d_tt / $t_tt);
+
+        $sumador_w = $w_t * $prob_w * $comision;
+        $sumador_l = $l_t * $prob_l * $comision;
+        $sumador_d = $d_t * $prob_d * $comision;
+        $ganancias = $sumador_w + $sumador_l + $sumador_d;
     }
-    public function algoritmo_apuestas($id_lucha, $id_apuesta, $email_usuario , $resultado, $comision = 0.9){
+
+    public function apuesta_actualizar_usuario($id_lucha, $id_apuesta, $email_usuario , $resultado, $comision = 0.9){
         
         $totales = $this->obtenerValoresT($id_lucha);
         if($totales){
@@ -87,19 +100,7 @@ class Apuestas{
             $d_t = $totales_apostados[2];
         }
 
-
-
-        // Si el resultado de la apuesta ha sido victoria
-        if($resultado == 1){
-            return [$id_apuesta , (($l_apostado + $d_apostado) / $total) * $w_apostado * $comision];
-
-        // Si el resultado de la apuesta ha sido derrota
-        }elseif($resultado == 0){
-            return [$id_apuesta , ($total_derrota / $total)];
-
-        }else{
-        // Si el resultado de la apuesta ha sido empate
-            return [$id_apuesta , ($total_empate / $total)];
-        }
-    }
+        $ganancias = $this->algoritmo_apuestas($w_tt , $w_t, $l_tt , $l_t , $d_tt, $d_t, $t_tt, $resultado, $comision);
+        
+}
 }
