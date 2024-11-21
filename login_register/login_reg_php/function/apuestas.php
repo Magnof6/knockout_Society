@@ -46,17 +46,18 @@ class Apuestas{
         }
     }
 
-    public function apostadoPorUsuario($id_apuesta, $email_usuario){
+    public function apostadoPorUsuario($id_apuesta , $email){
         try{
 
-            if (empty($id_apuesta) || empty($email_usuario)) {
+            if (empty($id_apuesta) || empty($email)) {
                 return ["success" => false, "message" => "Invalid ID_apuesta o email_usuario provided."];
             }
 
             // Para extraer lo que apostó el usuario
-            $sql = "SELECT w , l , d FROM apuesta WHERE id_apuesta = :id_apuesta";
+            $sql = "SELECT w , l , d FROM apuesta WHERE id_apuesta = :id_apuesta AND email = :email";
             $stmt = $this->conn->prepare($sql);
             $stmt -> bindParam(':id_apuesta' , $id_apuesta, PDO::PARAM_INT);
+            $stmt -> bindParam(':email' , $email, PDO::PARAM_STR);
             $stmt->execute();
             $apostado = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -81,6 +82,46 @@ class Apuestas{
         $sumador_l = $l_t * $prob_l * $comision;
         $sumador_d = $d_t * $prob_d * $comision;
         $ganancias = $sumador_w + $sumador_l + $sumador_d;
+
+        return $ganancias;
+    }
+
+    public function actualizarUsuarioApuesta($ganancias , $email){
+        try{
+
+            if (empty($ganancias) || empty($email)){
+                return ["success" => false, "message" => "Invalid ganancias provided."];
+            }
+        
+            $sql = "SELECT cartera FROM usuario WHERE email = :email";
+            $stmt = $this->conn->prepare($sql);
+            $stmt -> bindParam(':email' , $email, PDO::PARAM_STR);
+            $stmt->execute();
+            $cartera = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$cartera) {
+                return ["success" => false, "message" => "Usuario no encontrado."];
+            }
+
+            $cartera = $cartera['cartera'];
+            $nueva_cartera = $cartera + $ganancias;
+
+            $sql = "UPDATE usuario SET cartera = :nueva_cartera WHERE email = :email";
+            $stmt = $this->conn->prepare($sql);
+            $stmt -> bindParam(':email' , $email, PDO::PARAM_STR);
+            $stmt -> bindParam(':nueva_cartera' , $nueva_cartera, PDO::PARAM_INT);
+            //$stmt->execute();
+
+            if ($stmt->execute()) {
+                return ["success" => true, "message" => "Cartera actualizada exitosamente."];
+            } else {
+                return ["success" => false, "message" => "No se pudo actualizar la cartera."];
+            }   
+                
+        }catch(Exception){
+            echo "Error";
+            return false;
+        }
     }
 
     public function apuesta_actualizar_usuario($id_lucha, $id_apuesta, $email_usuario , $resultado, $comision = 0.9){
@@ -102,5 +143,9 @@ class Apuestas{
 
         $ganancias = $this->algoritmo_apuestas($w_tt , $w_t, $l_tt , $l_t , $d_tt, $d_t, $t_tt, $resultado, $comision);
         
-}
+        if($ganancias != Null){
+            $this->actualizarUsuarioApuesta($ganancias, $email_usuario);
+        }
+
+    }
 }
