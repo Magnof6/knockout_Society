@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-C:37:"PHPUnit\Runner\DefaultTestResultCache":336:{a:2:{s:7:"defects";a:3:{s:30:"LoginTest::testLoginSuccessful";i:4;s:26:"LoginTest::testLoginFailed";i:4;s:25:"LoginTest::testPruebaSuma";i:4;}s:5:"times";a:4:{s:30:"LoginTest::testLoginSuccessful";d:0.021;s:26:"LoginTest::testLoginFailed";d:0.004;s:25:"LoginTest::testPruebaSuma";d:0.022;s:30:"Tests\MathTest::testPruebaSuma";d:0.375;}}}
-=======
-C:37:"PHPUnit\Runner\DefaultTestResultCache":336:{a:2:{s:7:"defects";a:3:{s:30:"LoginTest::testLoginSuccessful";i:4;s:26:"LoginTest::testLoginFailed";i:4;s:25:"LoginTest::testPruebaSuma";i:4;}s:5:"times";a:4:{s:30:"LoginTest::testLoginSuccessful";d:0.021;s:26:"LoginTest::testLoginFailed";d:0.004;s:25:"LoginTest::testPruebaSuma";d:0.022;s:30:"Tests\MathTest::testPruebaSuma";d:0.375;}}}
->>>>>>> 9507a2d929885e8516243f89cd1134f4a5b94979
+C:37:"PHPUnit\Runner\DefaultTestResultCache":90:{a:2:{s:7:"defects";a:0:{}s:5:"times";a:1:{s:30:"Tests\MathTest::testPruebaSuma";d:1.045;}}}
