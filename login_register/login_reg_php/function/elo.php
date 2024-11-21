@@ -64,8 +64,45 @@ class Elo{
 
     }
 
-    public function actualizarEloLuchadores($id_lucha , $email_Luchador_1 , $email_Luchador_2, $resultado){
+    public function actualizarLuchadores($email_Luchador_1 , $email_Luchador_2, $resultado, $puntosLn_1 , $puntosLn_2){
+        try{
+        
+            //Luchador 1
+            $sql = "SELECT puntos FROM luchador WHERE email = :email_Luchador_1";
+            $stmt = $this->conn->prepare($sql);
+            $stmt -> bindParam(':email_Luchador_1' , $email_Luchador_1, PDO::PARAM_STR);
+            $stmt->execute();
 
+            $sql = "UPDATE luchador SET puntos = :puntosLn_1 WHERE email = :email_Luchador_1";
+            $stmt = $this->conn->prepare($sql);
+            $stmt -> bindParam(':email_Luchador_1' , $email_Luchador_1, PDO::PARAM_STR);
+            $stmt -> bindParam(':puntosLn_1' , $puntosLn_1, PDO::PARAM_INT);
+
+            //Luchador 2
+            $sql = "SELECT puntos FROM luchador WHERE email = :email_Luchador_2";
+            $stmt = $this->conn->prepare($sql);
+            $stmt -> bindParam(':email_Luchador_2' , $email_Luchador_2, PDO::PARAM_STR);
+            $stmt->execute();
+
+            $sql = "UPDATE luchador SET puntos = :puntosLn_2 WHERE email = :email_Luchador_2";
+            $stmt = $this->conn->prepare($sql);
+            $stmt -> bindParam(':email_Luchador_2' , $email_Luchador_2, PDO::PARAM_STR);
+            $stmt -> bindParam(':puntosLn_2' , $puntosLn_2, PDO::PARAM_INT);
+
+            if ($stmt->execute()) {
+                return ["success" => true, "message" => "Cartera actualizada exitosamente."];
+            } else {
+                return ["success" => false, "message" => "No se pudo actualizar la cartera."];
+            }   
+                
+        }catch(Exception){
+            echo "Error";
+            return false;
+        }
+    }
+
+    public function EloLuchadoresAfter($id_lucha , $email_Luchador_1 , $email_Luchador_2, $resultado){
+        
         $puntos = $this -> extraerEloLuchadoresBefore($email_Luchador_1 , $email_Luchador_2);
         if($puntos){
             $R_a = $puntos[0];
@@ -75,8 +112,10 @@ class Elo{
         if($puntos_f){
             $puntosLn_1 = $puntos_f[0];
             $puntosLn_2 = $puntos_f[1];
-            
+
+            $this->actualizarLuchadores($email_Luchador_1 , $email_Luchador_2, $resultado, $puntosLn_1 , $puntosLn_2);
         }
+
 
         
 
