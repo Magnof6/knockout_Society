@@ -28,6 +28,10 @@ Class Inserts{
             return ["success" => false, "message" => "All fields are required."];
         }
 
+        if (!is_numeric($age) || $age <= 0) {
+            return ["success" => false, "message" => "La edad debe ser un número positivo."];
+        }
+
         // Verificar si el usuario ya existe
         $check_user = $this->conn->prepare("SELECT email FROM usuario WHERE email = ?");
         $check_user->bind_param("s", $email);

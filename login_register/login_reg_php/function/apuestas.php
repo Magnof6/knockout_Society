@@ -89,7 +89,7 @@ class Apuestas{
     public function actualizarUsuarioApuesta($ganancias , $email){
         try{
 
-            if (empty($ganancias) || empty($email)){
+            if (($ganancias) != Null || empty($email)){
                 return ["success" => false, "message" => "Invalid ganancias provided."];
             }
         
