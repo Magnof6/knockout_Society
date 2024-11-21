@@ -1,5 +1,84 @@
 # Proyecto-Ingeniería-de-Software 
 
+## Requisitos para la demo del 09/12/24
+ ### Contáctanos 
+
+  *Cuando el usuario hace clic en la sección "Contáctanos", debe abrirse una página o formulario para enviar consultas. 
+
+  *Cuando el usuario completa el formulario, debe recibir una confirmación de envío. 
+
+ 
+
+ ### Ranking 
+
+  *Cuando el usuario accede al ranking, debe visualizar una lista ordenada por puntuación o categoría. 
+
+  *Se mostrarán los 10 mejores del ranking (que más puntos tienen) 
+
+ 
+
+ ### Watch.php (Visualización de videos) 
+
+  *Cuando el usuario accede a esta página, debe poder reproducir los videos disponibles sin interrupciones. 
+
+  *Cuando un video no se encuentra disponible, debe mostrarse un mensaje claro indicando el error. 
+
+  *Cuando el usuario selecciona un video, este debe cargarse en un reproductor intuitivo y funcional. 
+
+ 
+
+ ### Fight.php (Matchmaking) 
+
+  *Cuando el usuario hace clic en el botón "Buscando pelea", su estado debe actualizarse en la base de datos correctamente. 
+
+  *Cuando se realiza el matchmaking, el sistema debe emparejar al usuario con otro luchador compatible según los criterios definidos. 
+
+  *Cuando el administrador accede, debe tener control para gestionar el matchmaking de manera manual si es necesario. 
+
+ 
+
+ ### Mejorar la interfaz de change_password.php 
+
+  *Cuando el usuario accede a esta página, debe ver un diseño claro e intuitivo que facilite el cambio de contraseña. 
+
+  *Cuando el usuario completa el formulario, debe recibir mensajes inmediatos sobre el éxito o fallos al actualizar su contraseña. 
+
+ 
+
+ ### Tests 
+
+  *Cuando los tests se ejecutan, deben cubrir los requisitos clave definidos en el sistema. 
+
+  *Cuando se detecta un error durante los tests, debe registrarse con suficiente información para facilitar su resolución. 
+
+  *Cuando los tests finalizan, deben generar un reporte indicando el estado de cada funcionalidad probada. 
+
+ 
+
+ ### Sección para apostar 
+
+  *Cuando el usuario accede a la sección de apuestas, debe ver las peleas disponibles para apostar. 
+
+  *Cuando el usuario realiza una apuesta, debe confirmarse visualmente que esta fue registrada con éxito. 
+
+  *Lista usuario (Búsqueda de perfiles) 
+
+  *Cuando el usuario busca a una persona, debe poder encontrar su perfil individual si existe en la base de datos. 
+
+  *Cuando no se encuentra a un usuario, debe mostrarse un mensaje claro indicando que no existe. 
+
+  *Cuando se accede al perfil de un usuario, debe mostrarse su información básica y opciones según el rol del visitante. 
+
+
+
+
+
+
+
+
+
+
+
 ## Requisitos para demo del 25/10/2024
 * Menú sándwich accesible desde la pagina principal con acceso a varias otras paginas de la pagina web
 * Página de usuario, accesible desde la página principal una vez iniciada sesión. Visible como botón arriba en la esquina derecha. 
