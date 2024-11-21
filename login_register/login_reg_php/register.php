@@ -13,9 +13,10 @@
         $lastname = $_POST['lastname'];
         $age = $_POST['age'];
         $gender = $_POST['gender'];
+        $cartera = (float) $_POST['cartera'];
         $is_fighter = isset($_POST['is_fighter']) ? 1 : 0;
     
-        $result = $insert->registerUser($email, $username, $password, $name, $lastname, $age, $gender, $is_fighter);
+        $result = $insert->registerUser($email, $username, $password, $name, $lastname, $age, $gender, $cartera , $is_fighter);
     
         if ($result['success']) {
             $success_message = $result['message'];
@@ -85,6 +86,7 @@
                 <option value="Masculino">Male</option>
                 <option value="Femenino">Female</option>
             </select><br>
+            Cartera: <input type="number" name="cartera" step="0.01" required><br>
             <input type="checkbox" id="is_fighter" name="is_fighter" onchange="toggleFighterFields()"> Registrar como luchador?<br>
             <div id="fighterFields" style="display: none;">
                 Altura: <input type="number" step="0.01" name="height"><br>

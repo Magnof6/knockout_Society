@@ -19,12 +19,12 @@ Class Inserts{
 
 
     // Registrar Usuario
-    public function registerUser($email, $username, $password, $name, $lastname, $age, $gender, $is_fighter){
+    public function registerUser($email, $username, $password, $name, $lastname, $age, $gender, $cartera , $is_fighter){
         $error_message = "";
         $success_message = "";
 
         // Validación de campos obligatorios
-        if (empty($email) || empty($username) || empty($password) || empty($name) || empty($lastname) || empty($age) || empty($gender)) {
+        if (empty($email) || empty($username) || empty($password) || empty($name) || empty($lastname) || empty($cartera)|| empty($age) || empty($gender)) {
             return ["success" => false, "message" => "All fields are required."];
         }
 
@@ -40,10 +40,10 @@ Class Inserts{
 
         // Insertar en la tabla usuario
         $insert_user = $this->conn->prepare(
-            "INSERT INTO usuario (email, username, password, nombre, apellido, edad, sexo) VALUES (?, ?, ?, ?, ?, ?, ?)"
+            "INSERT INTO usuario (email, username, password, nombre, apellido, edad, sexo, cartera) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
         );
         $password_hashed = password_hash($password, PASSWORD_DEFAULT);
-        $insert_user->bind_param("sssssis", $email, $username, $password_hashed, $name, $lastname, $age, $gender);
+        $insert_user->bind_param("sssssisd", $email, $username, $password_hashed, $name, $lastname, $age, $gender, $cartera);
 
         if ($insert_user->execute()) {
             $success_message = "User registration successful!";
