@@ -1,7 +1,24 @@
 # Proyecto-Ingeniería-de-Software 
 
 ## Requisitos para la demo del 09/12/24
- ### Contáctanos 
+
+### Hosting Server
+
+  * Desplegar la aplicacion web en un servidor para que sea usable desde cualquier navegador.
+
+  * Servidor propio.
+
+### Buscando Pelea, extras:
+
+  * Debe aparecer una señal que permita al usuario seleccionar si quiere o no alternar su estado de Buscando Pelea
+
+  * Este estado pordrá ser visualizado por una señal de color verde (Si Buscando Pelea) o rojo (No Buscando Pelea).
+
+### Modificación del correo:
+
+  * El usuario debe poder modificar su correo tras usar su nombre de usuario y contraseña
+
+### Contáctanos 
 
   * Cuando el usuario hace clic en la sección "Contáctanos", debe abrirse una página o formulario para enviar consultas. 
 
@@ -9,7 +26,7 @@
 
  
 
- ### Ranking 
+### Ranking 
 
   * Cuando el usuario accede al ranking, debe visualizar una lista ordenada por puntuación o categoría. 
 
@@ -17,7 +34,7 @@
 
  
 
- ### Watch.php (Visualización de videos) 
+### Watch.php (Visualización de videos) 
 
   * Cuando el usuario accede a esta página, debe poder reproducir los videos disponibles sin interrupciones. 
 
@@ -27,7 +44,7 @@
 
  
 
- ### Fight.php (Matchmaking) 
+### Fight.php (Matchmaking) 
 
   * Cuando el usuario hace clic en el botón "Buscando pelea", su estado debe actualizarse en la base de datos correctamente. 
 
@@ -37,7 +54,7 @@
 
  
 
- ### Mejorar la interfaz de change_password.php 
+### Mejorar la interfaz de change_password.php 
 
   * Cuando el usuario accede a esta página, debe ver un diseño claro e intuitivo que facilite el cambio de contraseña. 
 
@@ -45,7 +62,7 @@
 
  
 
- ### Tests 
+### Tests 
 
   * Cuando los tests se ejecutan, deben cubrir los requisitos clave definidos en el sistema. 
 
@@ -55,7 +72,7 @@
 
  
 
- ### Sección para apostar 
+### Sección para apostar 
 
   * Cuando el usuario accede a la sección de apuestas, debe ver las peleas disponibles para apostar. 
 
