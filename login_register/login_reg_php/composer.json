@@ -1,0 +1,17 @@
+{
+    "name": "giuli/login_reg_php",
+    "description": "Ingeniería del Software",
+    "autoload": {
+        "psr-4": {
+            "Giuli\\LoginRegPhp\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Club de la Lucha"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^11.4"
+    }
+}
