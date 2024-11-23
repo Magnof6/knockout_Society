@@ -27,6 +27,8 @@
  *      echo "Nuevo Elo de B: " . round($nuevo_elo_b, 2) . "\n";
  * 
  */
+
+require_once '../db_connect.php';
 class Elo{
     public $conn;
 

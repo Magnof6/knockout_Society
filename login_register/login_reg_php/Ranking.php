@@ -1,7 +1,7 @@
 <?php
-    session_start();
-    require_once 'db_connect.php';
-    require_once 'function/apuestas.php'; 
+require_once 'function/apuestas.php'; 
+session_start();
+//    require_once 'function/apuestas.php'; 
 ?>
 
 <!DOCTYPE html>
@@ -105,7 +105,7 @@
     <div class="content">
         <div style="text-align: center;">
             <a href="function/mostrar.php?criterio=puntos">Puntos</a>
-            <a href="function/mostrar.php?criterio=nombre">Nombre</a>
+            <a href="function/mostrar.php?criterio=email">Email</a>
             <a href="function/mostrar.php?criterio=victorias">Victorias</a>
             <a href="function/mostrar.php?criterio=empates">Empates</a>
             <a href="function/mostrar.php?criterio=derrotas">Derrotas</a>

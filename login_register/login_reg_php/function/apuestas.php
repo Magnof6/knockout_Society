@@ -8,6 +8,7 @@ use PHPUnit\TextUI\TestSuiteMapper;
 * Todavía en progreso, debo comprobar cual es la clave de la apuesta
 */
 
+// require_once '../db_connect.php';
 
 class Apuestas{
 

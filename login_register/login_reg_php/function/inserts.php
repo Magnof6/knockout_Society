@@ -7,7 +7,7 @@
  * Si quereis insertar cualquier cosa hacedlo por aquí.
  * 
  */
-
+require_once '../db_connect.php';
 
 
 Class Inserts{

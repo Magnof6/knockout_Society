@@ -1,19 +1,29 @@
 <?php
+
+require_once '../db_connect.php';
+session_start();
+
+if (isset($_GET['criterio'])) {
+    $criterio = $_GET['criterio'];
+    $mostrar = new Mostrar($conn);
+    $mostrar->mostrarRanking($criterio);
+} else {
+    echo "No se ha especificado un criterio.";
+}
 class Mostrar {
-    public $db;
+    public $conn;
 
     public function __construct($dbConnection){
         $this->conn = $dbConnection;
     }
-
     public function mostrarRanking($criterio) {
   
-        $criterios_validos = ['puntos', 'nombre', 'victorias', 'empates', 'derrotas'];
+        $criterios_validos = ['puntos', 'email', 'victorias', 'empates', 'derrotas'];
         if (!in_array($criterio, $criterios_validos)) {
             die("Criterio no válido");
         }
 
-        $sql = "SELECT nombre, puntos, victorias, empates, derrotas 
+        $sql = "SELECT email, puntos, victorias, empates, derrotas 
             FROM luchador 
             ORDER BY $criterio DESC";
 
@@ -26,7 +36,7 @@ class Mostrar {
 
         if ($result->num_rows > 0) { //Mostrar
             while ($fila = $result->fetch_assoc()) {
-                echo "Nombre: {$fila['nombre']}, Puntos: {$fila['puntos']}, Victorias: {$fila['victorias']}, Empates: {$fila['empates']}, Derrotas: {$fila['derrotas']}<br>";
+                echo "Nombre: {$fila['email']}, Puntos: {$fila['puntos']}, Victorias: {$fila['victorias']}, Empates: {$fila['empates']}, Derrotas: {$fila['derrotas']}<br>";
             }
         } else {
             echo "No se encontraron resultados.";
@@ -34,12 +44,5 @@ class Mostrar {
     }
 }
 
-// oBtenido del html, cuando el usuario selecciona una opción
-if (isset($_GET['criterio'])) {
-    $criterio = $_GET['criterio'];
-    $mostrar = new Mostrar();
-    $mostrar->mostrarRanking($criterio);
-} else {
-    echo "No se ha especificado un criterio.";
-}
-?>
+$conn->close();
+
