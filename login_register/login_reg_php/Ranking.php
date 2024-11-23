@@ -29,8 +29,50 @@ if (!in_array($criterio, $criterios_validos)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ranking</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos básicos para el menú */
+        .menu {
+            background-color: #333;
+            overflow: hidden;
+        }
+        .menu ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+        .menu ul li {
+            float: left;
+        }
+        .menu ul li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .menu ul li a:hover {
+            background-color: #575757;
+        }
+    </style>
+    <script>
+        function toggleUserSection() {
+            alert('Funcionalidad en desarrollo: Perfiles de otras personas');
+        }
+    </script>
 </head>
 <body>
+    <div id="menu" class="menu">
+        <ul>
+            <li><a href="#" onclick="toggleUserSection()">Perfiles de otras personas</a></li>
+            <li><a href="#">Inicio</a></li>
+            <li><a href="#">Acerca de</a></li>
+            <li><a href="Contacto.php">Servicios</a></li>
+            <li><a href="Fight.php">Buscar Pelea</a></li>
+            <li><a href="Watch.php">Ver Peleas</a></li>
+            <li><a href="Ranking.php">Ranking</a></li>
+        </ul>
+    </div>
+
     <div class="container">
         <h1>Ranking de Luchadores</h1>
         
