@@ -3,7 +3,7 @@
         'name' => 'giuli/login_reg_php',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '37ba802b74cdb12bace7f7174a9a59a0736b117e',
+        'reference' => '8871db598565f226858b86a844129a5fa010203d',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'giuli/login_reg_php' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '37ba802b74cdb12bace7f7174a9a59a0736b117e',
+            'reference' => '8871db598565f226858b86a844129a5fa010203d',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

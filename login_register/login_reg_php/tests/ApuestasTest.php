@@ -2,6 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
+// Incluye el archivo de la clase Apuestas
+require_once __DIR__ . '/../function/apuestas.php';
+
 class ApuestasTest extends TestCase
 {
     private $db;
@@ -9,47 +12,71 @@ class ApuestasTest extends TestCase
 
     protected function setUp(): void
     {
-        // Conexión real a la base de datos
-        $dsn = 'mysql:host=localhost;dbname=test_db';
+        $dsn = 'mysql:host=serverkn.ddns.net;dbname=knockout';
         $username = 'root';
-        $password = 'password';
+        $password = 'PeleaDown$666';
         $this->db = new PDO($dsn, $username, $password);
         $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $this->apuestas = new Apuestas($this->db);
-
-        // Inserta datos para pruebas en la tabla `apuesta`
-        $this->db->exec("INSERT INTO apuesta (id, email_usuario, id_lucha, luchador_apostado, w, l, d, total) 
-                         VALUES (1, 'test@example.com', 1, 'Luchador1', 100, 50, 20, 170)");
-        $this->db->exec("INSERT INTO usuario (email, cartera) VALUES ('test@example.com', 100)");
+        $this->resetDatabase();
+        $this->initializeDatabase();
     }
 
-    protected function tearDown(): void
+    private function resetDatabase(): void
     {
-        // Limpia los datos después de las pruebas
-        $this->db->exec("DELETE FROM apuesta");
-        $this->db->exec("DELETE FROM usuario");
+        $this->db->exec("SET FOREIGN_KEY_CHECKS=0");
+        $this->db->exec("TRUNCATE TABLE apuesta");
+        $this->db->exec("TRUNCATE TABLE lucha");
+        $this->db->exec("TRUNCATE TABLE luchador");
+        $this->db->exec("TRUNCATE TABLE categoria");
+        $this->db->exec("TRUNCATE TABLE usuario");
+        $this->db->exec("TRUNCATE TABLE replays");
+        $this->db->exec("SET FOREIGN_KEY_CHECKS=1");
     }
 
-    public function testObtenerValoresT_ValidId_ReturnsSum()
+    private function initializeDatabase(): void
+    {
+        // Usuario
+        $this->db->exec("INSERT INTO usuario (email, username, password, nombre, apellido, edad, sexo, cartera)
+                         VALUES ('test@example.com', 'testuser', 'password', 'Nombre', 'Apellido', 30, 'masculino', 100)");
+
+        // Luchador
+        $this->db->exec("INSERT INTO luchador (email, peso, altura, victorias, derrotas, empates, puntos, grupoSang, ubicacion, lateralidad, buscando_pelea)
+                         VALUES ('test@example.com', 70, 175, 10, 5, 2, 100, 'O+', 'Madrid', 'diestro', 1)");
+
+        // Categoría
+        $this->db->exec("INSERT INTO categoria (id, descripcion, nombre)
+                         VALUES (1, 'mma', 'lucha libre')");
+
+        // Lucha
+        $this->db->exec("INSERT INTO lucha (id_lucha, id_luchador1, id_luchador2, id_categoria, id_ganador, num_rondas, fecha, hora_inicio, hora_final, estado, ubicacion)
+                         VALUES (1, 'test@example.com', 'test@example.com', 1, 'test@example.com', 3, '2024-11-24', '12:00:00', '12:30:00', 'pendiente', 'Madrid')");
+
+        // Apuesta
+        $this->db->exec("INSERT INTO apuesta (id, email_usuario, id_lucha, luchador_apostado, w, l, d, total)
+                         VALUES (1, 'test@example.com', 1, 'test@example.com', 100, 50, 20, 170)");
+    }
+
+    public function testObtenerValoresT_ValidId_ReturnsSum(): void
     {
         $result = $this->apuestas->obtenerValoresT(1);
-        $this->assertEquals([100, 50, 20], $result);
+        $this->assertSame([100, 50, 20], array_map('intval', $result));
     }
 
-    public function testObtenerValoresT_InvalidId_ReturnsDefault()
+    public function testObtenerValoresT_InvalidId_ReturnsDefault(): void
     {
         $result = $this->apuestas->obtenerValoresT(null);
-        $this->assertEquals(["success" => false, "message" => "Invalid ID_lucha provided."], $result);
+        $this->assertSame(["success" => false, "message" => "Invalid ID_lucha provided."], $result);
     }
 
-    public function testApostadoPorUsuario_ValidInput_ReturnsValues()
+    public function testApostadoPorUsuario_ValidInput_ReturnsValues(): void
     {
         $result = $this->apuestas->apostadoPorUsuario(1, 'test@example.com');
-        $this->assertEquals([100, 50, 20], $result);
+        $this->assertSame([100, 50, 20], $result !== false ? array_map('intval', $result) : []);
     }
 
-    public function testAlgoritmoApuestas_ReturnsExpectedGanancias()
+    public function testAlgoritmoApuestas_ReturnsExpectedGanancias(): void
     {
         $w_tt = 100;
         $w_t = 100;
@@ -69,25 +96,23 @@ class ApuestasTest extends TestCase
         $this->assertEquals($expectedGanancias, $result);
     }
 
-    public function testActualizarUsuarioApuesta_ValidUser_UpdatesWallet()
+    public function testActualizarUsuarioApuesta_ValidUser_UpdatesWallet(): void
     {
         $ganancias = 50;
         $result = $this->apuestas->actualizarUsuarioApuesta($ganancias, 'test@example.com');
-        $this->assertEquals(["success" => true, "message" => "Cartera actualizada exitosamente."], $result);
+        $this->assertSame(["success" => true, "message" => "Cartera actualizada exitosamente."], $result);
 
-        // Verificar que la cartera se haya actualizado correctamente
         $stmt = $this->db->query("SELECT cartera FROM usuario WHERE email = 'test@example.com'");
         $cartera = $stmt->fetch(PDO::FETCH_ASSOC);
-        $this->assertEquals(150, $cartera['cartera']);
+        $this->assertSame(150, (int)$cartera['cartera']);
     }
 
-    public function testApuestaActualizarUsuario_CompletesSuccessfully()
+    public function testApuestaActualizarUsuario_CompletesSuccessfully(): void
     {
         $this->apuestas->apuesta_actualizar_usuario(1, 1, 'test@example.com', 'w', 0.9);
 
-        // Verificar que la cartera del usuario fue actualizada correctamente
         $stmt = $this->db->query("SELECT cartera FROM usuario WHERE email = 'test@example.com'");
         $cartera = $stmt->fetch(PDO::FETCH_ASSOC);
-        $this->assertGreaterThan(100, $cartera['cartera']); // La cartera debe haber aumentado
+        $this->assertGreaterThan(100, (int)$cartera['cartera']);
     }
 }
