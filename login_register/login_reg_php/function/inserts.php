@@ -7,8 +7,11 @@
  * Si quereis insertar cualquier cosa hacedlo por aquí.
  * 
  */
-require_once '../db_connect.php';
-
+// session_start();
+require_once dirname(__DIR__) . '/db_connect.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 Class Inserts{
     public $conn;

@@ -1,4 +1,5 @@
 <?php
+
 // Suponiendo que ya tienes conexión a la base de datos
 session_start();
 $user_id = $_SESSION['user_id']; // Asegúrate de tener el ID del usuario en la sesión

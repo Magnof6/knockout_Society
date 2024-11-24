@@ -28,7 +28,10 @@
  * 
  */
 
-require_once '../db_connect.php';
+ require_once dirname(__DIR__) . '/db_connect.php';
+ if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 class Elo{
     public $conn;
 

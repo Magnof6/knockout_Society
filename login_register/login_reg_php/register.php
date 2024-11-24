@@ -1,7 +1,8 @@
 <?php
-    
+    session_start();
     require_once 'db_connect.php';
-    require_once 'function/inserts.php';
+    require 'function/inserts.php';
+    
     
     $insert = new Inserts($conn);
     
