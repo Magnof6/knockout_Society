@@ -224,7 +224,7 @@
 <div class="header">
     <div class="menu-container">
         <div id="menu-icon" class="menu-icon" onclick="toggleMenu()">&#9776;</div>
-        <h1>Servicios</h1>
+        <h1>Peleas Pasadas</h1>
     </div>
     <div class="search-section">
         <label for="search">Buscar perfiles:</label>
@@ -265,6 +265,7 @@
             <th>Hora Final</th>
             <th>Estado</th>
             <th>Ubicación</th>
+            <th>Ver pelea</th>
         </tr>
         </thead>
         <tbody>
@@ -280,6 +281,18 @@
                 <td><?php echo htmlspecialchars($fight['hora_final']); ?></td>
                 <td><?php echo htmlspecialchars($fight['estado']); ?></td>
                 <td><?php echo htmlspecialchars($fight['ubicacion']); ?></td>
+                <td>
+                    <?php
+                    $id_lucha = $fight['id_lucha'];
+                    $sql_replay = "SELECT url FROM replays WHERE id_lucha = ?";
+                    $stmt_replay = $conn->prepare($sql_replay);
+                    $stmt_replay->bind_param("i", $id_lucha);
+                    $stmt_replay->execute();
+                    $result_replay = $stmt_replay->get_result();
+                    $replay = $result_replay->fetch_assoc();
+                    ?>
+                    <a href="<?php echo htmlspecialchars($replay['url']); ?>" target="_blank">Ver</a>
+                </td>
             </tr>
         <?php endforeach; ?>
         </tbody>
