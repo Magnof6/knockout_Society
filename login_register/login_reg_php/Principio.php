@@ -66,12 +66,7 @@
         <a href="register.php" class="header-button">Register</a>
     </div>
 
-    <div class="footer">
-        <!-- Botón que te lleva a Kick -->
-        <a href="https://kick.com/knockoutsociety" target="_blank" id="Kick-floating-button">
-            <img src="imagenes/kickkk.png" alt="imagen-kick-Icono Flotante">
-        </a>
-    </div>
+    <?php include 'footer.php'; ?>
 
     <script src="script.js"></script>
 </body>

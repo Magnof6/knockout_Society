@@ -22,10 +22,6 @@ if (!isset($_SESSION['user_email'])) {
 </div>
 <h2>Bienvenido, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h2>
 <p>Perfil</p>
-<div class="footer">
-    <a href="https://kick.com/knockoutsociety">
-        <img src="imagenes/kickkk.png" alt="Footer Image">
-    </a>
-</div>
+<?php include 'footer.php'; ?>
 </body>
 </html>
