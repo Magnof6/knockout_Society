@@ -31,9 +31,13 @@ if (!in_array($criterio, $criterios_validos)) {
     <link rel="stylesheet" href="styles.css">
     <style>
         /* Estilos básicos para el menú */
-        .menu {
-            background-color: #333;
-            overflow: hidden;
+        .menu ul {
+            display: flex;
+            flex-direction: column; 
+            align-items: flex-start;
+            padding: 0;
+            width: 200px;
+            border-radius: 5px;
         }
         .menu ul {
             list-style-type: none;
@@ -51,20 +55,23 @@ if (!in_array($criterio, $criterios_validos)) {
             text-decoration: none;
         }
         .menu ul li a:hover {
-            background-color: #575757;
+            background-color: #FFFFFF;
+            color: #FFFFFF;
         }
+       
     </style>
-    <script>
-        function toggleUserSection() {
-            alert('Funcionalidad en desarrollo: Perfiles de otras personas');
-        }
-    </script>
+    
+<!-- scripts --> 
+
+<script src="script.js"></script>
+<div class="menu-container">
+                <div id="menu-icon" class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+            </div>
 </head>
 <body>
     <div id="menu" class="menu">
         <ul>
-            <li><a href="#" onclick="toggleUserSection()">Perfiles de otras personas</a></li>
-            <li><a href="#">Inicio</a></li>
+            <li><a href="index.php">Inicio</a></li>
             <li><a href="#">Acerca de</a></li>
             <li><a href="Contacto.php">Servicios</a></li>
             <li><a href="Fight.php">Buscar Pelea</a></li>
