@@ -55,7 +55,29 @@ if (!in_array($criterio, $criterios_validos)) {
             text-decoration: none;
         }
         .menu ul li a:hover {
-            color: #FFFFFF;
+            color: #000000;
+        }
+        .menu-icon{
+            color: #000000;
+        }
+        .header{
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: rgb(245, 240, 240);
+            flex-wrap: wrap;
+        }
+        .header h1 {
+            color: black; 
+            margin: 0;
+            font-size: 36px;
+            position: absolute;
+            left: 50%;
+            top: 25%;
+            transform: translateX(-50%);
+            text-align: center;
         }
        
     </style>
@@ -67,6 +89,16 @@ if (!in_array($criterio, $criterios_validos)) {
                 <div id="menu-icon" class="menu-icon" onclick="toggleMenu()">&#9776;</div>
             </div>
 </head>
+    <div class="header">
+        <div class="menu-container">
+            <div id="menu-icon" class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+            <h1>Ranking de Luchadores</h1>
+        </div>
+        <div class="search-section">
+            <label for="search">Buscar perfiles:</label>
+            <input type="text" id="search" placeholder="Buscar...">
+        </div>
+    </div>
 <body>
     <div id="menu" class="menu">
         <ul>
@@ -80,7 +112,6 @@ if (!in_array($criterio, $criterios_validos)) {
     </div>
 
     <div class="container">
-        <h1>Ranking de Luchadores</h1>
         
         <?php if (!empty($error_message)): ?>
             <p style="color: red;"><?php echo $error_message; ?></p>
