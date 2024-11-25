@@ -55,7 +55,6 @@ if (!in_array($criterio, $criterios_validos)) {
             text-decoration: none;
         }
         .menu ul li a:hover {
-            background-color: #FFFFFF;
             color: #FFFFFF;
         }
        
