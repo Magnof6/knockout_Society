@@ -26,7 +26,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['change_password'])) {
 
     // Verifica la contraseña actual con la almacenada
     if (password_verify($current_password, $user['password'])) {
-        if ($new_password === $confirm_password) {
+        if ($new_password == $current_password || $confirm_password == $current_password) {
+            $password_message = "New password can't be the same as old password"; 
+        }
+        elseif ($new_password === $confirm_password) {
             // Hashea la nueva contraseña
             $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
             
