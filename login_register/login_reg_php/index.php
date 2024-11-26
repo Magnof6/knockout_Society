@@ -55,8 +55,6 @@
         <div id = "menu"class="menu">
             <ul>
                 <li><a href="#" onclick="toggleUserSection()">Perfiles de otras personas</a></li>
-                <li><a href="#">Inicio</a></li>
-                <li><a href="#">Acerca de</a></li>
                 <li><a href="Contacto.php">Servicios</a></li>
                 <li><a href="Fight.php">Buscar Pelea</a></li>
                 <li><a href="Watch.php">Ver Peleas</a></li>
