@@ -62,6 +62,28 @@ if ($is_fighter) {
             background-color: #f0f0f0;
         }
 
+        .header {
+            display: flex;
+            justify-content: center; /* Centra el contenido horizontalmente */
+            align-items: center;    /* Centra el contenido verticalmente */
+            margin-top: 20px;       /* Añade un poco de separación superior */
+        }
+
+.header-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+        }
+
+    .header-button:hover {
+        background-color: #0056b3;
+    }
+
         .profile-container {
             background-color: white;
             border: 2px solid #ddd;
@@ -118,12 +140,6 @@ if ($is_fighter) {
     </style>
 </head>
 <body>
-    <div class="header">
-        <nav class="boton-atras">
-            <a href="index.php" class="header-button">Atras</a>
-        </nav>
-    </div>
-
     <div class="profile-container">
         <h2>Bienvenido, <?php echo htmlspecialchars($user['nombre']) . " " . htmlspecialchars($user['apellido']); ?></h2>
 
@@ -163,6 +179,12 @@ if ($is_fighter) {
         <div class="button-container">
             <button class="button" onclick="window.location.href='change_password.php'">Cambiar Contraseña</button>
         </div>
+        <div class="header">
+    <nav class="boton-atras">
+        <a href="index.php" class="header-button">Atrás</a>
+    </nav>
+</div>
+
 
     </div>
 

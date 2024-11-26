@@ -31,9 +31,13 @@ if (!in_array($criterio, $criterios_validos)) {
     <link rel="stylesheet" href="styles.css">
     <style>
         /* Estilos básicos para el menú */
-        .menu {
-            background-color: #333;
-            overflow: hidden;
+        .menu ul {
+            display: flex;
+            flex-direction: column; 
+            align-items: flex-start;
+            padding: 0;
+            width: 200px;
+            border-radius: 5px;
         }
         .menu ul {
             list-style-type: none;
@@ -51,20 +55,54 @@ if (!in_array($criterio, $criterios_validos)) {
             text-decoration: none;
         }
         .menu ul li a:hover {
-            background-color: #575757;
+            color: #000000;
         }
+        .menu-icon{
+            color: #000000;
+        }
+        .header{
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: rgb(245, 240, 240);
+            flex-wrap: wrap;
+        }
+        .header h1 {
+            color: black; 
+            margin: 0;
+            font-size: 36px;
+            position: absolute;
+            left: 50%;
+            top: 25%;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+       
     </style>
-    <script>
-        function toggleUserSection() {
-            alert('Funcionalidad en desarrollo: Perfiles de otras personas');
-        }
-    </script>
+    
+<!-- scripts --> 
+
+<script src="script.js"></script>
+<div class="menu-container">
+                <div id="menu-icon" class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+            </div>
 </head>
+    <div class="header">
+        <div class="menu-container">
+            <div id="menu-icon" class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+            <h1>Ranking de Luchadores</h1>
+        </div>
+        <div class="search-section">
+            <label for="search">Buscar perfiles:</label>
+            <input type="text" id="search" placeholder="Buscar...">
+        </div>
+    </div>
 <body>
     <div id="menu" class="menu">
         <ul>
-            <li><a href="#" onclick="toggleUserSection()">Perfiles de otras personas</a></li>
-            <li><a href="#">Inicio</a></li>
+            <li><a href="index.php">Inicio</a></li>
             <li><a href="#">Acerca de</a></li>
             <li><a href="Contacto.php">Servicios</a></li>
             <li><a href="Fight.php">Buscar Pelea</a></li>
@@ -74,7 +112,6 @@ if (!in_array($criterio, $criterios_validos)) {
     </div>
 
     <div class="container">
-        <h1>Ranking de Luchadores</h1>
         
         <?php if (!empty($error_message)): ?>
             <p style="color: red;"><?php echo $error_message; ?></p>
