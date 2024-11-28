@@ -1,22 +1,19 @@
 <?php
 session_start();
-require_once 'db_connect.php'; // Asegúrate de tener la conexión a la base de datos
+require_once 'db_connect.php'; // Ensure you have the database connection
+require_once 'function/Inserts.php'; // Include the Inserts class
 
-// Verifica si el usuario está logueado
+// Verify if the user is logged in
 if (!isset($_SESSION['user_email']) || !isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
 
-// Asigna el email de la sesión a una variable
+// Assign the email from the session to a variable
 $user_email = $_SESSION['user_email'];
 
-$sql = "SELECT * FROM usuario WHERE email = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $user_email);
-$stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
+// Instantiate the Inserts class
+$inserts = new Inserts($conn);
 
 $password_message = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['change_password'])) {
@@ -24,33 +21,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['change_password'])) {
     $new_password = $_POST['new_password'];
     $confirm_password = $_POST['confirm_password'];
 
-    // Verifica la contraseña actual con la almacenada
-    if (password_verify($current_password, $user['password'])) {
-        if ($new_password == $current_password || $confirm_password == $current_password) {
-            $password_message = "New password can't be the same as old password"; 
-        }
-        elseif ($new_password === $confirm_password) {
-            // Hashea la nueva contraseña
-            $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-            
-            // Actualiza la contraseña en la base de datos
-            $sql = "UPDATE usuario SET password = ? WHERE email = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ss", $hashed_password, $user_email);
-            if ($stmt->execute()) {
-                $password_message = "Password changed successfully.";
-            } else {
-                $password_message = "Error changing password: " . $stmt->error;
-            }
-        } else {
-            $password_message = "New passwords do not match.";
-        }
-    } else {
-        $password_message = "Current password is incorrect.";
-    }
+    // Call the changePassword method
+    $password_message = $inserts->changePassword($user_email, $current_password, $new_password, $confirm_password);
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>

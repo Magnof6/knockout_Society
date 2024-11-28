@@ -12,7 +12,7 @@ class ApuestasTest extends TestCase
 
     protected function setUp(): void
     {
-        $dsn = 'mysql:host=serverkn.ddns.net;dbname=knockout';
+        $dsn = 'mysql:host=serverkn.ddns.net;dbname=knockout_dev'; // base de datos dev por favor usar para los tests <3
         $username = 'root';
         $password = 'PeleaDown$666';
         $this->db = new PDO($dsn, $username, $password);

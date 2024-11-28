@@ -110,4 +110,55 @@ Class Inserts{
             return false;
         }
     }
+
+    /**
+     * Funcion para cambiar la contraseña
+     * 
+     * Cambia la contraseña de un usuario. Para poder cambiar la contraseña se deben cumplir:
+     * 1. Contraseña actual es correcta
+     * 2. Contraseña actual no es igual a nueva contraseña o confirmar contraseña
+     * 3. Nueva contraseña es igual a confirmar contraseña
+     * 
+     * Si se produce un error en el cambio de contraseña también lo maneja. 
+     * 
+     * @param string $user_email email del usuario, proveniente por ejemplo de la sesión
+     * @param string $current_password la contraseña actual sin cifrar.
+     * @param string $new_password la contraseña nueva.
+     * @param string $confirm_password la contraseña que se usa para confirmar que se ha escrito correctamente.
+     * 
+     * @return string Devuelve un texto de respuesta, ej. si ha sido exitoso o ha habido un error
+     */
+    public function changePassword($user_email, $current_password, $new_password, $confirm_password) {
+        $sql = "SELECT * FROM usuario WHERE email = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $user_email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+
+        // Verifica la contraseña actual con la almacenada
+        if (password_verify($current_password, $user['password'])) {
+            if ($new_password == $current_password || $confirm_password == $current_password) {
+                return "New password can't be the same as old password"; 
+            } elseif ($new_password === $confirm_password) {
+                // Hashea la nueva contraseña
+                $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+                
+                // Actualiza la contraseña en la base de datos
+                $sql = "UPDATE usuario SET password = ? WHERE email = ?";
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bind_param("ss", $hashed_password, $user_email);
+                
+                if ($stmt->execute()) {
+                    return "Password changed successfully.";
+                } else {
+                    return "Error changing password: " . $stmt->error;
+                }
+            } else {
+                return "New passwords do not match.";
+            }
+        } else {
+            return "Current password is incorrect.";
+        }
+    }
 }
