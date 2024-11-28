@@ -9,6 +9,7 @@ class ApuestasTest extends TestCase
 {
     private $db;
     private $apuestas;
+    private $backupData = [];
 
     protected function setUp(): void
     {
@@ -19,8 +20,31 @@ class ApuestasTest extends TestCase
         $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $this->apuestas = new Apuestas($this->db);
+
+        $this->backupDatabase(); // Crea un respaldo antes de resetear
         $this->resetDatabase();
         $this->initializeDatabase();
+    }
+
+    private function backupDatabase(): void
+    {
+        $this->backupData['usuario'] = $this->db->query("SELECT * FROM usuario")->fetchAll(PDO::FETCH_ASSOC);
+        $this->backupData['luchador'] = $this->db->query("SELECT * FROM luchador")->fetchAll(PDO::FETCH_ASSOC);
+        $this->backupData['categoria'] = $this->db->query("SELECT * FROM categoria")->fetchAll(PDO::FETCH_ASSOC);
+        $this->backupData['lucha'] = $this->db->query("SELECT * FROM lucha")->fetchAll(PDO::FETCH_ASSOC);
+        $this->backupData['apuesta'] = $this->db->query("SELECT * FROM apuesta")->fetchAll(PDO::FETCH_ASSOC);
+        $this->backupData['replays'] = $this->db->query("SELECT * FROM replays")->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    private function restoreDatabase(): void
+    {
+        foreach ($this->backupData as $table => $rows) {
+            foreach ($rows as $row) {
+                $columns = implode(", ", array_keys($row));
+                $values = implode(", ", array_map(fn($value) => $this->db->quote($value), $row));
+                $this->db->exec("INSERT INTO $table ($columns) VALUES ($values)");
+            }
+        }
     }
 
     private function resetDatabase(): void
@@ -56,6 +80,12 @@ class ApuestasTest extends TestCase
         // Apuesta
         $this->db->exec("INSERT INTO apuesta (id, email_usuario, id_lucha, luchador_apostado, w, l, d, total)
                          VALUES (1, 'test@example.com', 1, 'test@example.com', 100, 50, 20, 170)");
+    }
+
+    protected function tearDown(): void
+    {
+        $this->resetDatabase();
+        $this->restoreDatabase(); // Restaura los datos originales
     }
 
     public function testObtenerValoresT_ValidId_ReturnsSum(): void
