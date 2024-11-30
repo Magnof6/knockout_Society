@@ -51,59 +51,60 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrar como Luchador</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="header">
-        <nav>
-            <a href="index.php" class="header-button">Inicio</a>
-        </nav>
-    </div>
-    <h2>Registrar como Luchador</h2>
-    <?php
-    if (!empty($error_message)) {
-        echo "<p style='color: red;'>$error_message</p>";
-    }
-    if (!empty($success_message)) {
-        echo "<p style='color: green;'>$success_message</p>";
-    }
-    ?>
-    <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-        <label for="altura">Altura (cm):</label>
-        <input type="number" name="altura" required><br>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Registrar como Luchador</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <div class="header">
+            <nav>
+                <a href="index.php" class="header-button">Inicio</a>
+            </nav>
+        </div>
+        <h2>Registrar como Luchador</h2>
+        <?php
+        if (!empty($error_message)) {
+            echo "<p style='color: red;'>$error_message</p>";
+        }
+        if (!empty($success_message)) {
+            echo "<p style='color: green;'>$success_message</p>";
+        }
+        ?>
+        <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+            <label for="altura">Altura (cm):</label>
+            <input type="number" name="altura" required><br>
 
-        <label for="peso">Peso (kg):</label>
-        <input type="number" step="0.1" name="peso" required><br>
+            <label for="peso">Peso (kg):</label>
+            <input type="number" step="0.1" name="peso" required><br>
 
-        <label for="ubicacion">Ubicación:</label>
-        <input type="text" name="ubicacion" required><br>
+            <label for="ubicacion">Ubicación:</label>
+            <input type="text" name="ubicacion" required><br>
 
-        <label for="grupoSang">Grupo Sanguíneo:</label>
-        <select name="grupoSang" required>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-        </select><br>
+            <label for="grupoSang">Grupo Sanguíneo:</label>
+            <select name="grupoSang" required>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+            </select><br>
 
-        <label for="lateralidad">Lateralidad:</label>
-        <select name="lateralidad" required>
-            <option value="diestro">Derecha</option>
-            <option value="zurdo">Izquierda</option>
-            <option value="ambi">Ambidiestro</option>
-        </select><br>
+            <label for="lateralidad">Lateralidad:</label>
+            <select name="lateralidad" required>
+                <option value="diestro">Derecha</option>
+                <option value="zurdo">Izquierda</option>
+                <option value="ambi">Ambidiestro</option>
+            </select><br>
 
-        <input type="submit" value="Registrar como luchador">
-    </form>
+            <input type="submit" value="Registrar como luchador">
+        </form>
 
-    <?php include 'footer.php'; ?>
-</body>
+        <?php include 'footer.php'; ?>
+    </body>
 </html>
+s
