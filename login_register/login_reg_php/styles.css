@@ -523,3 +523,44 @@ body.contacto-page {
     background: url('Imagenes/nuestros_servicios.png') no-repeat center center fixed;
     background-size: cover;
 }
+
+/********************** Fight.php Specific Styles **********************/
+.matchmaking-button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.matchmaking-button:hover {
+    background-color: #218838;
+}
+
+.matchmaking-results {
+    margin-top: 20px;
+    text-align: left;
+    display: inline-block;
+}
+
+.matchmaking-results ul {
+    list-style: none;
+    padding: 0;
+}
+
+.matchmaking-results li {
+    background-color: #f8f9fa;
+    margin: 5px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}
+
