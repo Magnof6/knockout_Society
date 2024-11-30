@@ -29,60 +29,8 @@ if (!in_array($criterio, $criterios_validos)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ranking</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Estilos básicos para el menú */
-        .menu ul {
-            display: flex;
-            flex-direction: column; 
-            align-items: flex-start;
-            padding: 0;
-            width: 200px;
-            border-radius: 5px;
-        }
-        .menu ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-        .menu ul li {
-            float: left;
-        }
-        .menu ul li a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
-        .menu ul li a:hover {
-            color: #000000;
-        }
-        .menu-icon{
-            color: #000000;
-        }
-        .header{
-            position: relative;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 40px;
-            background-color: rgb(245, 240, 240);
-            flex-wrap: wrap;
-        }
-        .header h1 {
-            color: black; 
-            margin: 0;
-            font-size: 36px;
-            position: absolute;
-            left: 50%;
-            top: 25%;
-            transform: translateX(-50%);
-            text-align: center;
-        }
-       
-    </style>
     
-<!-- scripts --> 
+<!-- scripts -->
 
 <script src="script.js"></script>
 <div class="menu-container">
@@ -98,6 +46,14 @@ if (!in_array($criterio, $criterios_validos)) {
             <label for="search">Buscar perfiles:</label>
             <input type="text" id="search" placeholder="Buscar...">
         </div>
+        <div class="profile-dropdown">
+                    <button class="profile-button">Perfil ▼</button>
+                    <div class="profile-content">
+                        <a href="profile_user.php">Ver Perfil</a>
+                        <!--a href="#">Configuraciones</a-->
+                        <a href="logout.php">Cerrar sesión</a>
+                    </div>
+                </div>
     </div>
 <body>
     <div id="menu" class="menu">
@@ -149,7 +105,7 @@ if (!in_array($criterio, $criterios_validos)) {
                 <?php endwhile; ?>
             </table>
         <?php else: ?>
-            <p>No se encontraron resultados.</p>
+            <p>No se encontraron resultados.</p> <!-- ESTA LINEA HAY QUE QUITARLA EN LA WEB QUEDA MUY FEA -->
         <?php endif; ?>
     </div>
 </body>
