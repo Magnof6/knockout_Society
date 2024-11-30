@@ -42,7 +42,7 @@ $user = $result->fetch_assoc();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buscar Pelea</title>
-    <link rel="stylesheet" href="styles/fight.css">
+    <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
     <div class="header">
@@ -73,7 +73,7 @@ $user = $result->fetch_assoc();
         </ul>
     </div>
 
-    <main>
+    <div class="matchmaking-container">
         <h2>Hola, <?= htmlspecialchars($user['nombre'] . ' ' . $user['apellido']) ?>. ¿Listo para buscar una pelea?</h2>
 
         <!-- Formulario para activar el matchmaking -->
@@ -95,7 +95,7 @@ $user = $result->fetch_assoc();
                 <p class="error"><?= htmlspecialchars($errorMessage) ?></p>
             <?php endif; ?>
         </div>
-    </main>
+    </div>
 
     <?php include 'footer.php'; ?>
 </body>

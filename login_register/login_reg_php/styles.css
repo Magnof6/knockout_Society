@@ -16,29 +16,29 @@ h1, h2 {
     text-align: center;
 }
 
-/********************* Barra de cabedera ********************/
-.header{
+/********************* Barra de cabecera ********************/
+.header {
     position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px 40px;
     background-color: rgb(245, 240, 240);
-    flex-wrap: wrap;/*Para que se ajuste al tamaño de la pantalla*/
+    flex-wrap: wrap; /* Para que se ajuste al tamaño de la pantalla */
 }
 
-.header h1{
+.header h1 {
     color: black; /* Color del texto */
     margin: 0; /* Elimina margen por defecto */
     font-size: 36px; /* Tamaño del texto */
     position: absolute; /* Posición absoluta para centrar */
     left: 50%; /* Mueve a la mitad de la pantalla */
-    top: 25%;  /*A la mitad de lo blanco*/
+    top: 25%; /* A la mitad de lo blanco */
     transform: translateX(-50%); /* Centra horizontalmente */
     text-align: center; /* Centra el texto */
 }
 
-/************Barra de busquda en cabecera**************/
+/************ Barra de búsqueda en cabecera **************/
 .search-section {
     margin: 10px;
 }
@@ -66,7 +66,6 @@ h1, h2 {
     margin-right: 20px;
 }
 
-
 /************ Menú de navegación ***************/
 .menu-icon {
     font-size: 30px;
@@ -89,9 +88,9 @@ h1, h2 {
     border-radius: 5px; /* Opcional: bordes redondeados */
     opacity: 0; /* Oculto por defecto */
     transition: opacity 0.3s ease; /* Efecto de transición */
-    visibility: hidden; /*Para que no ocupe espacio en la página*/
+    visibility: hidden; /* Para que no ocupe espacio en la página */
 }
-.menu.open {  /* Clase que muestra el menú */
+.menu.open { /* Clase que muestra el menú */
     display: block;
     opacity: 1; /* Totalmente visible */
     visibility: visible; /* Asegúrate de que sea visible */
@@ -112,27 +111,27 @@ h1, h2 {
 
 .menu ul li {
     margin: 20px 0;
-    
 }
 
 .menu ul li a {
     color: rgb(248, 246, 246);
     font-size: 24px;
-    text-decoration: none
-/*   Efecto de transición*/
+    text-decoration: none;
+    /* Efecto de transición */
 }
 .menu ul li a:hover {
     font-size: 28px; /* Aumenta el tamaño del texto */
     color: #c2c8e2;
     display: inline-block;
-    transform: scale(1.15); 
+    transform: scale(1.15);
 }
+
 /************* Botones de inicio de sesión y registro ********************/
 .header {
     display: flex;
-    justify-content: center; 
-    align-items: center;    
-    margin-top: 20px;      
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
 }
 
 .header-button {
@@ -150,8 +149,7 @@ h1, h2 {
     background-color: #0056b3;
 }
 
-
-/****************Navbar******************/
+/**************** Navbar ******************/
 .navbar a {
     text-decoration: none;
     color: #fff;
@@ -317,7 +315,6 @@ form input[type="submit"]:hover {
     background-color: #0056b3;
 }
 
-
 /* Cambio de formulario entre Login y Registro */
 form .cambio-registro {
     display: block;
@@ -338,7 +335,8 @@ form .cambio-registro {
 form .cambio-registro:hover {
     background-color: #0056b3;
 }
-/*************************CSS PERFIL**********************/
+
+/************************* CSS PERFIL **********************/
 .profile-container {
     background-color: rgba(255, 255, 255, 0.8);
     padding: 20px;
@@ -348,7 +346,8 @@ form .cambio-registro:hover {
     max-width: 800px;
     width: 100%;
 }
-/*************************************Tablas Pelea************************/
+
+/************************************* Tablas Pelea ************************/
 .fights-table {
     width: 100%;
     border-collapse: collapse;
@@ -394,6 +393,7 @@ form .cambio-registro:hover {
 .password-form input[type="submit"]:hover {
     background-color: #0056b3;
 }
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -424,9 +424,6 @@ body {
 .sidebar a:hover {
     background-color: #575757;
 }
-
-
-
 
 /***************** Barra superior (perfil en la derecha) ***************/
 .navbar {
@@ -494,7 +491,6 @@ body {
 }
 
 /* Estilos para la tabla */
-/* Estilos para la tabla */
 table {
     width: 50%;
     border-collapse: collapse;
@@ -525,42 +521,70 @@ body.contacto-page {
 }
 
 /********************** Fight.php Specific Styles **********************/
+.matchmaking-container {
+    background-color: #fff; /* White background */
+    padding: 30px; /* Increased padding for better spacing */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Stronger shadow for better depth */
+    margin: 50px auto; /* Center the container with margin */
+    max-width: 600px; /* Maximum width */
+    width: 90%; /* Responsive width */
+    text-align: center; /* Center text */
+    position: relative; /* For potential future positioning */
+}
+
+/* Heading inside matchmaking container */
+.matchmaking-container h2 {
+    color: #333; /* Darker color for better readability */
+    margin-bottom: 20px; /* Space below heading */
+}
+
+/* Form inside matchmaking container */
+.matchmaking-container form {
+    margin-bottom: 20px; /* Space below form */
+}
+
+/* Button inside matchmaking container */
 .matchmaking-button {
-    background-color: #28a745;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
-    font-size: 16px;
+    background-color: #007bff; /* Blue background */
+    color: white; /* White text */
+    padding: 12px 25px; /* Increased padding for better spacing */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 16px; /* Font size */
+    transition: background-color 0.3s ease; /* Smooth transition */
 }
 
 .matchmaking-button:hover {
-    background-color: #218838;
+    background-color: #0056b3; /* Darker blue on hover */
 }
 
+/* Matchmaking results */
 .matchmaking-results {
-    margin-top: 20px;
-    text-align: left;
-    display: inline-block;
+    margin-top: 20px; /* Space above results */
+    text-align: left; /* Left align text */
 }
 
+/* List inside matchmaking results */
 .matchmaking-results ul {
-    list-style: none;
-    padding: 0;
+    list-style: none; /* Remove default list style */
+    padding: 0; /* Remove default padding */
 }
 
+/* List items inside matchmaking results */
 .matchmaking-results li {
-    background-color: #f8f9fa;
-    margin: 5px 0;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    background-color: #f8f9fa; /* Light grey background */
+    margin: 10px 0; /* Space between items */
+    padding: 15px; /* Padding inside items */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
 }
 
+/* Error message */
 .error {
-    color: red;
-    font-weight: bold;
+    color: red; /* Red text */
+    font-weight: bold; /* Bold text */
+    margin-top: 20px; /* Space above error message */
 }
-
