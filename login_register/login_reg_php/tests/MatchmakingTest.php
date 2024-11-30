@@ -11,39 +11,40 @@ class MatchmakingTest extends TestCase
 
     protected function setUp(): void
     {
-        $dsn = 'mysql:host=serverkn.ddns.net;dbname=knockout';
+        $host = 'serverkn.ddns.net';
         $username = 'root';
         $password = 'PeleaDown$666';
+        $dbname = 'knockout_dev';
 
-        try {
-            $this->db = new PDO($dsn, $username, $password);
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->db = new mysqli($host, $username, $password, $dbname);
 
-            $this->db->exec("SET FOREIGN_KEY_CHECKS = 0");
-            $this->db->exec("TRUNCATE TABLE luchador");
-            $this->db->exec("TRUNCATE TABLE usuario");
-            $this->db->exec("SET FOREIGN_KEY_CHECKS = 1");
-
-            $this->matchmaking = new Matchmaking($this->db);
-        } catch (PDOException $e) {
-            $this->fail("Error al conectar con la base de datos: " . $e->getMessage());
+        if ($this->db->connect_error) {
+            $this->fail("Error al conectar con la base de datos: " . $this->db->connect_error);
         }
+
+        $this->db->query("SET FOREIGN_KEY_CHECKS = 0");
+        $this->db->query("TRUNCATE TABLE luchador");
+        $this->db->query("TRUNCATE TABLE usuario");
+        $this->db->query("SET FOREIGN_KEY_CHECKS = 1");
+
+        $this->matchmaking = new Matchmaking($this->db);
     }
+    
 
     protected function tearDown(): void
     {
         if ($this->db) {
-            $this->db->exec("SET FOREIGN_KEY_CHECKS = 0");
-            $this->db->exec("TRUNCATE TABLE luchador");
-            $this->db->exec("TRUNCATE TABLE usuario");
-            $this->db->exec("SET FOREIGN_KEY_CHECKS = 1");
+            $this->db->query("SET FOREIGN_KEY_CHECKS = 0");
+            $this->db->query("TRUNCATE TABLE luchador");
+            $this->db->query("TRUNCATE TABLE usuario");
+            $this->db->query("SET FOREIGN_KEY_CHECKS = 1");
             $this->db = null;
         }
     }
 
     public function testGenerateMatches_WithValidFighters_ReturnsCorrectMatches()
     {
-        $this->db->exec("
+        $this->db->query("
             INSERT INTO usuario (email, username, password, nombre, apellido, edad, sexo, cartera)
             VALUES 
                 ('luchador1@example.com', 'luchador1', 'password', 'Nombre1', 'Apellido1', 30, 'masculino', 100),
@@ -52,7 +53,7 @@ class MatchmakingTest extends TestCase
                 ('luchador4@example.com', 'luchador4', 'password', 'Nombre4', 'Apellido4', 25, 'masculino', 100)
         ");
 
-        $this->db->exec("
+        $this->db->query("
             INSERT INTO luchador (email, peso, altura, victorias, derrotas, empates, puntos, grupoSang, ubicacion, lateralidad, buscando_pelea)
             VALUES 
                 ('luchador1@example.com', 80, 180, 10, 2, 1, 100, 'A+', 'Ciudad1', 'diestro', 1),
@@ -72,13 +73,13 @@ class MatchmakingTest extends TestCase
 
     public function testGenerateMatches_WithInsufficientFighters_ThrowsException()
     {
-        $this->db->exec("
+        $this->db->query("
             INSERT INTO usuario (email, username, password, nombre, apellido, edad, sexo, cartera)
             VALUES 
                 ('luchador1@example.com', 'luchador1', 'password', 'Nombre1', 'Apellido1', 30, 'masculino', 100)
         ");
 
-        $this->db->exec("
+        $this->db->query("
             INSERT INTO luchador (email, peso, altura, victorias, derrotas, empates, puntos, grupoSang, ubicacion, lateralidad, buscando_pelea)
             VALUES 
                 ('luchador1@example.com', 80, 180, 10, 2, 1, 100, 'A+', 'Ciudad1', 'diestro', 1)

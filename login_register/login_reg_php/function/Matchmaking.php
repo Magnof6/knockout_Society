@@ -4,7 +4,7 @@ class Matchmaking
 {
     private $db;
 
-    public function __construct(mysqli $db)
+    public function __construct($db)
     {
         $this->db = $db;
     }
