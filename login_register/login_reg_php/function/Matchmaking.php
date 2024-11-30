@@ -4,7 +4,7 @@ class Matchmaking
 {
     private $db;
 
-    public function __construct(PDO $db)
+    public function __construct(mysqli $db)
     {
         $this->db = $db;
     }
@@ -22,9 +22,13 @@ class Matchmaking
                 puntos DESC
         ";
 
-        $stmt = $this->db->prepare($query);
-        $stmt->execute();
-        $luchadores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = $this->db->query($query);
+
+        if (!$result) {
+            throw new Exception("Error en la consulta: " . $this->db->error);
+        }
+
+        $luchadores = $result->fetch_all(MYSQLI_ASSOC);
 
         if (count($luchadores) < 2) {
             throw new Exception("No hay suficientes luchadores para el matchmaking.");
