@@ -11,7 +11,7 @@ class MatchmakingTest extends TestCase
 
     protected function setUp(): void
     {
-        $dsn = 'mysql:host=serverkn.ddns.net;dbname=knockout_dev';
+        $dsn = 'mysql:host=serverkn.ddns.net;dbname=knockout';
         $username = 'root';
         $password = 'PeleaDown$666';
 
