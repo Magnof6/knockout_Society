@@ -15,6 +15,7 @@
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $result = $stmt->get_result();
+    $fights = [];
     while ($row = $result->fetch_assoc()) {
         $fights[] = $row;
     }
