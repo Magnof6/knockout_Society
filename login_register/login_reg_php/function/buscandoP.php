@@ -41,6 +41,7 @@ Class Buscando_pelea{
                     return "Error changing state: " . $stmt->error;
                     }
         }
+        
 
     }
 
