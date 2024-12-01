@@ -89,4 +89,19 @@ class Matchmaking
             INSERT INTO lucha (id_luchador1, id_luchador2, estado, fecha, hora_inicio, ubicacion) 
             VALUES (?, ?, 'pendiente', CURDATE(), CURTIME(), ?)
         ";
-        $stmt = $this->db->prepare($query
+        $stmt = $this->db->prepare($query);
+        $ubicacion = "Arena Central";
+        $stmt->bind_param("sss", $userEmail, $opponent['email'], $ubicacion);
+        $stmt->execute();
+
+        $query = "UPDATE luchador SET emparejado = 1 WHERE email IN (?, ?)";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("ss", $userEmail, $opponent['email']);
+        $stmt->execute();
+
+        return [
+            'user' => $userFighter,
+            'opponent' => $opponent,
+        ];
+    }
+}
