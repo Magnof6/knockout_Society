@@ -195,6 +195,7 @@
             <div class="left-side">
                 <h2>Bienvenido, <?php echo htmlspecialchars($user['nombre']) . " " . htmlspecialchars($user['apellido']); ?></h2>
                 <button class="button" onclick="window.location.href='change_password.php'">Cambiar Contraseña</button>
+                <button class="button" onclick="window.location.href='change_email.php'">Cambiar Correo</button>
                 <?php if (!$is_fighter): ?>
                     <button class="button" onclick="window.location.href='register_fighter.php'">Registrarse como Luchador</button>
                 <?php endif; ?>

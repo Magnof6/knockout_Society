@@ -28,7 +28,7 @@ Class Inserts{
 
         // Validación de campos obligatorios
         if (empty($email) || empty($username) || empty($password) || empty($name) || empty($lastname) || empty($cartera)|| empty($age) || empty($gender)) {
-            return ["success" => false, "message" => "All fields are required."];
+            return ["success" => false, "message" => "All fields are required."];              // Nota: si cartera==0 lo considera empty.
         }
 
         if (!is_numeric($age) || $age <= 0) {
@@ -159,6 +159,61 @@ Class Inserts{
             }
         } else {
             return "Current password is incorrect.";
+        }
+    }
+    /**
+     * Changes the email address of a user.
+     * 
+     * Se encarga de que:
+     * 1. Mail sea correcto
+     * 2. Contraseña sea correcta
+     * 3. Mails nuevo y confirm sean iguales
+     * 4. No exista el mail nuevo de antemano
+     *
+     * @param string $email The current email address of the user.
+     * @param string $password The current password of the user.
+     * @param string $new_email The new email address to be set.
+     * @param string $confirm_email The confirmation of the new email address.
+     * @return array An associative array containing the success status and a message.
+     */
+    public function changeEmail($email, $password, $new_email, $confirm_email) {
+        $sql = "SELECT * FROM usuario WHERE email = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+
+        if (empty($user)) return ["success" => false, "message" => "No user found with that email."];
+        // Verifica la contraseña actual con la almacenada
+        if (password_verify($password, $user['password'])) {
+            if ($new_email === $confirm_email) {
+                // Verifica si el nuevo email ya está en uso
+                $sql = "SELECT * FROM usuario WHERE email = ?";
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bind_param("s", $new_email);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                if ($result->num_rows > 0) {
+                    return ["success" => false, "message" => "New email is already in use."];
+                } else {
+                    // Actualiza el email en la base de datos
+                    $sql = "UPDATE usuario SET email = ? WHERE email = ?";
+                    $stmt = $this->conn->prepare($sql);
+                    $stmt->bind_param("ss", $new_email, $email);
+
+                    if ($stmt->execute()) {
+                        return ["success" => true, "message" => "Email changed successfully."];
+                    } else {
+                        return ["success" => false, "message" => "Error changing email: " . $stmt->error];
+                    }
+                }
+            } else {
+                return ["success" => false, "message" => "New emails do not match."];
+            }
+        } else {
+            return ["success" => false, "message" => "Password is incorrect."];
         }
     }
 }
