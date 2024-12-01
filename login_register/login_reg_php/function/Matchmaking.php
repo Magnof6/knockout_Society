@@ -9,12 +9,39 @@ class Matchmaking
         $this->db = $db;
     }
 
+    public function alternarEstadoBP(string $email, int $valor): array
+    {
+        if (empty($email)) {
+            return ["success" => false, "message" => "El correo electrónico es obligatorio."];
+        }
+
+        $checkQuery = "SELECT email FROM luchador WHERE email = ?";
+        $stmt = $this->db->prepare($checkQuery);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 0) {
+            return ["success" => false, "message" => "El correo no está registrado como luchador."];
+        }
+
+        $updateQuery = "UPDATE luchador SET buscando_pelea = ? WHERE email = ?";
+        $stmt = $this->db->prepare($updateQuery);
+        $stmt->bind_param("is", $valor, $email);
+
+        if ($stmt->execute()) {
+            return ["success" => true, "message" => "Estado actualizado correctamente."];
+        } else {
+            return ["success" => false, "message" => "Error al actualizar el estado: " . $stmt->error];
+        }
+    }
+
     public function generateMatchForUser(string $userEmail): ?array
     {
         $query = "
             SELECT 
                 luchador.email, usuario.username, usuario.nombre, usuario.apellido, 
-                luchador.peso, luchador.altura, luchador.puntos, usuario.edad, usuario.sexo
+                luchador.peso, luchador.altura, luchador.puntos
             FROM 
                 luchador
             JOIN 
@@ -38,7 +65,7 @@ class Matchmaking
         $query = "
             SELECT 
                 luchador.email, usuario.username, usuario.nombre, usuario.apellido, 
-                luchador.peso, luchador.altura, luchador.puntos, usuario.edad, usuario.sexo
+                luchador.peso, luchador.altura, luchador.puntos
             FROM 
                 luchador
             JOIN 
@@ -62,43 +89,4 @@ class Matchmaking
             INSERT INTO lucha (id_luchador1, id_luchador2, estado, fecha, hora_inicio, ubicacion) 
             VALUES (?, ?, 'pendiente', CURDATE(), CURTIME(), ?)
         ";
-        $stmt = $this->db->prepare($query);
-        $ubicacion = "Arena Central";
-        $stmt->bind_param("sss", $userEmail, $opponent['email'], $ubicacion);
-        $stmt->execute();
-
-        $query = "UPDATE luchador SET emparejado = 1 WHERE email IN (?, ?)";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param("ss", $userEmail, $opponent['email']);
-        $stmt->execute();
-
-        return [
-            'user' => $userFighter,
-            'opponent' => $opponent,
-        ];
-    }
-
-    public function finishMatch(int $matchId, string $winnerEmail): bool
-    {
-        $query = "
-            UPDATE lucha 
-            SET estado = 'finalizada', id_ganador = ?, hora_final = CURTIME() 
-            WHERE id_lucha = ?
-        ";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param("si", $winnerEmail, $matchId);
-        $stmt->execute();
-
-        $query = "
-            UPDATE luchador 
-            SET emparejado = 0 
-            WHERE email IN (
-                SELECT id_luchador1 FROM lucha WHERE id_lucha = ? UNION 
-                SELECT id_luchador2 FROM lucha WHERE id_lucha = ?
-            )
-        ";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param("ii", $matchId, $matchId);
-        return $stmt->execute();
-    }
-}
+        $stmt = $this->db->prepare($query
