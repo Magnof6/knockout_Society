@@ -12,14 +12,16 @@ class Matchmaking
     public function generateMatches(): array
     {
         $query = "
-            SELECT 
-                email, peso, altura, puntos, victorias, derrotas, empates 
-            FROM 
-                luchador
-            WHERE 
-                buscando_pelea = 1
-            ORDER BY 
-                puntos DESC
+            SELECT
+            luchador.email, usuario.username, luchador.peso, luchador.altura, luchador.puntos, luchador.victorias, luchador.derrotas, luchador.empates 
+        FROM
+            luchador
+        JOIN
+            usuario ON luchador.email = usuario.email
+        WHERE
+            luchador.buscando_pelea = 1
+        ORDER BY
+            luchador.puntos DESC
         ";
 
         $result = $this->db->query($query);

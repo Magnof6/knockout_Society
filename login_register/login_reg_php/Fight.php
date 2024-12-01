@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 }
 
 // Consulta SQL para mostrar el nombre y apellido del usuario
-$sql = "SELECT nombre, apellido FROM usuario WHERE email = ?";
+$sql = "SELECT nombre, apellido, username FROM usuario WHERE email = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('s', $user_email);
 $stmt->execute();
@@ -42,7 +42,7 @@ $user = $result->fetch_assoc();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buscar Pelea</title>
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="header">
@@ -88,7 +88,7 @@ $user = $result->fetch_assoc();
                 <h3>Resultados del Matchmaking:</h3>
                 <ul>
                     <?php foreach ($matchResults as $index => $match): ?>
-                        <li>Match <?= $index + 1 ?>: <?= htmlspecialchars($match[0]['email']) ?> vs <?= htmlspecialchars($match[1]['email']) ?></li>
+                        <li>Match <?= $index + 1 ?>: <?= htmlspecialchars($match[0]['username']) ?> vs <?= htmlspecialchars($match[1]['username']) ?></li>
                     <?php endforeach; ?>
                 </ul>
             <?php elseif ($errorMessage): ?>
