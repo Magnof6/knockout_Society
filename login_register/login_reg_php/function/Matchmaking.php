@@ -9,78 +9,99 @@ class Matchmaking
         $this->db = $db;
     }
 
-    public function generateMatches(): array
+    public function alternarEstadoBP(string $email, int $valor): array
+    {
+        if (empty($email)) {
+            return ["success" => false, "message" => "El correo electrónico es obligatorio."];
+        }
+
+        $checkQuery = "SELECT email FROM luchador WHERE email = ?";
+        $stmt = $this->db->prepare($checkQuery);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 0) {
+            return ["success" => false, "message" => "El correo no está registrado como luchador."];
+        }
+
+        $updateQuery = "UPDATE luchador SET buscando_pelea = ? WHERE email = ?";
+        $stmt = $this->db->prepare($updateQuery);
+        $stmt->bind_param("is", $valor, $email);
+
+        if ($stmt->execute()) {
+            return ["success" => true, "message" => "Estado actualizado correctamente."];
+        } else {
+            return ["success" => false, "message" => "Error al actualizar el estado: " . $stmt->error];
+        }
+    }
+
+    public function generateMatchForUser(string $userEmail): ?array
     {
         $query = "
             SELECT 
-                email, peso, altura, puntos, victorias, derrotas, empates 
+                luchador.email, usuario.username, usuario.nombre, usuario.apellido, 
+                luchador.peso, luchador.altura, luchador.puntos
             FROM 
                 luchador
+            JOIN 
+                usuario ON luchador.email = usuario.email
             WHERE 
-                buscando_pelea = 1
-            ORDER BY 
-                puntos DESC
+                luchador.email = ? 
+                AND luchador.buscando_pelea = 1
+                AND luchador.emparejado = 0
         ";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("s", $userEmail);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-        $result = $this->db->query($query);
+        $userFighter = $result->fetch_assoc();
 
-        if (!$result) {
-            throw new Exception("Error en la consulta: " . $this->db->error);
+        if (!$userFighter) {
+            throw new Exception("No estás disponible para el matchmaking.");
         }
 
-        $luchadores = $result->fetch_all(MYSQLI_ASSOC);
+        $query = "
+            SELECT 
+                luchador.email, usuario.username, usuario.nombre, usuario.apellido, 
+                luchador.peso, luchador.altura, luchador.puntos
+            FROM 
+                luchador
+            JOIN 
+                usuario ON luchador.email = usuario.email
+            WHERE 
+                luchador.email != ? 
+                AND luchador.buscando_pelea = 1
+                AND luchador.emparejado = 0
+            ORDER BY RAND() LIMIT 1
+        ";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("s", $userEmail);
+        $stmt->execute();
+        $opponent = $stmt->get_result()->fetch_assoc();
 
-        if (count($luchadores) < 2) {
-            throw new Exception("No hay suficientes luchadores para el matchmaking.");
+        if (!$opponent) {
+            throw new Exception("No se encontraron luchadores disponibles para el matchmaking.");
         }
 
-        $matches = [];
-        while (count($luchadores) > 1) {
-            $luchador1 = array_shift($luchadores);
-            $bestMatch = $this->findBestMatch($luchador1, $luchadores);
-            $matches[] = [$luchador1, $bestMatch];
+        $query = "
+            INSERT INTO lucha (id_luchador1, id_luchador2, estado, fecha, hora_inicio, ubicacion) 
+            VALUES (?, ?, 'pendiente', CURDATE(), CURTIME(), ?)
+        ";
+        $stmt = $this->db->prepare($query);
+        $ubicacion = "Arena Central";
+        $stmt->bind_param("sss", $userEmail, $opponent['email'], $ubicacion);
+        $stmt->execute();
 
-            $luchadores = array_filter($luchadores, function ($luchador) use ($bestMatch) {
-                return $luchador['email'] !== $bestMatch['email'];
-            });
-        }
+        $query = "UPDATE luchador SET emparejado = 1 WHERE email IN (?, ?)";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("ss", $userEmail, $opponent['email']);
+        $stmt->execute();
 
-        return $matches;
-    }
-
-    private function findBestMatch(array $fighter, array $candidates): array
-    {
-        $bestMatch = null;
-        $bestDistance = PHP_INT_MAX;
-
-        foreach ($candidates as $candidate) {
-            $distance = $this->calculateDistance($fighter, $candidate);
-            if ($distance < $bestDistance) {
-                $bestDistance = $distance;
-                $bestMatch = $candidate;
-            }
-        }
-
-        return $bestMatch;
-    }
-
-    private function calculateDistance(array $fighter1, array $fighter2): float
-    {
-        $weights = [
-            'puntos' => 3,
-            'peso' => 2,
-            'altura' => 1,
+        return [
+            'user' => $userFighter,
+            'opponent' => $opponent,
         ];
-
-        $distance = 0;
-
-        foreach ($weights as $attribute => $weight) {
-            $value1 = $fighter1[$attribute] ?? 0;
-            $value2 = $fighter2[$attribute] ?? 0;
-
-            $distance += $weight * pow($value1 - $value2, 2);
-        }
-
-        return sqrt($distance);
     }
 }

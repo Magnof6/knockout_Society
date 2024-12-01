@@ -7,28 +7,52 @@ require_once 'function/Matchmaking.php';
 if (isset($_SESSION['user_email'])) {
     $user_email = $_SESSION['user_email'];
 } else {
-    // Si no hay sesión activa, redirige al usuario al login
     header("Location: login.php");
     exit();
 }
 
-// Inicializa variables para los resultados del matchmaking
-$matchResults = [];
+$matchResult = null;
 $errorMessage = "";
+$successMessage = "";
+$currentFightingStatus = null;
 
-// Procesa la solicitud de matchmaking
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'matchmaking') {
+// Procesa las solicitudes POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     try {
-        // Conexión a la base de datos ya establecida en db_connect.php
         $matchmaking = new Matchmaking($conn);
-        $matchResults = $matchmaking->generateMatches();
+
+        if ($_POST['action'] === 'matchmaking') {
+            $matchResult = $matchmaking->generateMatchForUser($user_email);
+            $successMessage = "¡Se ha generado un emparejamiento!";
+        } elseif ($_POST['action'] === 'toggle_status') {
+            $newState = $_POST['new_state'];
+            $toggleResult = $matchmaking->alternarEstadoBP($user_email, $newState);
+
+            if ($toggleResult['success']) {
+                $successMessage = $toggleResult['message'];
+            } else {
+                $errorMessage = $toggleResult['message'];
+            }
+        }
     } catch (Exception $e) {
         $errorMessage = $e->getMessage();
     }
 }
 
-// Consulta SQL para mostrar el nombre y apellido del usuario
-$sql = "SELECT nombre, apellido FROM usuario WHERE email = ?";
+// Obtener el estado actual de "Buscando Pelea"
+$sql = "SELECT buscando_pelea FROM luchador WHERE email = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('s', $user_email);
+$stmt->execute();
+$result = $stmt->get_result();
+$luchador = $result->fetch_assoc();
+
+if ($luchador) {
+    $currentFightingStatus = $luchador['buscando_pelea'];
+}
+
+// Obtener datos del usuario para mostrar en la interfaz
+$sql = "SELECT nombre, apellido, username FROM usuario WHERE email = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('s', $user_email);
 $stmt->execute();
@@ -41,62 +65,87 @@ $user = $result->fetch_assoc();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscar Pelea</title>
-    <link rel="stylesheet" href="./styles.css">
+    <title>Fight Matchmaking</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px 0;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .success {
+            color: #28a745;
+        }
+        .error {
+            color: #dc3545;
+        }
+    </style>
 </head>
 <body>
-    <div class="header">
-        <div class="menu-container">
-            <div id="menu-icon" class="menu-icon" onclick="toggleMenu()">&#9776;</div>
-            <h1>Buscar Pelea</h1>
+    <div class="container">
+        <div class="header">
+            <h1>Fight Matchmaking</h1>
+            <p>Hola, <?= htmlspecialchars($user['nombre'] . ' ' . $user['apellido']) ?> (<?= htmlspecialchars($user['username']) ?>)</p>
         </div>
-        <div class="search-section">
-            <label for="search">Buscar perfiles:</label>
-            <input type="text" id="search" placeholder="Buscar...">
-        </div>
-        <div class="profile-dropdown">
-            <button class="profile-button">Perfil ▼</button>
-            <div class="profile-content">
-                <a href="profile_user.php">Ver Perfil</a>
-                <a href="#">Configuraciones</a>
-                <a href="logout.php">Cerrar sesión</a>
-            </div>
-        </div>
-    </div>
-    <div id="menu" class="menu">
-        <ul>
-            <li><a href="index.php">Inicio</a></li>
-            <li><a href="#">Acerca de</a></li>
-            <li><a href="Contacto.php">Contacto</a></li>
-            <li><a href="Watch.php">Ver Peleas</a></li>
-            <li><a href="Ranking.php">Ranking</a></li>
-        </ul>
-    </div>
 
-    <div class="matchmaking-container">
-        <h2>Hola, <?= htmlspecialchars($user['nombre'] . ' ' . $user['apellido']) ?>. ¿Listo para buscar una pelea?</h2>
+        <p>Estado actual: <strong><?= $currentFightingStatus ? "Activo" : "Desactivado" ?></strong></p>
 
-        <!-- Formulario para activar el matchmaking -->
         <form method="POST">
-            <input type="hidden" name="action" value="matchmaking">
-            <button type="submit" class="matchmaking-button">Generar Matchmaking</button>
+            <input type="hidden" name="action" value="toggle_status">
+            <input type="hidden" name="new_state" value="<?= $currentFightingStatus ? 0 : 1 ?>">
+            <button type="submit"><?= $currentFightingStatus ? "Desactivar" : "Activar" ?> "Buscando Pelea"</button>
         </form>
 
-        <!-- Mostrar resultados del matchmaking -->
-        <div class="matchmaking-results">
-            <?php if (!empty($matchResults)): ?>
-                <h3>Resultados del Matchmaking:</h3>
-                <ul>
-                    <?php foreach ($matchResults as $index => $match): ?>
-                        <li>Match <?= $index + 1 ?>: <?= htmlspecialchars($match[0]['email']) ?> vs <?= htmlspecialchars($match[1]['email']) ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php elseif ($errorMessage): ?>
-                <p class="error"><?= htmlspecialchars($errorMessage) ?></p>
-            <?php endif; ?>
-        </div>
-    </div>
+        <?php if ($currentFightingStatus): ?>
+            <form method="POST">
+                <input type="hidden" name="action" value="matchmaking">
+                <button type="submit">Buscar Pelea</button>
+            </form>
+        <?php else: ?>
+            <p class="error">Debes activar "Buscando Pelea" antes de buscar una pelea.</p>
+        <?php endif; ?>
 
-    <?php include 'footer.php'; ?>
+        <?php if ($successMessage): ?>
+            <p class="success"><?= htmlspecialchars($successMessage) ?></p>
+        <?php elseif ($errorMessage): ?>
+            <p class="error"><?= htmlspecialchars($errorMessage) ?></p>
+        <?php endif; ?>
+
+        <?php if ($matchResult): ?>
+            <div class="matchmaking">
+                <h3>¡Emparejamiento generado!</h3>
+                <p><strong>Tu luchador:</strong> <?= htmlspecialchars($matchResult['user']['nombre'] . ' ' . $matchResult['user']['apellido']) ?> (<?= $matchResult['user']['username'] ?>)</p>
+                <p><strong>Oponente:</strong> <?= htmlspecialchars($matchResult['opponent']['nombre'] . ' ' . $matchResult['opponent']['apellido']) ?> (<?= $matchResult['opponent']['username'] ?>)</p>
+            </div>
+        <?php endif; ?>
+    </div>
 </body>
 </html>
