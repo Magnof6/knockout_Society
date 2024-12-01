@@ -10,7 +10,10 @@ $criterios_validos = ['puntos', 'email', 'victorias', 'empates', 'derrotas'];
 if (!in_array($criterio, $criterios_validos)) {
     $error_message = "Criterio no válido.";
 } else {
-    $sql = "SELECT email, puntos, victorias, empates, derrotas FROM luchador ORDER BY $criterio DESC";
+    $sql = "SELECT usuario.username, luchador.puntos, luchador.victorias, luchador.empates, luchador.derrotas 
+            FROM luchador
+            JOIN usuario ON luchador.email = usuario.email
+            ORDER BY $criterio DESC";
     $stmt = $conn->prepare($sql);
 
     if (!$stmt) {
@@ -77,7 +80,7 @@ if (!in_array($criterio, $criterios_validos)) {
                 <label for="criterio">Ordenar por:</label>
                 <select name="criterio" id="criterio">
                     <option value="puntos" <?php echo $criterio === 'puntos' ? 'selected' : ''; ?>>Puntos</option>
-                    <option value="email" <?php echo $criterio === 'email' ? 'selected' : ''; ?>>Email</option>
+                    <option value="email" <?php echo $criterio === 'username' ? 'selected' : ''; ?>>Username</option>
                     <option value="victorias" <?php echo $criterio === 'victorias' ? 'selected' : ''; ?>>Victorias</option>
                     <option value="empates" <?php echo $criterio === 'empates' ? 'selected' : ''; ?>>Empates</option>
                     <option value="derrotas" <?php echo $criterio === 'derrotas' ? 'selected' : ''; ?>>Derrotas</option>
@@ -88,7 +91,7 @@ if (!in_array($criterio, $criterios_validos)) {
             <?php if (isset($result) && $result->num_rows > 0): ?>
                 <table border="1">
                     <tr>
-                        <th>Email</th>
+                        <th>Username</th>
                         <th>Puntos</th>
                         <th>Victorias</th>
                         <th>Empates</th>
@@ -96,7 +99,7 @@ if (!in_array($criterio, $criterios_validos)) {
                     </tr>
                     <?php while ($fila = $result->fetch_assoc()): ?>
                         <tr>
-                            <td><?php echo htmlspecialchars($fila['email']); ?></td>
+                            <td><?php echo htmlspecialchars($fila['username']); ?></td>
                             <td><?php echo htmlspecialchars($fila['puntos']); ?></td>
                             <td><?php echo htmlspecialchars($fila['victorias']); ?></td>
                             <td><?php echo htmlspecialchars($fila['empates']); ?></td>
