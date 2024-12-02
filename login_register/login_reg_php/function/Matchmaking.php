@@ -89,40 +89,82 @@ class Matchmaking
             $stmt->bind_param("ss", $userEmail, $opponent['email']);
             $stmt->execute();
     
+            $this->annadirPelea($userEmail, $opponent['email']);
 
             return [
                 'user' => $userFighter,
                 'opponent' => $opponent,
             ];
-            $this->annadirPelea($userEmail['email'] , $userFighter['email']);
+   
             //$this->annadirPelea($userFighter , $opponent);
         }
         
     }
-    public function annadirPelea($userFighter , $userEmail){
+    public function annadirPelea($userFighter, $userEmail) {
+        $usernames = $this->extraerDatosParaAnnadir($userEmail, $userFighter);
+        if ($usernames) {
+            $user_a = $usernames[0];
+            $user_b = $usernames[1];
+        }
+    
         $num_rondas = 3;
         $id_categoria = 80;
-        $ubicacion = "Ring KnockOut Society";
-
-        $insert_fighter = $this->conn->prepare(
-            "INSERT INTO lucha (id_lucha, id_luchador1 , id_luchador2, id_categoría, id_ganador, num_rondas, fecha, hora_inicio, hora_final, estado, ubicacion) 
-            VALUES (? , ?, ?, ? , CURDATE() , CURTIME() , ?)");
-        $insert_fighter->bind_param("ssiis", $userFighter, $userEmail, $id_categoria, $num_rondas, $ubicacion);
+        $ubicacion = 'Ring KnockOut Society';
+        $hora_inicio = '19:30:00';
+    
+        $sql = "INSERT INTO lucha (id_luchador1, id_luchador2, id_categoria, num_rondas, fecha, hora_inicio, ubicacion) 
+                VALUES (?, ?, ?, ?, CURDATE(), ?, ?)";
+        $insert_fighter = $this->db->prepare($sql);
+        if ($insert_fighter === false) {
+            die('Prepare failed: ' . $this->db->error);
+        }
+        $insert_fighter->bind_param("ssiiSS", $user_a, $user_b, $id_categoria, $num_rondas, $hora_inicio, $ubicacion);
         $insert_fighter->execute();
-
-
+        $insert_fighter->close();
     }
 
-        
-/**$query = "
-            INSERT INTO lucha (id_luchador1, id_luchador2, estado, fecha, hora_inicio, ubicacion) 
-            VALUES (?, ?, 'pendiente', CURDATE(), CURTIME(), ?)
-        ";
-        $stmt = $this->db->prepare($query);
-        $ubicacion = "Arena Central";
-        $stmt->bind_param("sss", $userEmail, $opponent['email'], $ubicacion);
-        $stmt->execute();
-*/
-/**No descomentar esto, si no el matchmaking no funca*/
+    public function extraerDatosParaAnnadir($email_Luchador_1 , $email_Luchador_2){
 
+        $sql = "SELECT username FROM usuario WHERE email = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("s", $email_Luchador_1);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $username_1 = $row['username'];
+
+        $sql = "SELECT username FROM usuario WHERE email = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("s", $email_Luchador_2);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $username_2 = $row['username'];
+
+
+        $usernames = [$username_1 , $username_2];
+
+        return $usernames;
+/* 
+        $sql = "SELECT puntos FROM usuario WHERE email = :email_Luchador_2";
+        $stmt = $this->conn->prepare($sql);
+        $stmt -> bindParam(':email_Luchador_2' , $email_Luchador_2, PDO::PARAM_STR);
+        $stmt->execute();
+        $puntosL_2 = $stmt->fetch(PDO::FETCH_ASSOC);
+        $puntosL_2 = $puntosL_2['puntos'];
+
+        $sql = "SELECT puntos FROM usuario WHERE email = :email_Luchador_2";
+        $stmt = $this->conn->prepare($sql);
+        $stmt -> bindParam(':email_Luchador_2' , $email_Luchador_2, PDO::PARAM_STR);
+        $stmt->execute();
+        $puntosL_2 = $stmt->fetch(PDO::FETCH_ASSOC);
+        $puntosL_2 = $puntosL_2['puntos']; */
+
+
+        /** PARA FUTURO
+         * UPDATE lucha
+        *SET estado = 'finalizada', hora_final = CURTIME()
+        *WHERE id_lucha = X;
+         */
+    }
 }
