@@ -94,12 +94,12 @@ class Matchmaking
                 'user' => $userFighter,
                 'opponent' => $opponent,
             ];
-            $this->annadirPelea($userFighter['email'] , $opponent['email']);
+            $this->annadirPelea($userEmail['email'] , $userFighter['email']);
             //$this->annadirPelea($userFighter , $opponent);
         }
         
     }
-    public function annadirPelea($userFighter , $opponent){
+    public function annadirPelea($userFighter , $userEmail){
         $num_rondas = 3;
         $id_categoria = 80;
         $ubicacion = "Ring KnockOut Society";
@@ -107,7 +107,7 @@ class Matchmaking
         $insert_fighter = $this->conn->prepare(
             "INSERT INTO lucha (id_lucha, id_luchador1 , id_luchador2, id_categoría, id_ganador, num_rondas, fecha, hora_inicio, hora_final, estado, ubicacion) 
             VALUES (? , ?, ?, ? , CURDATE() , CURTIME() , ?)");
-        $insert_fighter->bind_param("ssiis", $userFighter, $opponent, $id_categoria, $num_rondas, $ubicacion);
+        $insert_fighter->bind_param("ssiis", $userFighter, $userEmail, $id_categoria, $num_rondas, $ubicacion);
         $insert_fighter->execute();
 
 
