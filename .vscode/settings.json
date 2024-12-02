@@ -1,4 +1,6 @@
-/*
+{
+    "livePreview.defaultPreviewPath": "/login_register/login_reg_php/Principio.html"
+}/*
 {
     "liveServer.settings.port": 5501,
     "workbench.colorCustomizations": {

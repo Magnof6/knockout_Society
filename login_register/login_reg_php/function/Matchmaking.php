@@ -83,7 +83,35 @@ class Matchmaking
 
         if (!$opponent) {
             throw new Exception("No se encontraron luchadores disponibles para el matchmaking.");
+        }else{
+            $query = "UPDATE luchador SET emparejado = 1 WHERE email IN (?, ?)";
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param("ss", $userEmail, $opponent['email']);
+            $stmt->execute();
+    
+
+            return [
+                'user' => $userFighter,
+                'opponent' => $opponent,
+            ];
+            //this->annadirPelea($userFighter['email'] , $opponent['email']);
+            this->annadirPelea($userFighter , $opponent);
         }
+        
+    }
+    public function annadirPelea($userFighter , $opponent){
+        $num_rondas = 3;
+        $id_categoria = 80;
+        $ubicacion = "Ring KnockOut Society";
+
+        $insert_fighter = $this->conn->prepare(
+            "INSERT INTO lucha (id_lucha, id_luchador1 , id_luchador2, id_categoría, id_ganador, num_rondas, fecha, hora_inicio, hora_final, estado, ubicacion) 
+            VALUES (? , ?, ?, ? , CURDATE() , CURTIME() , ?)");
+        $insert_fighter->bind_param("ssiis", $userFighter, $opponent, $id_categoria, $num_rondas, $ubicacion);
+        $insert_fighter->execute();
+    }
+
+        
 /**$query = "
             INSERT INTO lucha (id_luchador1, id_luchador2, estado, fecha, hora_inicio, ubicacion) 
             VALUES (?, ?, 'pendiente', CURDATE(), CURTIME(), ?)
@@ -94,14 +122,5 @@ class Matchmaking
         $stmt->execute();
 */
 /**No descomentar esto, si no el matchmaking no funca*/
-        $query = "UPDATE luchador SET emparejado = 1 WHERE email IN (?, ?)";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param("ss", $userEmail, $opponent['email']);
-        $stmt->execute();
 
-        return [
-            'user' => $userFighter,
-            'opponent' => $opponent,
-        ];
-    }
 }
