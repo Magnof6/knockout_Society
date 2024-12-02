@@ -29,6 +29,43 @@
         <title>Peleas Pasadas</title>
         <link rel="stylesheet" href="styles.css">
         <style>
+            #video-popup {
+                position: fixed;
+                 top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+            }
+
+            .popup-content {
+                position: relative;
+                width: 80%;
+                max-width: 900px;
+                background: white;
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+
+            .popup-content iframe {
+                width: 100%;
+                height: 500px;
+            }
+
+            .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            color: black;
+            cursor: pointer;
+            }
+
             .profile-container {
                 background-color: white;
                 border: 2px solid #ddd;
@@ -81,45 +118,18 @@
                 background-color: dodgerblue;
                 color: white;
             }
-
-            #video-popup {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(0, 0, 0, 0.8);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                z-index: 1000;
-            }
-
-            .popup-content {
-                position: relative;
-                width: 80%;
-                max-width: 900px;
-                background: white;
-                border-radius: 10px;
-                overflow: hidden;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            }
-
-            .popup-content iframe {
-                width: 100%;
-                height: 500px;
-            }
-
-            .close-btn {
-                position: absolute;
-                top: 10px;
-                right: 15px;
-                font-size: 24px;
-                color: black;
-                cursor: pointer;
-            }
         </style>
         <script>
+            function toggleMenu() {
+                var menu = document.getElementById("menu");
+                menu.style.display = menu.style.display === "block" ? "none" : "block";
+            }
+
+            function buscarPeleador() {
+                // Función para realizar la búsqueda de peleadores
+                var busqueda = document.getElementById("busqueda").value;
+                alert("Buscando peleador: " + busqueda);
+            }
             function openPopup(videoUrl) {
                 document.getElementById('video-popup').style.display = 'flex';
                 document.getElementById('video-frame').src = videoUrl;
@@ -129,6 +139,7 @@
                 document.getElementById('video-popup').style.display = 'none';
                 document.getElementById('video-frame').src = '';
             }
+
         </script>
     </head>
     <body>
@@ -202,6 +213,7 @@
                             $result_replay = $stmt_replay->get_result();
                             $replay = $result_replay->fetch_assoc();
                             ?>
+                            <a href="<?php echo htmlspecialchars($replay['url']); ?>" target="_blank">Ver</a>
                             <a href="javascript:void(0);" onclick="openPopup('<?php echo htmlspecialchars($replay['url']); ?>')">Ver</a>
                         </td>
                     </tr>
@@ -209,13 +221,11 @@
                 </tbody>
             </table>
         </div>
-
-        <!-- Popup para reproducir el video -->
         <div id="video-popup" style="display: none;">
-            <div class="popup-content">
-                <span class="close-btn" onclick="closePopup()">&times;</span>
-                <iframe id="video-frame" src="" frameborder="0" allowfullscreen></iframe>
-            </div>
+        <div class="popup-content">
+            <span class="close-btn" onclick="closePopup()">&times;</span>
+            <iframe id="video-frame" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
         </div>
 
         <?php include 'footer.php'; ?>
