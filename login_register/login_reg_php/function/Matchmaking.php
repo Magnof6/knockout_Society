@@ -84,8 +84,7 @@ class Matchmaking
         if (!$opponent) {
             throw new Exception("No se encontraron luchadores disponibles para el matchmaking.");
         }
-
-        $query = "
+/**$query = "
             INSERT INTO lucha (id_luchador1, id_luchador2, estado, fecha, hora_inicio, ubicacion) 
             VALUES (?, ?, 'pendiente', CURDATE(), CURTIME(), ?)
         ";
@@ -93,7 +92,8 @@ class Matchmaking
         $ubicacion = "Arena Central";
         $stmt->bind_param("sss", $userEmail, $opponent['email'], $ubicacion);
         $stmt->execute();
-
+*/
+/**No descomentar esto, si no el matchmaking no funca*/
         $query = "UPDATE luchador SET emparejado = 1 WHERE email IN (?, ?)";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param("ss", $userEmail, $opponent['email']);
