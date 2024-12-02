@@ -95,7 +95,7 @@ class Matchmaking
                 'opponent' => $opponent,
             ];
             //this->annadirPelea($userFighter['email'] , $opponent['email']);
-            this->annadirPelea($userFighter , $opponent);
+            $this->annadirPelea($userFighter , $opponent);
         }
         
     }
