@@ -94,8 +94,8 @@ class Matchmaking
                 'user' => $userFighter,
                 'opponent' => $opponent,
             ];
-            //this->annadirPelea($userFighter['email'] , $opponent['email']);
-            $this->annadirPelea($userFighter , $opponent);
+            $this->annadirPelea($userFighter['email'] , $opponent['email']);
+            //$this->annadirPelea($userFighter , $opponent);
         }
         
     }
@@ -109,6 +109,8 @@ class Matchmaking
             VALUES (? , ?, ?, ? , CURDATE() , CURTIME() , ?)");
         $insert_fighter->bind_param("ssiis", $userFighter, $opponent, $id_categoria, $num_rondas, $ubicacion);
         $insert_fighter->execute();
+
+
     }
 
         
