@@ -96,6 +96,7 @@ Class Inserts{
 
     // Crear una apuesta
     public function crearApuesta($id_apuesta, $email_usuario , $id_lucha , $luchador_apostado, $w, $l, $d, $total = null){
+
         if (empty($id_apuesta) || empty($email_usuario) || empty($id_lucha) || empty($luchador_apostado) || empty($w) || empty($l) || empty($d)) {
                 throw new Exception("Missing required fields.");
             }

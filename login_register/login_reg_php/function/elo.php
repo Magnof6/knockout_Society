@@ -152,11 +152,5 @@ class Elo{
 
             $this->actualizarLuchadores($email_Luchador_1 , $email_Luchador_2, $resultado, $puntosLn_1 , $puntosLn_2);
         }
-
-
-        
-
-
-
     }
 }
