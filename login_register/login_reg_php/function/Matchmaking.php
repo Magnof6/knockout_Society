@@ -15,6 +15,7 @@ class Matchmaking
             return ["success" => false, "message" => "El correo electrónico es obligatorio."];
         }
 
+        // Verificar que el luchador existe en la base de datos
         $checkQuery = "SELECT email FROM luchador WHERE email = ?";
         $stmt = $this->db->prepare($checkQuery);
         $stmt->bind_param("s", $email);
@@ -25,6 +26,7 @@ class Matchmaking
             return ["success" => false, "message" => "El correo no está registrado como luchador."];
         }
 
+        // Actualizar el estado de "buscando pelea"
         $updateQuery = "UPDATE luchador SET buscando_pelea = ? WHERE email = ?";
         $stmt = $this->db->prepare($updateQuery);
         $stmt->bind_param("is", $valor, $email);
@@ -38,6 +40,7 @@ class Matchmaking
 
     public function generateMatchForUser(string $userEmail): ?array
     {
+        // Obtener los datos del luchador
         $query = "
             SELECT 
                 luchador.email, usuario.username, usuario.nombre, usuario.apellido, 
@@ -62,6 +65,7 @@ class Matchmaking
             throw new Exception("No estás disponible para el matchmaking.");
         }
 
+        // Buscar un oponente disponible
         $query = "
             SELECT 
                 luchador.email, usuario.username, usuario.nombre, usuario.apellido, 
@@ -83,88 +87,55 @@ class Matchmaking
 
         if (!$opponent) {
             throw new Exception("No se encontraron luchadores disponibles para el matchmaking.");
-        }else{
-            $query = "UPDATE luchador SET emparejado = 1 WHERE email IN (?, ?)";
-            $stmt = $this->db->prepare($query);
-            $stmt->bind_param("ss", $userEmail, $opponent['email']);
-            $stmt->execute();
-    
-            $this->annadirPelea($userEmail, $opponent['email']);
+        }
 
-            return [
-                'user' => $userFighter,
-                'opponent' => $opponent,
-            ];
-   
-            //$this->annadirPelea($userFighter , $opponent);
-        }
-        
+        // Emparejar luchadores
+        $query = "UPDATE luchador SET emparejado = 1 WHERE email IN (?, ?)";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("ss", $userEmail, $opponent['email']);
+        $stmt->execute();
+
+        // Registrar la pelea en la tabla lucha
+        $this->annadirPelea($userEmail, $opponent['email']);
+
+        return [
+            'user' => $userFighter,
+            'opponent' => $opponent,
+        ];
     }
-    public function annadirPelea($userFighter, $userEmail) {
-        $usernames = $this->extraerDatosParaAnnadir($userEmail, $userFighter);
-        if ($usernames) {
-            $user_a = $usernames[0];
-            $user_b = $usernames[1];
+
+    public function annadirPelea($userFighter, $userEmail)
+    {
+        // Asegurarse de usar un id_categoria válido
+        $id_categoria = 1;  // Cambiar a un valor de id_categoria válido que exista en la tabla categoria
+
+        // Verificar si el id_categoria existe
+        $checkCategoriaQuery = "SELECT id FROM categoria WHERE id = ?";
+        $stmt = $this->db->prepare($checkCategoriaQuery);
+        $stmt->bind_param("i", $id_categoria);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 0) {
+            die("Error: El id_categoria no existe en la tabla categoria.");
         }
-    
+
+        // Si id_categoria es válido, continuar con la inserción de la pelea
         $num_rondas = 3;
-        $id_categoria = 80;
         $ubicacion = 'Ring KnockOut Society';
         $hora_inicio = '19:30:00';
-    
-        $sql = "INSERT INTO lucha (id_luchador1, id_luchador2, id_categoria, num_rondas, fecha, hora_inicio, ubicacion) 
-                VALUES (?, ?, ?, ?, CURDATE(), ?, ?)";
+        $estado = 'pendiente';
+
+        $sql = "INSERT INTO lucha (id_luchador1, id_luchador2, id_categoria, num_rondas, fecha, hora_inicio, estado, ubicacion) 
+                VALUES (?, ?, ?, ?, CURDATE(), ?, ?, ?)";
         $insert_fighter = $this->db->prepare($sql);
+
         if ($insert_fighter === false) {
             die('Prepare failed: ' . $this->db->error);
         }
-        $insert_fighter->bind_param("ssiiSS", $user_a, $user_b, $id_categoria, $num_rondas, $hora_inicio, $ubicacion);
+
+        $insert_fighter->bind_param("ssiisss", $userEmail, $userFighter, $id_categoria, $num_rondas, $hora_inicio, $estado, $ubicacion);
         $insert_fighter->execute();
         $insert_fighter->close();
-    }
-
-    public function extraerDatosParaAnnadir($email_Luchador_1 , $email_Luchador_2){
-
-        $sql = "SELECT username FROM usuario WHERE email = ?";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("s", $email_Luchador_1);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
-        $username_1 = $row['username'];
-
-        $sql = "SELECT username FROM usuario WHERE email = ?";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("s", $email_Luchador_2);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
-        $username_2 = $row['username'];
-
-
-        $usernames = [$username_1 , $username_2];
-
-        return $usernames;
-/* 
-        $sql = "SELECT puntos FROM usuario WHERE email = :email_Luchador_2";
-        $stmt = $this->conn->prepare($sql);
-        $stmt -> bindParam(':email_Luchador_2' , $email_Luchador_2, PDO::PARAM_STR);
-        $stmt->execute();
-        $puntosL_2 = $stmt->fetch(PDO::FETCH_ASSOC);
-        $puntosL_2 = $puntosL_2['puntos'];
-
-        $sql = "SELECT puntos FROM usuario WHERE email = :email_Luchador_2";
-        $stmt = $this->conn->prepare($sql);
-        $stmt -> bindParam(':email_Luchador_2' , $email_Luchador_2, PDO::PARAM_STR);
-        $stmt->execute();
-        $puntosL_2 = $stmt->fetch(PDO::FETCH_ASSOC);
-        $puntosL_2 = $puntosL_2['puntos']; */
-
-
-        /** PARA FUTURO
-         * UPDATE lucha
-        *SET estado = 'finalizada', hora_final = CURTIME()
-        *WHERE id_lucha = X;
-         */
     }
 }
