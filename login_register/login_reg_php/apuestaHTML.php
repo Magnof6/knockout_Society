@@ -1,3 +1,53 @@
+<?php
+session_start();
+require_once 'db_connect.php';
+require_once 'function/inserts.php';
+
+// Verificar que el usuario esté autenticado
+if (!isset($_SESSION['user_email'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$mensaje = "";
+$error = "";
+
+// Generar token CSRF
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        $error = "CSRF token inválido.";
+    } else {
+        // Validar y sanitizar los datos del formulario
+        $id_apuesta = uniqid('apuesta_', true); // Generar un ID único
+        $id_lucha = filter_input(INPUT_POST, 'id_lucha', FILTER_SANITIZE_NUMBER_INT);
+        $luchador_apostado = filter_input(INPUT_POST, 'luchador_apostado', FILTER_SANITIZE_STRING);
+        $w = filter_input(INPUT_POST, 'ganadas', FILTER_VALIDATE_INT);
+        $l = filter_input(INPUT_POST, 'perdidas', FILTER_VALIDATE_INT);
+        $d = filter_input(INPUT_POST, 'empates', FILTER_VALIDATE_INT);
+
+        // Verificar que los datos sean válidos
+        if ($id_lucha && $luchador_apostado && $w !== false && $l !== false && $d !== false) {
+            // Validar que los valores no sean negativos
+            if ($w < 0 || $l < 0 || $d < 0) {
+                $error = "Los valores de 'ganadas', 'perdidas' y 'empates' no pueden ser negativos.";
+            } else {
+                $crearApuesta = new inserts($conn);
+                if ($crearApuesta->crearApuesta($_SESSION['user_email'], $id_lucha, $luchador_apostado, $w, $l, $d)) {
+                    $mensaje = "Apuesta creada exitosamente.";
+                } else {
+                    $error = "Error al crear la apuesta. Intenta nuevamente.";
+                }
+            }
+        } else {
+            $error = "Por favor, completa todos los campos correctamente.";
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,291 +58,94 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 8px 12px;
-            text-align: left;
+            background-color: #f5f5f5;
         }
         form {
-            margin-bottom: 20px;
-            display: none; /* Oculto por defecto */
-        }
-        form div {
-            margin-bottom: 10px;
-        }
-        #apuestaForm {
             border: 1px solid #ccc;
             padding: 20px;
             border-radius: 8px;
             max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+        }
+        form div {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
         button {
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
             margin-right: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .mensaje, .error {
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .mensaje {
+            color: #155724;
+            background-color: #d4edda;
+        }
+        .error {
+            color: #721c24;
+            background-color: #f8d7da;
         }
     </style>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const toggleButton = document.getElementById("toggleFormButton");
-            const form = document.getElementById("apuestaForm");
-            const cancelButton = document.getElementById("cancelFormButton");
-
-            toggleButton.addEventListener("click", () => {
-                form.style.display = "block"; // Mostrar el formulario
-                toggleButton.style.display = "none"; // Ocultar el botón
-            });
-
-            cancelButton.addEventListener("click", () => {
-                form.style.display = "none"; // Ocultar el formulario
-                toggleButton.style.display = "inline-block"; // Mostrar el botón
-            });
-        });
-    </script>
 </head>
 <body>
     <h1>Gestión de Apuestas</h1>
 
-    <!-- Botón para abrir el formulario -->
-    <button id="toggleFormButton">Realizar Apuesta</button>
+    <?php if ($mensaje): ?>
+        <p class="mensaje"><?php echo htmlspecialchars($mensaje, ENT_QUOTES, 'UTF-8'); ?></p>
+    <?php endif; ?>
 
-    <!-- Formulario para crear una apuesta -->
-    <form method="POST" action="" id="apuestaForm">
-        <h2>Crear Apuesta</h2>
-        <div>
-            <label for="id_apuesta">ID Apuesta:</label>
-            <input type="text" id="id_apuesta" name="id_apuesta" required>
-        </div>
-        <div>
-            <label for="email_usuario">Email Usuario:</label>
-            <input type="email" id="email_usuario" name="email_usuario" required>
-        </div>
+    <?php if ($error): ?>
+        <p class="error"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></p>
+    <?php endif; ?>
+
+    <form action="" method="post">
+        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
         <div>
             <label for="id_lucha">ID Lucha:</label>
-            <input type="text" id="id_lucha" name="id_lucha" required>
+            <input type="number" id="id_lucha" name="id_lucha" required>
         </div>
         <div>
             <label for="luchador_apostado">Luchador Apostado:</label>
             <input type="text" id="luchador_apostado" name="luchador_apostado" required>
         </div>
         <div>
-            <label for="w">Ganadas (W):</label>
-            <input type="number" id="w" name="w" required>
+            <label for="ganadas">Ganadas (W):</label>
+            <input type="number" id="ganadas" name="ganadas" required>
         </div>
         <div>
-            <label for="l">Perdidas (L):</label>
-            <input type="number" id="l" name="l" required>
+            <label for="perdidas">Perdidas (L):</label>
+            <input type="number" id="perdidas" name="perdidas" required>
         </div>
         <div>
-            <label for="d">Empates (D):</label>
-            <input type="number" id="d" name="d" required>
+            <label for="empates">Empates (D):</label>
+            <input type="number" id="empates" name="empates" required>
         </div>
-        <div>
-            <label for="total">Total (Opcional):</label>
-            <input type="number" id="total" name="total">
-        </div>
-        <button type="submit" name="crear_apuesta">Crear Apuesta</button>
-        <button type="button" id="cancelFormButton">Cancelar</button>
+        <button type="submit">Crear Apuesta</button>
+        <button type="button" onclick="window.location.href='index.php';">Cancelar</button>
     </form>
-
-    <?php
-session_start();
-require_once 'db_connect.php';
-
-// Verificar si el usuario ha iniciado sesión
-if (!isset($_SESSION['user_email'])) {
-    header("Location: login.php");
-    exit();
-}
-
-$user_email = $_SESSION['user_email'];
-
-// Obtener peleas de la base de datos
-$sql = "SELECT * FROM lucha";
-$stmt = $conn->prepare($sql);
-$stmt->execute();
-$result = $stmt->get_result();
-$fights = [];
-while ($row = $result->fetch_assoc()) {
-    $fights[] = $row;
-}
-?>
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peleas Pasadas</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Estilos principales */
-        #video-popup {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .popup-content {
-            position: relative;
-            width: 80%;
-            max-width: 900px;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .popup-content iframe {
-            width: 100%;
-            height: 500px;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 24px;
-            color: black;
-            cursor: pointer;
-        }
-
-        .profile-container {
-            background-color: white;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            padding: 40px;
-            width: 80%;
-            max-width: 1200px;
-            margin: 0 auto;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        h2 {
-            color: black;
-        }
-
-        .fights-table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-            font-family: Arial, sans-serif;
-        }
-
-        .fights-table th, .fights-table td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
-
-        .fights-table th {
-            background-color: dodgerblue;
-            color: white;
-            font-weight: bold;
-        }
-
-        .fights-table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        .fights-table tr:hover {
-            background-color: #f1f1f1;
-        }
-    </style>
-    <script>
-        function openPopup(videoUrl) {
-            document.getElementById('video-popup').style.display = 'flex';
-            document.getElementById('video-frame').src = videoUrl;
-        }
-
-        function closePopup() {
-            document.getElementById('video-popup').style.display = 'none';
-            document.getElementById('video-frame').src = '';
-        }
-    </script>
-</head>
-<body>
-    <div class="profile-container">
-        <h2>Resultados de Peleas</h2>
-        <table class="fights-table">
-            <thead>
-            <tr>
-                <th>Luchador 1</th>
-                <th>Luchador 2</th>
-                <th>Categoría</th>
-                <th>Ganador</th>
-                <th>Número de Rondas</th>
-                <th>Fecha</th>
-                <th>Hora de Inicio</th>
-                <th>Hora Final</th>
-                <th>Estado</th>
-                <th>Ubicación</th>
-                <th>Ver pelea</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php foreach ($fights as $fight): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($fight['id_luchador1']); ?></td>
-                    <td><?php echo htmlspecialchars($fight['id_luchador2']); ?></td>
-                    <td><?php echo htmlspecialchars($fight['id_categoria']); ?></td>
-                    <td><?php echo htmlspecialchars($fight['id_ganador']); ?></td>
-                    <td><?php echo htmlspecialchars($fight['num_rondas']); ?></td>
-                    <td><?php echo htmlspecialchars($fight['fecha']); ?></td>
-                    <td><?php echo htmlspecialchars($fight['hora_inicio']); ?></td>
-                    <td><?php echo htmlspecialchars($fight['hora_final']); ?></td>
-                    <td><?php echo htmlspecialchars($fight['estado']); ?></td>
-                    <td><?php echo htmlspecialchars($fight['ubicacion']); ?></td>
-                    <td>
-                        <?php
-                        $id_lucha = $fight['id_lucha'];
-                        $sql_replay = "SELECT url FROM replays WHERE id_lucha = ?";
-                        $stmt_replay = $conn->prepare($sql_replay);
-                        $stmt_replay->bind_param("i", $id_lucha);
-                        $stmt_replay->execute();
-                        $result_replay = $stmt_replay->get_result();
-                        $replay = $result_replay->fetch_assoc();
-                        ?>
-                        <?php if (!empty($replay['url'])): ?>
-                            <a href="<?php echo htmlspecialchars($replay['url']); ?>" target="_blank">Ver</a>
-                            <a href="javascript:void(0);" onclick="openPopup('<?php echo htmlspecialchars($replay['url']); ?>')">Popup</a>
-                        <?php else: ?>
-                            <span>No disponible</span>
-                        <?php endif; ?>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Pop-up para el video -->
-    <div id="video-popup">
-        <div class="popup-content">
-            <span class="close-btn" onclick="closePopup()">&times;</span>
-            <iframe id="video-frame" src="" frameborder="0" allowfullscreen></iframe>
-        </div>
-    </div>
-
-    <?php include 'footer.php'; ?>
-</body>
-</html>
 </body>
 </html>

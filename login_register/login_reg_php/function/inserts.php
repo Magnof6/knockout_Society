@@ -95,22 +95,48 @@ Class Inserts{
     }
 
     // Crear una apuesta
-    public function crearApuesta($id_apuesta, $email_usuario , $id_lucha , $luchador_apostado, $w, $l, $d, $total = null){
-
-        if (empty($id_apuesta) || empty($email_usuario) || empty($id_lucha) || empty($luchador_apostado) || empty($w) || empty($l) || empty($d)) {
-                throw new Exception("Missing required fields.");
-            }
-
+    public function crearApuesta($email_usuario, $id_lucha, $luchador_apostado, $w = 0, $l = 0, $d = 0) {
+        // Validar los campos obligatorios
+        if (empty($email_usuario) || empty($id_lucha) || empty($luchador_apostado)) {
+            throw new Exception("Missing required fields.");
+        }
+    
+        // Preparar la consulta
         $insert_apuesta = $this->conn->prepare(
-            "INSERT INTO apuesta ($id_apuesta, $email_usuario , $id_lucha , $luchador_apostado, $w, $l, $d, $total) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $insert_apuesta->bind_param("isisiiii" , $id_apuesta, $email_usuario , $id_lucha , $luchador_apostado, $w, $l, $d, $total);
+            "INSERT INTO apuesta (email_usuario, id_lucha, luchador_apostado, w, l, d, total) 
+             VALUES (?, ?, ?, ?, ?, ?, NULL)"
+        );
+    
+        // Verificar si la consulta se preparó correctamente
+        if (!$insert_apuesta) {
+            throw new Exception("Failed to prepare the statement: " . $this->conn->error);
+        }
+    
+        // Enlazar parámetros
+        $insert_apuesta->bind_param("sisiii", $email_usuario, $id_lucha, $luchador_apostado, $w, $l, $d);
+    
+        // Ejecutar la consulta
+        if ($insert_apuesta->execute()) {
+            return true; // Inserción exitosa
+        } else {
+            throw new Exception("Failed to execute the statement: " . $insert_apuesta->error);
+        }
+    }
+    
+
+    
+    
+
+        /* $insert_apuesta = $this->conn->prepare(
+            "INSERT INTO apuesta ($email_usuario , $id_lucha , $luchador_apostado, $w, $l, $d, NULL) VALUES (?, ?, ?, ?, ?, ?, ?, NULL)");
+        $insert_apuesta->bind_param("sisiii" , $email_usuario , $id_lucha , $luchador_apostado, $w, $l, $d);
 
         if ($insert_apuesta->execute()) {
             return true;
         } else {
             return false;
-        }
-    }
+        } */
+    
 
     /**
      * Funcion para cambiar la contraseña
