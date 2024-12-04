@@ -33,7 +33,7 @@
                     <li><a href="Fight.php">Buscar Pelea</a></li>
                     <li><a href="Watch.php">Ver Peleas</a></li>
                     <li><a href="Ranking.php">Ranking</a></li>
-                    <li><a href="apuestasHTML.php">Apuestas</a></li>
+                    <li><a href="apuestaHTML.php">Apuestas</a></li>
                 </ul>
         </div>
         <?php include 'footer.php'; ?>

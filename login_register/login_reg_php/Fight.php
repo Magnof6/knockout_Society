@@ -120,7 +120,7 @@ $user = $result->fetch_assoc();
                 <li><a href="Contacto.php">Contacto</a></li>
                 <li><a href="Watch.php">Ver Peleas</a></li>
                 <li><a href="Ranking.php">Ranking</a></li>
-                <li><a href="apuestasHTML.php">Apuestas</a></li>
+                <li><a href="apuestaHTML.php">Apuestas</a></li>
             </ul>
         </div>
 
