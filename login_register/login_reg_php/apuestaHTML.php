@@ -21,7 +21,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {
         $error = "CSRF token inválido.";
     } else {
-        // Validar y sanitizar los datos del formulario
         $id_apuesta = uniqid('apuesta_', true); // Generar un ID único
         $id_lucha = filter_input(INPUT_POST, 'id_lucha', FILTER_SANITIZE_NUMBER_INT);
         $luchador_apostado = filter_input(INPUT_POST, 'luchador_apostado', FILTER_SANITIZE_STRING);
@@ -29,9 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $l = filter_input(INPUT_POST, 'perdidas', FILTER_VALIDATE_INT);
         $d = filter_input(INPUT_POST, 'empates', FILTER_VALIDATE_INT);
 
-        // Verificar que los datos sean válidos
         if ($id_lucha && $luchador_apostado && $w !== false && $l !== false && $d !== false) {
-            // Validar que los valores no sean negativos
             if ($w < 0 || $l < 0 || $d < 0) {
                 $error = "Los valores de 'ganadas', 'perdidas' y 'empates' no pueden ser negativos.";
             } else {
@@ -47,6 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -54,155 +52,129 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Apuestas</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f5f5f5;
-        }
-        form {
-            border: 1px solid #ccc;
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 600px;
-            margin: 20px auto;
-            background-color: #fff;
-        }
-        form div {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        input[type="text"], input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            font-size: 14px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-right: 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .mensaje, .error {
-            padding: 10px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-        }
-        .mensaje {
-            color: #155724;
-            background-color: #d4edda;
-        }
-        .error {
-            color: #721c24;
-            background-color: #f8d7da;
-        }
-    </style>
+            /* Ocultar la lista de usuarios por defecto */
+            #userSection {
+                display: none;
+            }
+        </style>
 </head>
 <body>
-    <h1>Gestión de Apuestas</h1>
+    <div class="header">
+        <div class="menu-container">
+            <div id="menu-icon" class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+            <h1>Gestión de Apuestas</h1>
+        </div>
+        <div class="search-section">
+                <label for="search">Buscar perfiles:</label>
+                <input type="text" id="search" placeholder="Buscar...">
+            </div>
+        <div class="profile-dropdown">
+                    <button class="profile-button">Perfil ▼</button>
+                    <div class="profile-content">
+                        <a href="profile_user.php">Ver Perfil</a>
+                        <!--a href="#">Configuraciones</a-->
+                        <a href="logout.php">Cerrar sesión</a>
+                    </div>
+                </div>
+    </div>
 
-    <?php if ($mensaje): ?>
-        <p class="mensaje"><?php echo htmlspecialchars($mensaje, ENT_QUOTES, 'UTF-8'); ?></p>
-    <?php endif; ?>
+    <div id="menu" class="menu">
+        <ul>
+            <li><a href="index.php">Inicio</a></li>
+            <li><a href="Ranking.php">Ranking</a></li>
+            <li><a href="Fight.php">Buscar Pelea</a></li>
+            <li><a href="Watch.php">Ver Peleas</a></li>
+            <li><a href="apuestasHTML.php">Apuestas</a></li>
+        </ul>
+    </div>
 
-    <?php if ($error): ?>
-        <p class="error"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></p>
-    <?php endif; ?>
+    <div class="container">
+        <?php if ($mensaje): ?>
+            <p class="mensaje"><?php echo htmlspecialchars($mensaje, ENT_QUOTES, 'UTF-8'); ?></p>
+        <?php endif; ?>
 
-    <form action="" method="post">
-        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-        <div>
-            <label for="id_lucha">ID Lucha:</label>
-            <input type="number" id="id_lucha" name="id_lucha" required>
-        </div>
-        <div>
-            <label for="luchador_apostado">Luchador Apostado:</label>
-            <input type="text" id="luchador_apostado" name="luchador_apostado" required>
-        </div>
-        <div>
-            <label for="ganadas">Ganadas (W):</label>
-            <input type="number" id="ganadas" name="ganadas" required>
-        </div>
-        <div>
-            <label for="perdidas">Perdidas (L):</label>
-            <input type="number" id="perdidas" name="perdidas" required>
-        </div>
-        <div>
-            <label for="empates">Empates (D):</label>
-            <input type="number" id="empates" name="empates" required>
-        </div>
-        <button type="submit">Crear Apuesta</button>
-        <button type="button" onclick="window.location.href='index.php';">Cancelar</button>
-    </form>
+        <?php if ($error): ?>
+            <p class="error"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></p>
+        <?php endif; ?>
+
+        <form action="" method="post">
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+            <div>
+                <label for="id_lucha">ID Lucha:</label>
+                <input type="number" id="id_lucha" name="id_lucha" required>
+            </div>
+            <div>
+                <label for="luchador_apostado">Luchador Apostado:</label>
+                <input type="text" id="luchador_apostado" name="luchador_apostado" required>
+            </div>
+            <div>
+                <label for="ganadas">Ganadas (W):</label>
+                <input type="number" id="ganadas" name="ganadas" required>
+            </div>
+            <div>
+                <label for="perdidas">Perdidas (L):</label>
+                <input type="number" id="perdidas" name="perdidas" required>
+            </div>
+            <div>
+                <label for="empates">Empates (D):</label>
+                <input type="number" id="empates" name="empates" required>
+            </div>
+            <button type="submit">Crear Apuesta</button>
+            <button type="button" onclick="window.location.href='index.php';">Cancelar</button>
+        </form>
+
+        <h2>Listado de Luchas</h2>
+        <?php
+        $sql = "SELECT id_lucha, id_luchador1, id_luchador2, id_categoria, id_ganador, num_rondas, fecha, hora_inicio, hora_final, estado, ubicacion FROM lucha";
+        $result = $conn->query($sql);
+
+        if ($result === FALSE) {
+            echo "<p class='error'>Error al cargar las luchas: " . $conn->error . "</p>";
+        } elseif ($result->num_rows > 0) {
+            echo '<table>
+                    <thead>
+                        <tr>
+                            <th>ID Lucha</th>
+                            <th>Luchador 1</th>
+                            <th>Luchador 2</th>
+                            <th>Categoría</th>
+                            <th>Ganador</th>
+                            <th>Número de Rondas</th>
+                            <th>Fecha</th>
+                            <th>Hora Inicio</th>
+                            <th>Hora Final</th>
+                            <th>Estado</th>
+                            <th>Ubicación</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>';
+            while ($row = $result->fetch_assoc()) {
+                echo '<tr>
+                        <td>' . htmlspecialchars($row['id_lucha']) . '</td>
+                        <td>' . htmlspecialchars($row['id_luchador1']) . '</td>
+                        <td>' . htmlspecialchars($row['id_luchador2']) . '</td>
+                        <td>' . htmlspecialchars($row['id_categoria']) . '</td>
+                        <td>' . (isset($row['id_ganador']) ? htmlspecialchars($row['id_ganador']) : 'Sin ganador') . '</td>
+                        <td>' . htmlspecialchars($row['num_rondas']) . '</td>
+                        <td>' . htmlspecialchars($row['fecha']) . '</td>
+                        <td>' . htmlspecialchars($row['hora_inicio']) . '</td>
+                        <td>' . htmlspecialchars($row['hora_final']) . '</td>
+                        <td>' . htmlspecialchars($row['estado']) . '</td>
+                        <td>' . htmlspecialchars($row['ubicacion']) . '</td>
+                        <td><a href="ver_pelea.php?id=' . htmlspecialchars($row['id_lucha']) . '">Ver</a></td>
+                      </tr>';
+            }
+            echo '</tbody></table>';
+        } else {
+            echo "<p>No hay luchas registradas.</p>";
+        }
+
+        $conn->close();
+        ?>
+    </div>
 </body>
 </html>
-<?php
-// Execute the query with joins to get wrestler names and category
-$sql = "SELECT id_lucha, id_luchador1, id_luchador2, id_categoria, id_ganador, num_rondas, fecha, hora_inicio, hora_final, estado, ubicacion FROM lucha";
-$result = $conn->query($sql);
-
-// Check for query errors
-if ($result === FALSE) {
-    die("Query failed: " . $conn->error);
-}
-
-if ($result->num_rows > 0) {
-    // Output data of each row
-    echo '<table border="1">
-            <thead>
-                <tr>
-                    <th>Id lucha</th>
-                    <th>Luchador 1</th>
-                    <th>Luchador 2</th>
-                    <th>Categoría</th>
-                    <th>Ganador</th>
-                    <th>Número de Rondas</th>
-                    <th>Fecha</th>
-                    <th>Hora de Inicio</th>
-                    <th>Hora Final</th>
-                    <th>Estado</th>
-                    <th>Ubicación</th>
-                    <th>Ver pelea</th>
-                </tr>
-            </thead>
-            <tbody>';
-
-    while ($row = $result->fetch_assoc()) {
-        echo '<tr>';
-        echo '<td>' . htmlspecialchars($row['id_lucha']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['id_luchador1']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['id_luchador2']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['id_categoria']) . '</td>';
-        echo '<td>' . (isset($row['id_ganador']) ? htmlspecialchars($row['id_ganador']) : 'No ganador') . '</td>';
-        echo '<td>' . htmlspecialchars($row['num_rondas']) . '</td>';
-        echo '<td>' . date('Y-m-d', strtotime($row['fecha'])) . '</td>';
-        echo '<td>' . date('H:i:s', strtotime($row['hora_inicio'])) . '</td>';
-        echo '<td>' . date('H:i:s', strtotime($row['hora_final'])) . '</td>';
-        echo '<td>' . htmlspecialchars($row['estado']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['ubicacion']) . '</td>';
-        echo '<td><a href="ver_pelea.php?id=' . htmlspecialchars($row['id_lucha']) . '">Ver pelea</a></td>';
-        echo '</tr>';
-    }
-
-    echo '</tbody>
-        </table>';
-} else {
-    echo "No hay peleas disponibles.";
-}
-
-// Close the connection
-$conn->close();
-?>
