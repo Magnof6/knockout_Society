@@ -190,7 +190,7 @@ class Apuestas{
         //Obtenemos las apuestas relalizadas por el usuario a una pelea en específico
         $sql = "SELECT id FROM apuesta WHERE id_lucha = ? AND email_usuario = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("i", $id_lucha);
+        $stmt->bind_param("is", $id_lucha, $email_aux);
         $stmt->execute();
         $result = $stmt->get_result();
         
