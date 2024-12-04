@@ -149,3 +149,60 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </form>
 </body>
 </html>
+<?php
+// Execute the query with joins to get wrestler names and category
+$sql = "SELECT id_lucha, id_luchador1, id_luchador2, id_categoria, id_ganador, num_rondas, fecha, hora_inicio, hora_final, estado, ubicacion FROM lucha";
+$result = $conn->query($sql);
+
+// Check for query errors
+if ($result === FALSE) {
+    die("Query failed: " . $conn->error);
+}
+
+if ($result->num_rows > 0) {
+    // Output data of each row
+    echo '<table border="1">
+            <thead>
+                <tr>
+                    <th>Id lucha</th>
+                    <th>Luchador 1</th>
+                    <th>Luchador 2</th>
+                    <th>Categoría</th>
+                    <th>Ganador</th>
+                    <th>Número de Rondas</th>
+                    <th>Fecha</th>
+                    <th>Hora de Inicio</th>
+                    <th>Hora Final</th>
+                    <th>Estado</th>
+                    <th>Ubicación</th>
+                    <th>Ver pelea</th>
+                </tr>
+            </thead>
+            <tbody>';
+
+    while ($row = $result->fetch_assoc()) {
+        echo '<tr>';
+        echo '<td>' . htmlspecialchars($row['id_lucha']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['id_luchador1']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['id_luchador2']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['id_categoria']) . '</td>';
+        echo '<td>' . (isset($row['id_ganador']) ? htmlspecialchars($row['id_ganador']) : 'No ganador') . '</td>';
+        echo '<td>' . htmlspecialchars($row['num_rondas']) . '</td>';
+        echo '<td>' . date('Y-m-d', strtotime($row['fecha'])) . '</td>';
+        echo '<td>' . date('H:i:s', strtotime($row['hora_inicio'])) . '</td>';
+        echo '<td>' . date('H:i:s', strtotime($row['hora_final'])) . '</td>';
+        echo '<td>' . htmlspecialchars($row['estado']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['ubicacion']) . '</td>';
+        echo '<td><a href="ver_pelea.php?id=' . htmlspecialchars($row['id_lucha']) . '">Ver pelea</a></td>';
+        echo '</tr>';
+    }
+
+    echo '</tbody>
+        </table>';
+} else {
+    echo "No hay peleas disponibles.";
+}
+
+// Close the connection
+$conn->close();
+?>
