@@ -25,7 +25,7 @@ class Apuestas{
         try{
 
             if (empty($id_lucha)) {
-                return ["success" => false, "message" => "Invalid ID_lucha provided."];
+                return false;
             }
 
             // Para el total de dinero apostado a W => w_t
@@ -54,7 +54,7 @@ class Apuestas{
         try{
 
             if (empty($id_apuesta) || empty($email)) {
-                return ["success" => false, "message" => "Invalid ID_apuesta o email_usuario provided."];
+                return false;
             }
 
             // Para extraer lo que apostó el usuario
@@ -93,7 +93,7 @@ class Apuestas{
     public function actualizarUsuarioApuesta($ganancias , $email){
         try{
 
-            if (($ganancias) != Null || empty($email)){
+            if (($ganancias) != null || empty($email)){
                 return ["success" => false, "message" => "Invalid ganancias provided."];
             }
         
@@ -136,6 +136,8 @@ class Apuestas{
             $l_tt = $totales[1];
             $d_tt = $totales[2];
             $t_tt = $w_tt + $l_tt + $d_tt;
+        }else{
+            return ["success" => false, "message" => "Error al obtener los valores totales de apuestas."];
         }
         
         $totales_apostados = $this->apostadoPorUsuario($id_apuesta , $email_usuario);
@@ -143,13 +145,61 @@ class Apuestas{
             $w_t = $totales_apostados[0];
             $l_t = $totales_apostados[1];
             $d_t = $totales_apostados[2];
+        }else{
+            return ["success" => false, "message" => "Error al obtener las apuestas realizadas por el usuario."];
         }
 
         $ganancias = $this->algoritmo_apuestas($w_tt , $w_t, $l_tt , $l_t , $d_tt, $d_t, $t_tt, $resultado, $comision);
         
-        if($ganancias != Null){
+        if($ganancias != null){
             $this->actualizarUsuarioApuesta($ganancias, $email_usuario);
+            return ["success" => true, "message" => "Apuesta actualizada exitosamente."];
+        }else{
+            return ["success" => false, "message" => "Error en el cálculo de ganancias."];
         }
 
     }
+    public function ActualizadorGeneralApuestas($id_lucha , $resultado){
+        //Buscar quienes realizaron las apuestas
+        $sql = "SELECT email_usuario FROM apuesta WHERE id_lucha = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id_lucha);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        // Almacenar los emails en un arreglo
+        $emails_apostadores = [];
+        while ($row = $result->fetch_assoc()) {
+            $emails_apostadores[] = $row['email_usuario'];
+        }
+        $length_e = count($emails_apostadores);
+        
+        for($i = 0 ; $i < $length_e; $i++){
+            $email_aux = $emails_apostadores[$i];
+            $apuestas = $this->IdApuestaMasIdLucha($email_aux , $id_lucha);
+            $length_a = count($apuestas);
+            for($j = 0; $j < $length_a; $j++){
+                $id_apuesta = $apuestas[$j];
+                $this->apuesta_actualizar_usuario($id_lucha, $id_apuesta, $email_usuario = $email_aux , $resultado, $comision = 0.9);
+            }
+
+        }
+    }
+
+    public function IdApuestaMasIdLucha($email_aux , $id_lucha){
+        //Obtenemos las apuestas relalizadas por el usuario a una pelea en específico
+        $sql = "SELECT id FROM apuesta WHERE id_lucha = ? AND email_usuario = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id_lucha);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        $id_apuesta = [];
+        while ($row = $result->fetch_assoc()) {
+            $id_apuesta[] = $row['id'];
+        }
+
+        return $id_apuesta;
+    }
 }
+
