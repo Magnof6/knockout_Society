@@ -9,6 +9,8 @@ class AfterFight{
    public function __construct($dbConnection){
        $this->conn = $dbConnection;
    }
+
+   //Importante, el $email_Luchado_1, debe ser el ganador en caso de haberlo.
    public function afterFight($id_lucha , $email_Luchador_1 , $email_Luchador_2, $resultado){
 
     //Actualizar los puntos de los luchadores tras el combate
