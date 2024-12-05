@@ -35,7 +35,7 @@
         <div class="header">
             <div class="menu-container">
                 <div id="menu-icon" class="menu-icon" onclick="toggleMenu()">&#9776;</div>
-                <h1>KNOCKOUT SOCIETY</h1>
+                <h1>KNOCKOUT WHOS'S THERE</h1>
             </div>
             <div class="search-section">
                 <label for="search">Buscar perfiles:</label>
