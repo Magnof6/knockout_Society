@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<<<<<<< HEAD
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -93,7 +93,7 @@
     </script>
 </body>
 </html>
-=======
+
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -133,4 +133,3 @@
         <?php include 'footer.php'; ?>
     </body>
 </html>
->>>>>>> 3a533d6d66d98c778843b74a855341a618a0451f
