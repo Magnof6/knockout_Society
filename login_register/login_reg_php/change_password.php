@@ -23,6 +23,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['change_password'])) {
 
     // Call the changePassword method
     $password_message = $inserts->changePassword($user_email, $current_password, $new_password, $confirm_password);
+    if ($password_message["success"]) {
+        $_SESSION['user_password'] = $new_password;
+    }
 }
 ?>
 <!DOCTYPE html>

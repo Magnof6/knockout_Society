@@ -39,9 +39,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['change_email'])) {
     <title>Cambiar Email</title>
     <style>
         body {
+            margin: 0;
+            padding: 0;
             font-family: Arial, sans-serif;
-            margin: 20px;
+            background: url('Imagenes/FondoPantalla.webp') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
             padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-sizing: border-box;
         }
 
         h2 {
@@ -51,32 +68,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['change_email'])) {
         form {
             margin-top: 20px;
             max-width: 400px;
+            width: 100%;
         }
 
         label {
             display: block;
             margin-bottom: 8px;
+            text-align: left;
         }
 
         input[type="password"], input[type="email"] {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 12px;
+            width: calc(100% - 20px);
+            max-width: 100%;
+            padding: 10px;
+            margin: 10px 0;
             border: 1px solid #ccc;
-            border-radius: 4px;
+            border-radius: 5px;
+            box-sizing: border-box;
         }
 
         button {
-            background-color: #4CAF50;
+            background-color: #28a745;
             color: white;
             padding: 10px 15px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            font-size: 16px;
         }
 
         button:hover {
-            background-color: #45a049;
+            background-color: #218838;
         }
 
         .message {
@@ -94,35 +116,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['change_email'])) {
     </style>
 </head>
 <body>
+    <div class="container">
+        <h2>Cambiar Email</h2>
 
-    <h2>Cambiar Email</h2>
+        <form action="" method="POST">
+            <label for="current_password">Contraseña Actual:</label>
+            <input type="password" id="current_password" name="current_password" required>
 
-    <form action="" method="POST">
-        <label for="current_password">Contraseña Actual:</label>
-        <input type="password" id="current_password" name="current_password" required>
+            <label for="new_email">Nuevo Email:</label>
+            <input type="email" id="new_email" name="new_email" required>
 
-        <label for="new_email">Nuevo Email:</label>
-        <input type="email" id="new_email" name="new_email" required>
+            <label for="confirm_email">Confirmar Nuevo Email:</label>
+            <input type="email" id="confirm_email" name="confirm_email" required>
 
-        <label for="confirm_email">Confirmar Nuevo Email:</label>
-        <input type="email" id="confirm_email" name="confirm_email" required>
-
-        <button type="submit" name="change_email">Cambiar Email</button>
-    </form>
-
-    <!-- Mensaje de resultado -->
-    <?php if (!empty($email_message)) : ?>
-        <div class="message <?= strpos($email_message, 'successfully') !== false ? 'success' : '' ?>">
-            <?= $email_message; ?>
-        </div>
-    <?php endif; ?>
-
-    <!-- Botón para volver a profile_user.php -->
-    <div class="back-button">
-        <form action="profile_user.php" method="GET">
-            <button type="submit">Volver al perfil</button>
+            <button type="submit" name="change_email">Cambiar Email</button>
         </form>
-    </div>
 
+        <!-- Mensaje de resultado -->
+        <?php if (!empty($email_message)) : ?>
+            <div class="message <?= strpos($email_message, 'successfully') !== false ? 'success' : '' ?>">
+                <?= $email_message; ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- Botón para volver a profile_user.php -->
+        <div class="back-button">
+            <form action="profile_user.php" method="GET">
+                <button type="submit">Volver al perfil</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
