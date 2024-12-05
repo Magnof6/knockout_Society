@@ -100,27 +100,36 @@ Class Inserts{
         if (empty($email_usuario) || empty($id_lucha) || empty($luchador_apostado)) {
             throw new Exception("Missing required fields.");
         }
-    
-        // Preparar la consulta
-        $insert_apuesta = $this->conn->prepare(
-            "INSERT INTO apuesta (email_usuario, id_lucha, luchador_apostado, w, l, d, total) 
-             VALUES (?, ?, ?, ?, ?, ?, NULL)"
-        );
-    
-        // Verificar si la consulta se preparó correctamente
-        if (!$insert_apuesta) {
-            throw new Exception("Failed to prepare the statement: " . $this->conn->error);
+
+        //Revisamos la cartera del usuario
+        $disponible = new Apuestas($this->conn);
+        $cartera = $disponible->comprobarCartera($email_usuario);
+
+        //Comparamos la cantidad apostada con la cartera inicial del usuario
+        if($w + $l + $d <= $cartera){
+            
+            // Preparar la consulta
+            $insert_apuesta = $this->conn->prepare(
+                "INSERT INTO apuesta (email_usuario, id_lucha, luchador_apostado, w, l, d, total) 
+                VALUES (?, ?, ?, ?, ?, ?, NULL)"
+            );
+            // Verificar si la consulta se preparó correctamente
+            if (!$insert_apuesta) {
+                throw new Exception("Failed to prepare the statement: " . $this->conn->error);
+            }
+            // Enlazar parámetros
+            $insert_apuesta->bind_param("sisiii", $email_usuario, $id_lucha, $luchador_apostado, $w, $l, $d);
+        
+            // Ejecutar la consulta
+            if ($insert_apuesta->execute()) {
+                return true; // Inserción exitosa
+            } else {
+                throw new Exception("Failed to execute the statement: " . $insert_apuesta->error);
+            }
+        }else{
+            throw new Exception("Failed to prepare the statement, not enought cash on your wallet: " . $this->conn->error);
         }
     
-        // Enlazar parámetros
-        $insert_apuesta->bind_param("sisiii", $email_usuario, $id_lucha, $luchador_apostado, $w, $l, $d);
-    
-        // Ejecutar la consulta
-        if ($insert_apuesta->execute()) {
-            return true; // Inserción exitosa
-        } else {
-            throw new Exception("Failed to execute the statement: " . $insert_apuesta->error);
-        }
     }
     
 

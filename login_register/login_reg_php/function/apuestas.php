@@ -201,5 +201,15 @@ class Apuestas{
 
         return $id_apuesta;
     }
+
+    public function comprobarCartera($email_usuario){
+        $sql = "SELECT cartera FROM usuario WHERE email_usuario = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s" , $email_usuario);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result;
+    }
 }
 

@@ -15,11 +15,11 @@ class AfterFight{
 
     //Actualizar los puntos de los luchadores tras el combate
     $elo = new Elo($this->conn);
-    $this->$elo->EloLuchadoresAfter($id_lucha , $email_Luchador_1 , $email_Luchador_2, $resultado);
+    $elo->EloLuchadoresAfter($id_lucha , $email_Luchador_1 , $email_Luchador_2, $resultado);
 
     //Actualiza las apuestas realizadas para todos los usuarios
     $apuesta = new Apuestas($this->conn);
-    $this->$elo->ActualizadorGeneralApuestas($id_lucha , $resultado);
+    $apuesta->ActualizadorGeneralApuestas($id_lucha , $resultado);
     
    }
 }
