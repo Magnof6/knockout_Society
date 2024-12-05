@@ -109,7 +109,7 @@ Class Inserts{
 
         //Comparamos la cantidad apostada con la cartera inicial del usuario
         if(($w + $l + $d) < $cartera){
-            
+            $new_cartera = $cartera - ($w + $l + $d);
             // Preparar la consulta
             $insert_apuesta = $this->conn->prepare(
                 "INSERT INTO apuesta (email_usuario, id_lucha, luchador_apostado, w, l, d, total) 
@@ -121,15 +121,25 @@ Class Inserts{
             }
             // Enlazar parámetros
             $insert_apuesta->bind_param("sisiii", $email_usuario, $id_lucha, $luchador_apostado, $w, $l, $d);
-        
+
+            $actu_cartera = $this->conn->prepare(
+                "UPDATE usuario SET cartera = ? WHERE email = ?"
+            );
+            // Verificar si la consulta se preparó correctamente
+            if (!$actu_cartera) {
+                throw new Exception("Failed to prepare the statement: " . $this->conn->error);
+            }
+            // Enlazar parámetros
+            $actu_cartera->bind_param("is", $new_cartera, $email_usuario);
+
             // Ejecutar la consulta
-            if ($insert_apuesta->execute()) {
+            if ($insert_apuesta->execute() & $actu_cartera->execute()) {
                 return true; // Inserción exitosa
             } else {
-                throw new Exception("Failed to execute the statement: " . $insert_apuesta->error);
+                return ["success" => false, "message" => "No se encontró información para el usuario."];
             }
         }else{
-            throw new Exception("Failed to prepare the statement, not enought cash on your wallet: " . $this->conn->error);
+            return ["success" => false, "message" => "No se tienen los fondos suficientes para realizar esta apuesta."];
         }
     
     }
