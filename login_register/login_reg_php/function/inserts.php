@@ -96,6 +96,7 @@ Class Inserts{
 
     // Crear una apuesta
     public function crearApuesta($email_usuario, $id_lucha, $luchador_apostado, $w = 0, $l = 0, $d = 0) {
+        require 'apuestas.php';
         // Validar los campos obligatorios
         if (empty($email_usuario) || empty($id_lucha) || empty($luchador_apostado)) {
             throw new Exception("Missing required fields.");
@@ -104,9 +105,10 @@ Class Inserts{
         //Revisamos la cartera del usuario
         $disponible = new Apuestas($this->conn);
         $cartera = $disponible->comprobarCartera($email_usuario);
+        $cartera = $cartera['cartera'];
 
         //Comparamos la cantidad apostada con la cartera inicial del usuario
-        if($w + $l + $d <= $cartera){
+        if(($w + $l + $d) < $cartera){
             
             // Preparar la consulta
             $insert_apuesta = $this->conn->prepare(

@@ -203,13 +203,22 @@ class Apuestas{
     }
 
     public function comprobarCartera($email_usuario){
-        $sql = "SELECT cartera FROM usuario WHERE email_usuario = ?";
+        if (!$this->conn) {
+            die("Conexión a la base de datos fallida: " . mysqli_connect_error());
+        }
+        $sql = "SELECT cartera FROM usuario WHERE email = ?";
         $stmt = $this->conn->prepare($sql);
+        if (!$stmt) {
+            die("Error en la preparación de la consulta: " . $this->conn->error);
+        }
         $stmt->bind_param("s" , $email_usuario);
         $stmt->execute();
         $result = $stmt->get_result();
-
-        return $result;
+        if ($result->num_rows === 0) {
+            die("No se encontró información para el usuario: " . $email_usuario);
+        }
+        
+        return $result->fetch_assoc();
     }
 }
 
