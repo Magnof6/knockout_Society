@@ -223,11 +223,23 @@
             </table>
         </div>
         <div id="video-popup" style="display: none;">
-        <div class="popup-content">
-            <span class="close-btn" onclick="closePopup()">&times;</span>
-            <iframe id="video-frame" src="" frameborder="0" allowfullscreen></iframe>
+            <div class="popup-content">
+                <span class="close-btn" onclick="closePopup()">&times;</span>
+                <?php
+                $youtubeUrl = "https://www.youtube.com/watch?v=gJtX_yRkwwU"; // URL del video
+                $embedUrl = str_replace("watch?v=", "embed/", $youtubeUrl);   // Transformar a formato embed
+                ?>
+                <iframe 
+                    src="<?php echo $embedUrl; ?>" 
+                    width="560" 
+                    height="315" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
         </div>
-        </div>
+
 
         <?php include 'footer.php'; ?>
     </body>
