@@ -11,7 +11,13 @@
     $user_email = $_SESSION['user_email'];
 
 
-    $sql = "SELECT * FROM lucha";
+    $sql = "SELECT l.*, 
+               u1.nombre AS luchador1_nombre, 
+               u2.nombre AS luchador2_nombre 
+        FROM lucha l
+        LEFT JOIN usuarios u1 ON l.id_luchador1 = u1.id_usuario
+        LEFT JOIN usuarios u2 ON l.id_luchador2 = u2.id_usuario";
+
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -194,10 +200,10 @@
                 <tbody>
                 <?php foreach ($fights as $fight): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($fight['id_luchador1']); ?></td>
-                        <td><?php echo htmlspecialchars($fight['id_luchador2']); ?></td>
+                        <td><?php echo htmlspecialchars($fight['luchador1_nombre'] ?? 'Desconocido'); ?></td> <!-- Nombre de Luchador 1 -->
+                        <td><?php echo htmlspecialchars($fight['luchador2_nombre'] ?? 'Desconocido'); ?></td> <!-- Nombre de Luchador 2 -->
                         <td><?php echo htmlspecialchars($fight['id_categoria']); ?></td>
-                        <td><?php echo htmlspecialchars($fight['id_ganador']); ?></td>
+                        <td><?php echo htmlspecialchars($fight['id_ganador'] ?? 'No disponible'); ?></td>
                         <td><?php echo htmlspecialchars($fight['num_rondas']); ?></td>
                         <td><?php echo htmlspecialchars($fight['fecha']); ?></td>
                         <td><?php echo htmlspecialchars($fight['hora_inicio']); ?></td>
@@ -213,9 +219,12 @@
                             $stmt_replay->execute();
                             $result_replay = $stmt_replay->get_result();
                             $replay = $result_replay->fetch_assoc();
+                            if ($replay) {
+                                echo '<a href="javascript:void(0);" onclick="openPopup(\'' . htmlspecialchars($replay['url']) . '\')">Ver</a>';
+                            } else {
+                                echo 'No disponible';
+                            }
                             ?>
-                            <a href="<?php echo htmlspecialchars($replay['url']); ?>" target="_blank">Ver</a>
-                            <a href="javascript:void(0);" onclick="openPopup('<?php echo htmlspecialchars($replay['url']); ?>')">Ver</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
