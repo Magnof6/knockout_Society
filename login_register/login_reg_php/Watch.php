@@ -15,8 +15,8 @@
                u1.nombre AS luchador1_nombre, 
                u2.nombre AS luchador2_nombre 
         FROM lucha l
-        LEFT JOIN usuarios u1 ON l.id_luchador1 = u1.id_usuario
-        LEFT JOIN usuarios u2 ON l.id_luchador2 = u2.id_usuario";
+        LEFT JOIN usuario u1 ON l.id_luchador1 = u1.email
+        LEFT JOIN usuario u2 ON l.id_luchador2 = u2.email";
 
     $stmt = $conn->prepare($sql);
     $stmt->execute();
