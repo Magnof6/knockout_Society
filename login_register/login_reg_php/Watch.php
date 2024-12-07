@@ -174,7 +174,6 @@
                 <button class="profile-button">Perfil ▼</button>
                 <div class="profile-content">
                     <a href="profile_user.php">Ver Perfil</a>
-                    <a href="#">Configuraciones</a>
                     <a href="logout.php">Cerrar sesión</a>
                 </div>
             </div>
@@ -182,7 +181,7 @@
         <div id="menu" class="menu">
             <ul>
                 <li><a href="index.php">Inicio</a></li>
-                <li><a href="Contacto.php">Servicios</a></li>
+                <li><a href="Contacto.php">Contacto</a></li>
                 <li><a href="Fight.php">Buscar Pelea</a></li>
                 <li><a href="Ranking.php">Ranking</a></li>
                 <li><a href="apuestaHTML.php">Apuestas</a></li>

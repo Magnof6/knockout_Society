@@ -1,4 +1,6 @@
 <?php
+require_once 'function/selects.php';
+require_once 'db_connect.php';
 session_start();
 
 // Verifica que la sesión esté activa
@@ -10,7 +12,12 @@ if (!isset($_SESSION['user_email']) || !isset($_SESSION['username'])) {
 // Usa los datos de la sesión
 $username = $_SESSION['username'];
 $email = $_SESSION['user_email'];
+
+$sql = "SELECT nombre, apellido FROM usuario";
+    $result = $conn->query($sql);
+    $cartera = cartera($conn, $email);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -98,15 +105,14 @@ $email = $_SESSION['user_email'];
                     <h1>Contacto</h1>
                 </div>
                 <div class="search-section">
-                    <label for="search">Buscar perfiles:</label>
-                    <input type="text" id="search" placeholder="Buscar...">
+                    <label for="cartera">Cartera:</label>
+                    <input type="number" id="cartera" value="<?php echo $cartera; ?>" disabled>
                 </div>
                     <!-- Perfil desplegable en la esquina derecha -->
                     <div class="profile-dropdown">
                         <button class="profile-button">Perfil ▼</button>
                         <div class="profile-content">
                             <a href="profile_user.php">Ver Perfil</a>
-                            <a href="#">Configuraciones</a>
                             <a href="logout.php">Cerrar sesión</a>
                         </div>
                     </div>

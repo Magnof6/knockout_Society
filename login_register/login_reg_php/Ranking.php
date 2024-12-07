@@ -98,8 +98,7 @@ $cartera = cartera($conn, $user_email);
     <div id="menu" class="menu">
         <ul>
             <li><a href="index.php">Inicio</a></li>
-            <li><a href="#">Acerca de</a></li>
-            <li><a href="Contacto.php">Servicios</a></li>
+            <li><a href="Contacto.php">Contacto</a></li>
             <li><a href="Fight.php">Buscar Pelea</a></li>
             <li><a href="Watch.php">Ver Peleas</a></li>
             <li><a href="Ranking.php">Ranking</a></li>
@@ -182,7 +181,7 @@ $cartera = cartera($conn, $user_email);
     </script>
     <?php include 'footer.php'; ?>
     </body>
-    </html>
+</html>
 
 <?php
 $conn->close();
