@@ -228,7 +228,7 @@
                                     <tr onclick="showFightDetails('<?php echo htmlspecialchars(json_encode($fight)); ?>')">
                                         <td><?php echo htmlspecialchars($fight['fecha']); ?></td>
                                         <td><?php echo htmlspecialchars($fight['id_luchador1'] == $user_email ? $fight['id_luchador2'] ?? '' : $fight['id_luchador1'] ?? ''); ?></td>
-                                        <td><?php echo htmlspecialchars($fight['id_ganador']); ?></td>
+                                        <td><?php echo htmlspecialchars($fight['id_ganador'] ?? ''); ?></td>
                                         <td><?php echo htmlspecialchars($fight['num_rondas']); ?></td>
                                         <td><?php echo htmlspecialchars($fight['ubicacion']); ?></td>
                                     </tr>
@@ -257,7 +257,7 @@
                                     <td><?php echo htmlspecialchars($bet['w']); ?></td>
                                     <td><?php echo htmlspecialchars($bet['l']); ?></td>
                                     <td><?php echo htmlspecialchars($bet['d']); ?></td>
-                                    <td><?php echo htmlspecialchars($bet['total']); ?></td>
+                                    <td><?php echo htmlspecialchars($bet['total'] ?? ''); ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </table>
