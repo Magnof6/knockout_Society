@@ -1,6 +1,7 @@
 <?php
     session_start();
     require_once 'db_connect.php';
+    require_once 'function/selects.php';
 
     // Verificar si el usuario ha iniciado sesión
     if (!isset($_SESSION['user_email'])) {
@@ -24,6 +25,8 @@
     while ($row = $result->fetch_assoc()) {
         $fights[] = $row;
     }
+
+    $cartera = cartera($conn, $user_email);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -164,8 +167,8 @@
                 <h1>Peleas Pasadas</h1>
             </div>
             <div class="search-section">
-                <label for="search">Buscar perfiles:</label>
-                <input type="text" id="search" placeholder="Buscar...">
+                <label for="cartera">Cartera:</label>
+                <input type="number" id="cartera" value="<?php echo $cartera; ?>" disabled>
             </div>
             <div class="profile-dropdown">
                 <button class="profile-button">Perfil ▼</button>
@@ -179,9 +182,8 @@
         <div id="menu" class="menu">
             <ul>
                 <li><a href="index.php">Inicio</a></li>
-                <li><a href="#">Acerca de</a></li>
+                <li><a href="Contacto.php">Servicios</a></li>
                 <li><a href="Fight.php">Buscar Pelea</a></li>
-                <li><a href="Watch.php">Ver Peleas</a></li>
                 <li><a href="Ranking.php">Ranking</a></li>
                 <li><a href="apuestaHTML.php">Apuestas</a></li>
             </ul>

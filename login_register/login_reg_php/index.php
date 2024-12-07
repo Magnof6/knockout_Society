@@ -1,5 +1,6 @@
 <?php
     require_once 'db_connect.php';
+require_once 'function/selects.php';
     session_start();
     // Consulta SQL para obtener nombre y apellido
     if (isset($_SESSION['user_email'])) {
@@ -14,6 +15,7 @@
     $sql = "SELECT nombre, apellido FROM usuario";
     $result = $conn->query($sql);
 
+    $cartera = cartera($conn, $user_email);
 ?>
 
 <!DOCTYPE html>
@@ -35,11 +37,11 @@
         <div class="header">
             <div class="menu-container">
                 <div id="menu-icon" class="menu-icon" onclick="toggleMenu()">&#9776;</div>
-                <h1>KNOCKOUT WHOS'S THERE</h1>
+                <h1>KNOCKOUT WHO'S THERE</h1>
             </div>
             <div class="search-section">
-                <label for="search">Buscar perfiles:</label>
-                <input type="text" id="search" placeholder="Buscar...">
+                <label for="cartera">Cartera:</label>
+                <input type="number" id="cartera" value="<?php echo $cartera; ?>" disabled>
             </div>
                 <!-- Perfil desplegable en la esquina derecha -->
                 <div class="profile-dropdown">
