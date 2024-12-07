@@ -41,17 +41,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 $errorMessage = "No se pudo generar un emparejamiento.";
             }
         } elseif ($_POST['action'] === 'toggle_status') {
-            // Alternar estado "Buscando pelea"
             $newState = $_POST['new_state'];
+            
+            // Actualiza el estado en la base de datos
             $sql = "UPDATE luchador SET buscando_pelea = ?, emparejado = 0 WHERE email = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param('is', $newState, $user_email);
             $stmt->execute();
-
+        
             if ($stmt->affected_rows > 0) {
                 $currentFightingStatus = $newState;
-                $hasActiveMatch = false; // Restablece el emparejamiento
-                $successMessage = $newState ? "Has activado 'Buscando pelea'." : "Has desactivado 'Buscando pelea'.";
+        
+                // Si se desactiva "Buscando pelea", elimina la lucha activa
+                if ($newState == 0) {
+                    // Eliminar la lucha activa
+                    $sql = "DELETE FROM lucha WHERE id_luchador1 = ? OR id_luchador2 = ?";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param('ss', $user_email, $user_email);
+                    $stmt->execute();
+                
+                    if ($stmt->affected_rows > 0) {
+                        $sql = "UPDATE luchador SET emparejado = 0 WHERE email IN (
+                                    SELECT id_luchador1 FROM lucha WHERE id_luchador1 = ? OR id_luchador2 = ?
+                                    UNION
+                                    SELECT id_luchador2 FROM lucha WHERE id_luchador1 = ? OR id_luchador2 = ?
+                                )";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->bind_param('ssss', $user_email, $user_email, $user_email, $user_email);
+                        $stmt->execute();
+                
+                        $successMessage = "Has desactivado 'Buscando pelea' y tu lucha activa ha sido eliminada.";
+                    } else {
+                        $successMessage = "Has desactivado 'Buscando pelea'.";
+                    }
+                
+                    $hasActiveMatch = false; 
+                }
             } else {
                 $errorMessage = "No se pudo actualizar el estado.";
             }
