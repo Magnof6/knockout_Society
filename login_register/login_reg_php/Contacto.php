@@ -1,3 +1,17 @@
+<?php
+session_start();
+
+// Verifica que la sesión esté activa
+if (!isset($_SESSION['user_email']) || !isset($_SESSION['username'])) {
+    header("Location: login.php"); // Redirige al login si no hay sesión activa
+    exit;
+}
+
+// Usa los datos de la sesión
+$username = $_SESSION['username'];
+$email = $_SESSION['user_email'];
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -67,7 +81,7 @@
         </style>
 
     </head>
-    <body class="contacto-page">
+<bodyclass="contacto-page">
         <div class="header">
                 <div class="menu-container">
                     <div id="menu-icon" class="menu-icon" onclick="toggleMenu()">&#9776;</div>
@@ -98,13 +112,8 @@
         </div>
         <div class="contact-form-container">
             <h2>Contáctanos</h2>
+            <p>Hola, <?php echo htmlspecialchars($username); ?> (<?php echo htmlspecialchars($email); ?>), ¡déjanos tu mensaje!</p>
             <form id="contactForm">
-                <label for="name">Nombre:</label>
-                <input type="text" id="name" name="name" required>
-                
-                <label for="email">Correo Electrónico:</label>
-                <input type="email" id="email" name="email" required>
-                
                 <label for="message">Mensaje:</label>
                 <textarea id="message" name="message" rows="5" required></textarea>
                 
@@ -116,18 +125,18 @@
         <script>
             document.getElementById('contactForm').addEventListener('submit', async function (e) {
                 e.preventDefault();
-                const formData = new FormData(this);
+                const formData = new FormData();
+                formData.append('message', document.getElementById('message').value);
 
-                const response = await fetch('/knockout_society/login_register/login_reg_php/contacto_submit.php', {
+                const response = await fetch('contacto_submit.php', {
                     method: 'POST',
                     body: formData
                 });
 
                 const result = await response.text();
                 document.getElementById('confirmationMessage').textContent = result;
-                this.reset();
+                document.getElementById('contactForm').reset();
             });
         </script>
-        <?php include 'footer.php'; ?>
     </body>
 </html>

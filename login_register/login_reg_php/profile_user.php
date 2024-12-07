@@ -22,6 +22,13 @@
         die("Usuario no encontrado.");
     }
 
+    $sql = "SELECT cartera FROM usuario WHERE email = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $user_email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $cartera = $result->fetch_assoc()['cartera'];
+
     // Consulta para determinar si el usuario es luchador
     $sql = "SELECT * FROM luchador WHERE email = ?";
     $stmt = $conn->prepare($sql);
@@ -33,7 +40,7 @@
     // Consulta para obtener peleas pasadas si es luchador
     $fights = [];
     if ($is_fighter) {
-        $sql = "SELECT * FROM lucha WHERE id_luchador1 = ? OR id_luchador2 = ?";
+        $sql = "SELECT * FROM lucha WHERE id_luchador1 = ? OR id_luchador2 = ? AND estado = 'finalizada'";
         $stmt->prepare($sql);
         $stmt->bind_param("ss", $user_email, $user_email);
         $stmt->execute();
@@ -202,57 +209,59 @@
                 <button class="button" onclick ="window.location.href='index.php'" >Home</button>
             </div>
             <div class="right-side">
-                <?php if ($is_fighter): ?>
-                    <h3>Peleas Pasadas</h3>
-                    <?php if (empty($fights)): ?>
-                        <p>Aún no has luchado.</p>
+                <h3>Cartera</h3>
+                    <p><?php echo htmlspecialchars($cartera); ?></p>
+                    <?php if ($is_fighter): ?>
+                        <h3>Peleas Pasadas</h3>
+                        <?php if (empty($fights)): ?>
+                            <p>Aún no has luchado.</p>
+                        <?php else: ?>
+                            <table class="fights-table">
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Contrincante</th>
+                                    <th>Ganador</th>
+                                    <th>Rondas</th>
+                                    <th>Ubicacion</th>
+                                </tr>
+                                <?php foreach ($fights as $fight): ?>
+                                    <tr onclick="showFightDetails('<?php echo htmlspecialchars(json_encode($fight)); ?>')">
+                                        <td><?php echo htmlspecialchars($fight['fecha']); ?></td>
+                                        <td><?php echo htmlspecialchars($fight['id_luchador1'] == $user_email ? $fight['id_luchador2'] ?? '' : $fight['id_luchador1'] ?? ''); ?></td>
+                                        <td><?php echo htmlspecialchars($fight['id_ganador']); ?></td>
+                                        <td><?php echo htmlspecialchars($fight['num_rondas']); ?></td>
+                                        <td><?php echo htmlspecialchars($fight['ubicacion']); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </table>
+                        <?php endif; ?>
+                    <?php endif; ?>
+
+                    <h3>Apuestas Pasadas</h3>
+                    <?php if (empty($bets)): ?>
+                        <p>No has realizado apuestas.</p>
                     <?php else: ?>
-                        <table class="fights-table">
+                        <table class="bets-table">
                             <tr>
-                                <th>Fecha</th>
-                                <th>Contrincante</th>
-                                <th>Ganador</th>
-                                <th>Rondas</th>
-                                <th>Ubicacion</th>
+                                <th>ID Lucha</th>
+                                <th>Luchador Apostado</th>
+                                <th>Ganadas</th>
+                                <th>Perdidas</th>
+                                <th>Empates</th>
+                                <th>Total</th>
                             </tr>
-                            <?php foreach ($fights as $fight): ?>
-                                <tr onclick="showFightDetails('<?php echo htmlspecialchars(json_encode($fight)); ?>')">
-                                    <td><?php echo htmlspecialchars($fight['fecha']); ?></td>
-                                    <td><?php echo htmlspecialchars($fight['id_luchador1'] == $user_email ? $fight['id_luchador2'] : $fight['id_luchador1']); ?></td>
-                                    <td><?php echo htmlspecialchars($fight['id_ganador']); ?></td>
-                                    <td><?php echo htmlspecialchars($fight['num_rondas']); ?></td>
-                                    <td><?php echo htmlspecialchars($fight['ubicacion']); ?></td>
+                            <?php foreach ($bets as $bet): ?>
+                                <tr onclick="showBetDetails('<?php echo htmlspecialchars(json_encode($bet)); ?>')">
+                                    <td><?php echo htmlspecialchars($bet['id_lucha']); ?></td>
+                                    <td><?php echo htmlspecialchars($bet['luchador_apostado']); ?></td>
+                                    <td><?php echo htmlspecialchars($bet['w']); ?></td>
+                                    <td><?php echo htmlspecialchars($bet['l']); ?></td>
+                                    <td><?php echo htmlspecialchars($bet['d']); ?></td>
+                                    <td><?php echo htmlspecialchars($bet['total']); ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </table>
                     <?php endif; ?>
-                <?php endif; ?>
-
-                <h3>Apuestas Pasadas</h3>
-                <?php if (empty($bets)): ?>
-                    <p>No has realizado apuestas.</p>
-                <?php else: ?>
-                    <table class="bets-table">
-                        <tr>
-                            <th>ID Lucha</th>
-                            <th>Luchador Apostado</th>
-                            <th>Ganadas</th>
-                            <th>Perdidas</th>
-                            <th>Empates</th>
-                            <th>Total</th>
-                        </tr>
-                        <?php foreach ($bets as $bet): ?>
-                            <tr onclick="showBetDetails('<?php echo htmlspecialchars(json_encode($bet)); ?>')">
-                                <td><?php echo htmlspecialchars($bet['id_lucha']); ?></td>
-                                <td><?php echo htmlspecialchars($bet['luchador_apostado']); ?></td>
-                                <td><?php echo htmlspecialchars($bet['w']); ?></td>
-                                <td><?php echo htmlspecialchars($bet['l']); ?></td>
-                                <td><?php echo htmlspecialchars($bet['d']); ?></td>
-                                <td><?php echo htmlspecialchars($bet['total']); ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </table>
-                <?php endif; ?>
             </div>
         </div>
 
