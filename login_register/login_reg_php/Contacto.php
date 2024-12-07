@@ -21,6 +21,16 @@ $email = $_SESSION['user_email'];
         <link rel="stylesheet" href="styles.css">
         <style>
         /* Estilos específicos para el formulario de contacto */
+            body {
+                font-family: Arial, sans-serif;
+                background: url('imagenes/nuestros_servicios.png') no-repeat center center fixed;
+                background-size: cover;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+            }
             .contact-form-container {
                 max-width: 500px; /* Ajusta el ancho para que no sea demasiado grande */
                 margin: 50px auto;
@@ -138,5 +148,7 @@ $email = $_SESSION['user_email'];
                 document.getElementById('contactForm').reset();
             });
         </script>
+
+        <?php include 'footer.php'; ?>
     </body>
 </html>
