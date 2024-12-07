@@ -142,9 +142,11 @@
             }
 
             function closePopup() {
+                const iframeContainer = document.getElementById('iframe-container');
+                iframeContainer.innerHTML = ''; // Elimina el iframe del DOM
                 document.getElementById('video-popup').style.display = 'none';
-                document.getElementById('video-frame').src = '';
             }
+
 
         </script>
     </head>
@@ -238,6 +240,7 @@
                 $youtubeUrl = "https://www.youtube.com/watch?v=gJtX_yRkwwU"; // URL del video
                 $embedUrl = str_replace("watch?v=", "embed/", $youtubeUrl);   // Transformar a formato embed
                 ?>
+            <div id="iframe-container">
                 <iframe 
                     src="<?php echo $embedUrl; ?>" 
                     width="560" 
@@ -248,6 +251,7 @@
                 </iframe>
             </div>
         </div>
+    </div>
 
 
         <?php include 'footer.php'; ?>
