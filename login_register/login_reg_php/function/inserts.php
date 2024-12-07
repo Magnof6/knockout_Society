@@ -187,7 +187,7 @@ Class Inserts{
         // Verifica la contraseña actual con la almacenada
         if (password_verify($current_password, $user['password'])) {
             if ($new_password == $current_password || $confirm_password == $current_password) {
-                return "New password can't be the same as old password"; 
+                return ["success"=>false,"message"=>"New password can't be the same as old password."]; 
             } elseif ($new_password === $confirm_password) {
                 // Hashea la nueva contraseña
                 $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
@@ -198,15 +198,15 @@ Class Inserts{
                 $stmt->bind_param("ss", $hashed_password, $user_email);
                 
                 if ($stmt->execute()) {
-                    return "Password changed successfully.";
+                    return ["success"=>true,"message"=>"Password changed successfully."];
                 } else {
-                    return "Error changing password: " . $stmt->error;
+                    return ["success"=>false,"message"=>"Error changing password: " . $stmt->error];
                 }
             } else {
-                return "New passwords do not match.";
+                return ["success"=>false,"message"=>"New passwords do not match."];
             }
         } else {
-            return "Current password is incorrect.";
+            return ["success"=>false,"message"=>"Current password is incorrect."];
         }
     }
     /**

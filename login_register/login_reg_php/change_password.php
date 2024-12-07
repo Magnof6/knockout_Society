@@ -110,9 +110,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['change_password'])) {
 
         <!-- Mensaje de resultado -->
         <?php if (!empty($password_message)) : ?>
-            <div class="message <?= strpos($password_message, 'successfully') !== false ? 'success' : '' ?>">
-                <?= $password_message; ?>
-            </div>
+              <?= $password_message['message']; ?>
+
         <?php endif; ?>
 
         <!-- Botón para volver a profile_user.php -->
