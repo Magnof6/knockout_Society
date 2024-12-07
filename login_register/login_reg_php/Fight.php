@@ -113,32 +113,9 @@ $user = $result->fetch_assoc();
 </head>
 <body>
     <div class="header">
-        <div class="menu-container">
-            <div id="menu-icon" class="menu-icon" onclick="toggleMenu()">&#9776;</div>
-            <h1>Buscar Pelea</h1>
-        </div>
-        <div class="search-section">
-            <!-- Add search functionality here if needed -->
-        </div>
-        <div class="profile-dropdown">
-            <button class="profile-button">Perfil ▼</button>
-            <div class="profile-content">
-                <a href="profile_user.php">Ver Perfil</a>
-                <a href="#">Configuraciones</a>
-                <a href="logout.php">Cerrar sesión</a>
-            </div>
-        </div>
+        <h1>Buscar pelea</h1>
     </div>
-    <div id="menu" class="menu">
-        <ul>
-            <li><a href="index.php">Inicio</a></li>
-            <li><a href="Fight.php">Buscar Pelea</a></li>
-            <li><a href="Watch.php">Ver Peleas</a></li>
-            <li><a href="Ranking.php">Ranking</a></li>
-            <li><a href="apuestaHTML.php">Apuestas</a></li>
-        </ul>
-    </div>
-    
+
     <div class="matchmaking-container">
         <h2>Hola, <?= htmlspecialchars($user['nombre'] . ' ' . $user['apellido']) ?> (<?= htmlspecialchars($user['username']) ?>)</h2>
         <p>Estado actual: <strong><?= $currentFightingStatus ? "Activo" : "Desactivado" ?></strong></p>
@@ -172,5 +149,6 @@ $user = $result->fetch_assoc();
             <p class="error"><?= htmlspecialchars($errorMessage) ?></p>
         <?php endif; ?>
     </div>
+    <?php include 'footer.php'; ?>
 </body>
 </html>
