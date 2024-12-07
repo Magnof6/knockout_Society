@@ -187,5 +187,6 @@ $user = $result->fetch_assoc();
             <p class="error"><?= htmlspecialchars($errorMessage) ?></p>
         <?php endif; ?>
     </div>
+    <?php include 'footer.php'; ?>
 </body>
 </html>
