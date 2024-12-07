@@ -57,7 +57,7 @@ require_once 'function/selects.php';
         <div id = "menu"class="menu">
             <ul>
                 <li><a href="#" onclick="toggleUserSection()">Perfiles de otras personas</a></li>
-                <li><a href="Contacto.php">Servicios</a></li>
+                <li><a href="Contacto.php">Contacto</a></li>
                 <li><a href="Fight.php">Buscar Pelea</a></li>
                 <li><a href="Watch.php">Ver Peleas</a></li>
                 <li><a href="Ranking.php">Ranking</a></li>
