@@ -10,7 +10,6 @@
 
     $user_email = $_SESSION['user_email'];
 
-
     $sql = "SELECT l.*, 
                u1.nombre AS luchador1_nombre, 
                u2.nombre AS luchador2_nombre 
@@ -26,7 +25,6 @@
         $fights[] = $row;
     }
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -37,7 +35,7 @@
         <style>
             #video-popup {
                 position: fixed;
-                 top: 0;
+                top: 0;
                 left: 0;
                 width: 100%;
                 height: 100%;
@@ -64,12 +62,12 @@
             }
 
             .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 24px;
-            color: black;
-            cursor: pointer;
+                position: absolute;
+                top: 10px;
+                right: 15px;
+                font-size: 24px;
+                color: black;
+                cursor: pointer;
             }
 
             .profile-container {
@@ -132,20 +130,31 @@
             }
 
             function buscarPeleador() {
-                // Función para realizar la búsqueda de peleadores
                 var busqueda = document.getElementById("busqueda").value;
                 alert("Buscando peleador: " + busqueda);
             }
+
             function openPopup(videoUrl) {
+                const iframeContainer = document.getElementById('iframe-container');
+                iframeContainer.innerHTML = `
+                    <iframe 
+                        id="video-frame" 
+                        width="560" 
+                        height="315" 
+                        src="${videoUrl}" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                `;
                 document.getElementById('video-popup').style.display = 'flex';
-                document.getElementById('video-frame').src = videoUrl;
             }
 
             function closePopup() {
+                const iframeContainer = document.getElementById('iframe-container');
+                iframeContainer.innerHTML = ''; // Elimina el iframe del DOM
                 document.getElementById('video-popup').style.display = 'none';
-                document.getElementById('video-frame').src = '';
             }
-
         </script>
     </head>
     <body>
@@ -158,7 +167,6 @@
                 <label for="search">Buscar perfiles:</label>
                 <input type="text" id="search" placeholder="Buscar...">
             </div>
-            <!-- Perfil desplegable en la esquina derecha -->
             <div class="profile-dropdown">
                 <button class="profile-button">Perfil ▼</button>
                 <div class="profile-content">
@@ -200,8 +208,8 @@
                 <tbody>
                 <?php foreach ($fights as $fight): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($fight['luchador1_nombre'] ?? 'Desconocido'); ?></td> <!-- Nombre de Luchador 1 -->
-                        <td><?php echo htmlspecialchars($fight['luchador2_nombre'] ?? 'Desconocido'); ?></td> <!-- Nombre de Luchador 2 -->
+                        <td><?php echo htmlspecialchars($fight['luchador1_nombre'] ?? 'Desconocido'); ?></td>
+                        <td><?php echo htmlspecialchars($fight['luchador2_nombre'] ?? 'Desconocido'); ?></td>
                         <td><?php echo htmlspecialchars($fight['id_categoria']); ?></td>
                         <td><?php echo htmlspecialchars($fight['id_ganador'] ?? 'No disponible'); ?></td>
                         <td><?php echo htmlspecialchars($fight['num_rondas']); ?></td>
@@ -220,7 +228,8 @@
                             $result_replay = $stmt_replay->get_result();
                             $replay = $result_replay->fetch_assoc();
                             if ($replay) {
-                                echo '<a href="javascript:void(0);" onclick="openPopup(\'' . htmlspecialchars($replay['url']) . '\')">Ver</a>';
+                                $embedUrl = str_replace("watch?v=", "embed/", htmlspecialchars($replay['url']));
+                                echo '<a href="javascript:void(0);" onclick="openPopup(\'' . $embedUrl . '\')">Ver</a>';
                             } else {
                                 echo 'No disponible';
                             }
@@ -234,21 +243,9 @@
         <div id="video-popup" style="display: none;">
             <div class="popup-content">
                 <span class="close-btn" onclick="closePopup()">&times;</span>
-                <?php
-                $youtubeUrl = "https://www.youtube.com/watch?v=gJtX_yRkwwU"; // URL del video
-                $embedUrl = str_replace("watch?v=", "embed/", $youtubeUrl);   // Transformar a formato embed
-                ?>
-                <iframe 
-                    src="<?php echo $embedUrl; ?>" 
-                    width="560" 
-                    height="315" 
-                    frameborder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowfullscreen>
-                </iframe>
+                <div id="iframe-container"></div>
             </div>
         </div>
-
 
         <?php include 'footer.php'; ?>
     </body>
