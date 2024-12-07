@@ -7,7 +7,7 @@ $error_message = "";
 
 $criterio = isset($_GET['criterio']) ? $_GET['criterio'] : 'puntos';
 
-$criterios_validos = ['puntos', 'email', 'victorias', 'empates', 'derrotas'];
+$criterios_validos = ['puntos', 'luchador.email', 'victorias', 'empates', 'derrotas'];
 if (!in_array($criterio, $criterios_validos)) {
     $error_message = "Criterio no válido.";
 } else {
@@ -116,7 +116,7 @@ $cartera = cartera($conn, $user_email);
             <label for="criterio">Ordenar por:</label>
             <select name="criterio" id="criterio">
                 <option value="puntos" <?php echo $criterio === 'puntos' ? 'selected' : ''; ?>>Puntos</option>
-                <option value="email" <?php echo $criterio === 'username' ? 'selected' : ''; ?>>Username</option>
+                <option value="luchador.email" <?php echo $criterio === 'username' ? 'selected' : ''; ?>>Username</option>
                 <option value="victorias" <?php echo $criterio === 'victorias' ? 'selected' : ''; ?>>Victorias</option>
                 <option value="empates" <?php echo $criterio === 'empates' ? 'selected' : ''; ?>>Empates</option>
                 <option value="derrotas" <?php echo $criterio === 'derrotas' ? 'selected' : ''; ?>>Derrotas</option>
