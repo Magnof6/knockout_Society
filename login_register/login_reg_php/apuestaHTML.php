@@ -2,6 +2,7 @@
 session_start();
 require_once 'db_connect.php';
 require_once 'function/inserts.php';
+require_once 'function/selects.php';
 
 // Verificar que el usuario esté autenticado
 if (!isset($_SESSION['user_email'])) {
@@ -45,6 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+$cartera = cartera($conn, $_SESSION['user_email']);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -68,9 +70,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <h1>Gestión de Apuestas</h1>
         </div>
         <div class="search-section">
-                <label for="search">Buscar perfiles:</label>
-                <input type="text" id="search" placeholder="Buscar...">
-            </div>
+            <label for="cartera">Cartera:</label>
+            <input type="number" id="cartera" value="<?php echo $cartera; ?>" disabled>
+        </div>
         <div class="profile-dropdown">
                     <button class="profile-button">Perfil ▼</button>
                     <div class="profile-content">

@@ -1,5 +1,6 @@
 <?php
 require_once 'db_connect.php';
+require_once 'function/selects.php';
 session_start();
 
 $error_message = "";
@@ -10,7 +11,7 @@ $criterios_validos = ['puntos', 'email', 'victorias', 'empates', 'derrotas'];
 if (!in_array($criterio, $criterios_validos)) {
     $error_message = "Criterio no válido.";
 } else {
-    $sql = "SELECT usuario.username, luchador.puntos, luchador.victorias, luchador.empates, luchador.derrotas 
+    $sql = "SELECT usuario.username, luchador.puntos, luchador.victorias, luchador.empates, luchador.derrotas
             FROM luchador
             JOIN usuario ON luchador.email = usuario.email
             ORDER BY $criterio DESC";
@@ -23,6 +24,8 @@ if (!in_array($criterio, $criterios_validos)) {
         $result = $stmt->get_result();
     }
 }
+$user_email = $_SESSION['user_email'] ?? '';
+$cartera = cartera($conn, $user_email);
 ?>
 
 <!DOCTYPE html>
@@ -46,8 +49,8 @@ if (!in_array($criterio, $criterios_validos)) {
                 <h1>Ranking de Luchadores</h1>
             </div>
             <div class="search-section">
-                <label for="search">Buscar perfiles:</label>
-                <input type="text" id="search" placeholder="Buscar...">
+                <label for="cartera">Cartera:</label>
+                <input type="number" id="cartera" value="<?php echo $cartera; ?>" disabled>
             </div>
             <div class="profile-dropdown">
                         <button class="profile-button">Perfil ▼</button>
