@@ -150,27 +150,26 @@ $cartera = cartera($conn, $_SESSION['user_email']);
                             <th>Hora Final</th>
                             <th>Estado</th>
                             <th>Ubicación</th>
-                            <th>Acción</th>
                         </tr>
                     </thead>
-                    <tbody>';
-            while ($row = $result->fetch_assoc()) {
-                echo '<tr>
-                        <td>' . htmlspecialchars($row['id_lucha']) . '</td>
-                        <td>' . htmlspecialchars($row['id_luchador1']) . '</td>
-                        <td>' . htmlspecialchars($row['id_luchador2']) . '</td>
-                        <td>' . htmlspecialchars($row['id_categoria']) . '</td>
-                        <td>' . (isset($row['id_ganador']) ? htmlspecialchars($row['id_ganador']) : 'Sin ganador') . '</td>
-                        <td>' . htmlspecialchars($row['num_rondas']) . '</td>
-                        <td>' . htmlspecialchars($row['fecha']) . '</td>
-                        <td>' . htmlspecialchars($row['hora_inicio']) . '</td>
-                        <td>' . htmlspecialchars($row['hora_final']) . '</td>
-                        <td>' . htmlspecialchars($row['estado']) . '</td>
-                        <td>' . htmlspecialchars($row['ubicacion']) . '</td>
-                        <td><a href="ver_pelea.php?id=' . htmlspecialchars($row['id_lucha']) . '">Ver</a></td>
-                      </tr>';
-            }
-            echo '</tbody></table>';
+<tbody>';
+        while ($row = $result->fetch_assoc()) {
+            echo '<tr>
+                    <td>' . htmlspecialchars($row['id_lucha']) . '</td>
+                    <td>' . htmlspecialchars($row['id_luchador1']) . '</td>
+                    <td>' . htmlspecialchars($row['id_luchador2']) . '</td>
+                    <td>' . htmlspecialchars($row['id_categoria']) . '</td>
+                    <td>' . (isset($row['id_ganador']) ? htmlspecialchars($row['id_ganador']) : 'Sin ganador') . '</td>
+                    <td>' . htmlspecialchars($row['num_rondas']) . '</td>
+                    <td>' . htmlspecialchars($row['fecha']) . '</td>
+                    <td>' . htmlspecialchars($row['hora_inicio']) . '</td>
+                    <td>' . htmlspecialchars($row['hora_final']) . '</td>
+                    <td>' . htmlspecialchars($row['estado']) . '</td>
+                    <td>' . htmlspecialchars($row['ubicacion']) . '</td>
+                </tr>';
+        }
+        echo '</tbody>';
+        '</table>';
         } else {
             echo "<p>No hay luchas registradas.</p>";
         }
