@@ -17,8 +17,7 @@ $matchResult = null;
 $errorMessage = "";
 $successMessage = "";
 $currentFightingStatus = null;
-$hasActiveMatch = false;
-$readyToStart = false;
+$hasActiveMatch = false; // Estado inicial para emparejado
 
 // Procesa las solicitudes POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
@@ -36,61 +35,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 $stmt->bind_param('s', $user_email);
                 $stmt->execute();
                 $successMessage = "¡Emparejamiento completado con éxito!";
-                $hasActiveMatch = true;
+                $hasActiveMatch = true; // Marca como emparejado
             } else {
                 $errorMessage = "No se pudo generar un emparejamiento.";
             }
         } elseif ($_POST['action'] === 'toggle_status') {
             // Alternar estado "Buscando pelea"
             $newState = $_POST['new_state'];
-
-            // Actualiza el estado del usuario y elimina su emparejamiento
-            $sql = "UPDATE luchador SET buscando_pelea = ?, emparejado = 0, empezarPelea = 0 WHERE email = ?";
+            $sql = "UPDATE luchador SET buscando_pelea = ?, emparejado = 0 WHERE email = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param('is', $newState, $user_email);
             $stmt->execute();
 
             if ($stmt->affected_rows > 0) {
-                // Elimina la pelea asociada al usuario y al oponente
-                $sql = "DELETE FROM lucha WHERE id_luchador1 = ? OR id_luchador2 = ?";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param('ss', $user_email, $user_email);
-                $stmt->execute();
-
-                // Actualiza el estado del oponente para resetear su emparejamiento
-                $sql = "UPDATE luchador l
-                        INNER JOIN lucha lu ON (l.email = lu.id_luchador1 OR l.email = lu.id_luchador2)
-                        SET l.emparejado = 0, l.empezarPelea = 0
-                        WHERE lu.id_luchador1 = ? OR lu.id_luchador2 = ?";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param('ss', $user_email, $user_email);
-                $stmt->execute();
-
                 $currentFightingStatus = $newState;
-                $hasActiveMatch = false;
-                $successMessage = $newState ? "Has activado 'Buscando pelea'." : "Has desactivado 'Buscando pelea' y se eliminó el emparejamiento.";
+                $hasActiveMatch = false; // Restablece el emparejamiento
+                $successMessage = $newState ? "Has activado 'Buscando pelea'." : "Has desactivado 'Buscando pelea'.";
             } else {
                 $errorMessage = "No se pudo actualizar el estado.";
-            }
-        } elseif ($_POST['action'] === 'start_fight') {
-            // Marcar el usuario como listo para empezar la pelea
-            $sql = "UPDATE luchador SET empezarPelea = 1 WHERE email = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param('s', $user_email);
-            $stmt->execute();
-
-            // Verificar si ambos luchadores están listos
-            $sql = "SELECT COUNT(*) as readyCount 
-                    FROM luchador 
-                    WHERE emparejado = 1 AND empezarPelea = 1";
-            $result = $conn->query($sql);
-            $row = $result->fetch_assoc();
-
-            if ($row['readyCount'] >= 2) {
-                $readyToStart = true;
-                $successMessage = "¡Ambos luchadores están listos! La pelea puede comenzar.";
-            } else {
-                $successMessage = "Estás listo para la pelea. Esperando al oponente...";
             }
         }
     } catch (Exception $e) {
@@ -98,8 +60,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     }
 }
 
-// Obtener el estado actual de "Buscando pelea", "Emparejado" y "Empezar pelea"
-$sql = "SELECT buscando_pelea, emparejado, empezarPelea FROM luchador WHERE email = ?";
+// Obtener el estado actual de "Buscando pelea" y "Emparejado"
+$sql = "SELECT buscando_pelea, emparejado FROM luchador WHERE email = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('s', $user_email);
 $stmt->execute();
@@ -109,7 +71,6 @@ $luchador = $result->fetch_assoc();
 if ($luchador) {
     $currentFightingStatus = $luchador['buscando_pelea'];
     $hasActiveMatch = $luchador['emparejado'];
-    $readyToStart = ($luchador['empezarPelea'] == 1);
 }
 
 // Consulta para obtener datos del usuario
@@ -152,19 +113,21 @@ $user = $result->fetch_assoc();
 </head>
 <body>
     <div class="header">
-        <h1>Buscar Pelea</h1>
+        <h1>Buscar pelea</h1>
     </div>
 
     <div class="matchmaking-container">
         <h2>Hola, <?= htmlspecialchars($user['nombre'] . ' ' . $user['apellido']) ?> (<?= htmlspecialchars($user['username']) ?>)</h2>
         <p>Estado actual: <strong><?= $currentFightingStatus ? "Activo" : "Desactivado" ?></strong></p>
 
+        <!-- Botón para alternar estado -->
         <form method="POST">
             <input type="hidden" name="action" value="toggle_status">
             <input type="hidden" name="new_state" value="<?= $currentFightingStatus ? 0 : 1 ?>">
             <button type="submit"><?= $currentFightingStatus ? "Desactivar" : "Activar" ?> "Buscando pelea"</button>
         </form>
 
+        <!-- Botón para buscar pelea -->
         <?php if ($currentFightingStatus && !$hasActiveMatch): ?>
             <form method="POST">
                 <input type="hidden" name="action" value="matchmaking">
@@ -172,15 +135,14 @@ $user = $result->fetch_assoc();
             </form>
         <?php endif; ?>
 
-        <?php if ($hasActiveMatch && !$readyToStart): ?>
-            <form method="POST">
-                <input type="hidden" name="action" value="start_fight">
+        <!-- Botón "Empezar pelea" (solo si el emparejamiento ya está completo) -->
+        <?php if ($hasActiveMatch): ?>
+            <form method="POST" action="start_match.php">
                 <button type="submit">Empezar pelea</button>
             </form>
-        <?php elseif ($readyToStart): ?>
-            <p class="success">¡La pelea puede comenzar!</p>
         <?php endif; ?>
 
+        <!-- Mensajes de éxito o error -->
         <?php if ($successMessage): ?>
             <p class="success"><?= htmlspecialchars($successMessage) ?></p>
         <?php elseif ($errorMessage): ?>
