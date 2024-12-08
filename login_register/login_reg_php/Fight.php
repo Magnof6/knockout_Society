@@ -66,10 +66,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 $errorMessage = "Cannot toggle status while in fight.";
             }
         } elseif ($_POST['action'] === 'finalize_fight') {
-            // Finalize the fight
-            $sql = "UPDATE lucha SET estado = 'finalizado' WHERE (id_luchador1 = ? OR id_luchador2 = ?) AND estado = 'luchando'";
+            // Retrieve form data
+            $datetime = $_POST['hora_final'];
+            $ganador = $_POST['ganador'];
+            $num_rondas = $_POST['num_rondas'];
+            
+            // Create DateTime object and format time
+            try {
+                $date = new DateTime($datetime);
+                $time = $date->format('H:i:s');
+            } catch (Exception $e) {
+                $errorMessage = "Invalid datetime format.";
+                // Handle the error as needed
+            }
+            
+            // Update the lucha table with the time
+            $sql = "UPDATE lucha SET estado = 'finalizado', hora_final = ?, ganador = ?, num_rondas = ? WHERE (id_luchador1 = ? OR id_luchador2 = ?) AND estado = 'luchando'";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param('ss', $user_email, $user_email);
+            $stmt->bind_param('sssss', $time, $ganador, $num_rondas, $user_email, $user_email);
             $stmt->execute();
             
             if ($stmt->affected_rows > 0) {
@@ -215,11 +229,22 @@ $cartera = cartera($conn, $_SESSION['user_email']);
 
         <!-- "Finalizar" button if in 'luchando' state -->
         <?php if ($activeFight): ?>
-            <form method="POST">
-                <input type="hidden" name="action" value="finalize_fight">
-                <button type="submit">Finalizar</button>
-            </form>
+            <button type="button" onclick="showFinalizeForm()">Finalizar</button>
         <?php endif; ?>
+        <div id="finalize-form" style="display:none;">
+            <h3>Finalizar Pelea</h3>
+            <form id="finalize-fight-form" method="POST">
+                <input type="hidden" name="action" value="finalize_fight">
+                <label for="hora_final">Hora Final:</label>
+                <input type="datetime-local" id="hora_final" name="hora_final" required><br>
+                <label for="ganador">Ganador (Email):</label>
+                <input type="email" id="ganador" name="ganador" required><br>
+                <label for="num_rondas">Número de Rondas:</label>
+                <input type="number" id="num_rondas" name="num_rondas" required><br>
+                <button type="button" onclick="submitFinalizeForm()">Enviar</button>
+                <button type="button" onclick="hideFinalizeForm()">Cancelar</button>
+            </form>
+        </div>
 
         <!-- Success or error messages -->
         <?php if ($successMessage): ?>
@@ -229,5 +254,38 @@ $cartera = cartera($conn, $_SESSION['user_email']);
         <?php endif; ?>
     </div>
     <?php include 'footer.php'; ?>
+    <script>
+        function showFinalizeForm() {
+            document.getElementById('finalize-form').style.display = 'block';
+        }
+
+        function hideFinalizeForm() {
+            document.getElementById('finalize-form').style.display = 'none';
+        }
+
+        function submitFinalizeForm() {
+            var form = document.getElementById('finalize-fight-form');
+            var formData = new FormData(form);
+
+            fetch('index.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                if (data === 'success') {
+                    alert('Pelea finalizada correctamente.');
+                    hideFinalizeForm();
+                    // Optionally refresh the page or update the UI
+                } else {
+                    alert('Error al finalizar la pelea: ' + data);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Ocurrió un error al finalizar la pelea.');
+            });
+        }
+    </script>
 </body>
 </html>
