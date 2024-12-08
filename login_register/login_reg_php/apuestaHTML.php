@@ -141,7 +141,7 @@ $cartera = cartera($conn, $_SESSION['user_email']);
 
             <h2>Listado de Luchas</h2>
             <?php
-            $sql = "SELECT id_lucha, id_luchador1, id_luchador2, id_categoria, id_ganador, num_rondas, fecha, hora_inicio, hora_final, estado, ubicacion FROM lucha";
+            $sql = "SELECT id_lucha, id_luchador1, id_luchador2, id_categoria, id_ganador, num_rondas, fecha, hora_inicio, hora_final, estado, ubicacion FROM lucha where estado = 'pendiente'";
             $result = $conn->query($sql);
 
             if ($result === FALSE) {

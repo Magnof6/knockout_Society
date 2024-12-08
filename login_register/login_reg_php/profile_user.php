@@ -40,7 +40,7 @@
     // Consulta para obtener peleas pasadas si es luchador
     $fights = [];
     if ($is_fighter) {
-        $sql = "SELECT * FROM lucha WHERE id_luchador1 = ? OR id_luchador2 = ? AND estado = 'finalizada'";
+        $sql = "SELECT * FROM lucha WHERE id_luchador1 = ? AND estado = 'finalizada' OR id_luchador2 = ? AND estado = 'finalizada';";
         $stmt->prepare($sql);
         $stmt->bind_param("ss", $user_email, $user_email);
         $stmt->execute();
