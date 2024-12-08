@@ -18,7 +18,8 @@ $matchResult = null;
 $errorMessage = "";
 $successMessage = "";
 $currentFightingStatus = null;
-$hasActiveMatch = false; // Initial state for matched
+$hasActiveMatch = false;
+$activeFight = false; // To check if in 'luchando' state
 
 // Process POST requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
@@ -43,54 +44,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         } elseif ($_POST['action'] === 'toggle_status') {
             $newState = $_POST['new_state'];
             
-            // Update the status in the database
-            $sql = "UPDATE luchador SET buscando_pelea = ?, emparejado = 0 WHERE email = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param('is', $newState, $user_email);
-            $stmt->execute();
-        
-            if ($stmt->affected_rows > 0) {
-                $currentFightingStatus = $newState;
-        
-                // If "Buscando pelea" is deactivated, delete the active match
-                if ($newState == 0) {
-                    // Check if the user is in a fight
-                    $sql = "SELECT * FROM lucha WHERE id_luchador1 = ? OR id_luchador2 = ?";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->bind_param('ss', $user_email, $user_email);
-                    $stmt->execute();
-                    $result = $stmt->get_result();
-                    $match = $result->fetch_assoc();
-
-                    if ($match) {
-                        // Get opponent's email
-                        if ($match['id_luchador1'] == $user_email) {
-                            $opponent_email = $match['id_luchador2'];
-                        } else {
-                            $opponent_email = $match['id_luchador1'];
-                        }
-
-                        // Delete the fight
-                        $sql = "DELETE FROM lucha WHERE id_luchador1 = ? OR id_luchador2 = ?";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->bind_param('ss', $user_email, $opponent_email);
-                        $stmt->execute();
-
-                        // Update both users' emparejado status
-                        $sql = "UPDATE luchador SET emparejado = 0 WHERE email = ? OR email = ?";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->bind_param('ss', $user_email, $opponent_email);
-                        $stmt->execute();
-
-                        $successMessage = "Has desactivado 'Buscando pelea' y tu lucha activa ha sido eliminada.";
-                    } else {
+            // Prevent toggling if in 'luchando' state
+            if (!$activeFight) {
+                // Update the status in the database
+                $sql = "UPDATE luchador SET buscando_pelea = ?, emparejado = 0 WHERE email = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param('is', $newState, $user_email);
+                $stmt->execute();
+                
+                if ($stmt->affected_rows > 0) {
+                    $currentFightingStatus = $newState;
+                    
+                    if ($newState == 0) {
+                        // Additional logic if needed
                         $successMessage = "Has desactivado 'Buscando pelea'.";
                     }
-                
-                    $hasActiveMatch = false; 
+                } else {
+                    $errorMessage = "Could not update the status.";
                 }
             } else {
-                $errorMessage = "Could not update the status.";
+                $errorMessage = "Cannot toggle status while in fight.";
+            }
+        } elseif ($_POST['action'] === 'finalize_fight') {
+            // Finalize the fight
+            $sql = "UPDATE lucha SET estado = 'finalizado' WHERE (id_luchador1 = ? OR id_luchador2 = ?) AND estado = 'luchando'";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param('ss', $user_email, $user_email);
+            $stmt->execute();
+            
+            if ($stmt->affected_rows > 0) {
+                // Update luchador's status
+                $sql = "UPDATE luchador SET emparejado = 0, empezarPelea = 0 WHERE email = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param('s', $user_email);
+                $stmt->execute();
+                
+                $successMessage = "Pelea finalizada.";
+                $hasActiveMatch = false;
+                $activeFight = false;
+            } else {
+                $errorMessage = "No se pudo finalizar la pelea.";
             }
         }
     } catch (Exception $e) {
@@ -109,6 +102,20 @@ $luchador = $result->fetch_assoc();
 if ($luchador) {
     $currentFightingStatus = $luchador['buscando_pelea'];
     $hasActiveMatch = $luchador['emparejado'];
+}
+
+// Check for active fight with estado = 'luchando'
+$sql = "SELECT estado FROM lucha WHERE (id_luchador1 = ? OR id_luchador2 = ?) AND estado = 'luchando'";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('ss', $user_email, $user_email);
+$stmt->execute();
+$result = $stmt->get_result();
+$activeFight = $result->fetch_assoc();
+
+if ($activeFight) {
+    $activeFight = true;
+} else {
+    $activeFight = false;
 }
 
 // Query to get user data
@@ -187,11 +194,11 @@ $cartera = cartera($conn, $_SESSION['user_email']);
         <form method="POST">
             <input type="hidden" name="action" value="toggle_status">
             <input type="hidden" name="new_state" value="<?= $currentFightingStatus ? 0 : 1 ?>">
-            <button type="submit"><?= $currentFightingStatus ? "Desactivar" : "Activar" ?> "Buscando pelea"</button>
+            <button type="submit" <?= $activeFight ? 'disabled' : '' ?>><?= $currentFightingStatus ? "Desactivar" : "Activar" ?> "Buscando pelea"</button>
         </form>
 
         <!-- Button to search for a fight -->
-        <?php if ($currentFightingStatus && !$hasActiveMatch): ?>
+        <?php if ($currentFightingStatus && !$hasActiveMatch && !$activeFight): ?>
             <form method="POST">
                 <input type="hidden" name="action" value="matchmaking">
                 <button type="submit">Buscar pelea</button>
@@ -199,10 +206,18 @@ $cartera = cartera($conn, $_SESSION['user_email']);
         <?php endif; ?>
 
         <!-- "Start fight" button (only if the match is already complete) -->
-        <?php if ($hasActiveMatch): ?>
+        <?php if ($hasActiveMatch && !$activeFight): ?>
             <form method="POST" action="start_match.php">
                 <input type="hidden" name="action" value="start_fight">
                 <button type="submit">Empezar pelea</button>
+            </form>
+        <?php endif; ?>
+
+        <!-- "Finalizar" button if in 'luchando' state -->
+        <?php if ($activeFight): ?>
+            <form method="POST">
+                <input type="hidden" name="action" value="finalize_fight">
+                <button type="submit">Finalizar</button>
             </form>
         <?php endif; ?>
 
