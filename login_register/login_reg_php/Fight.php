@@ -201,6 +201,7 @@ $cartera = cartera($conn, $_SESSION['user_email']);
         <!-- "Start fight" button (only if the match is already complete) -->
         <?php if ($hasActiveMatch): ?>
             <form method="POST" action="start_match.php">
+                <input type="hidden" name="action" value="start_fight">
                 <button type="submit">Empezar pelea</button>
             </form>
         <?php endif; ?>
