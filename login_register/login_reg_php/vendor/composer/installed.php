@@ -3,7 +3,7 @@
         'name' => 'giuli/login_reg_php',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '8871db598565f226858b86a844129a5fa010203d',
+        'reference' => 'e2da3d56f455e167f2c35b04e7575286b69b4f38',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'giuli/login_reg_php' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '8871db598565f226858b86a844129a5fa010203d',
+            'reference' => 'e2da3d56f455e167f2c35b04e7575286b69b4f38',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -54,6 +54,15 @@
             'install_path' => __DIR__ . '/../phar-io/version',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'phpmailer/phpmailer' => array(
+            'pretty_version' => 'v6.9.3',
+            'version' => '6.9.3.0',
+            'reference' => '2f5c94fe7493efc213f643c23b1b1c249d40f47e',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../phpmailer/phpmailer',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'phpunit/php-code-coverage' => array(
             'pretty_version' => '11.0.7',

@@ -15,6 +15,7 @@ class ComposerStaticInit902c3aaca2d4b2d4ac9b0a7574f80b80
         'P' => 
         array (
             'PhpParser\\' => 10,
+            'PHPMailer\\PHPMailer\\' => 20,
         ),
         'G' => 
         array (
@@ -30,6 +31,10 @@ class ComposerStaticInit902c3aaca2d4b2d4ac9b0a7574f80b80
         'PhpParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
+        ),
+        'PHPMailer\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
         'Giuli\\LoginRegPhp\\' => 
         array (
