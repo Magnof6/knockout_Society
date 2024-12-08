@@ -11,7 +11,7 @@ $criterios_validos = ['puntos', 'luchador.email', 'victorias', 'empates', 'derro
 if (!in_array($criterio, $criterios_validos)) {
     $error_message = "Criterio no válido.";
 } else {
-    $sql = "SELECT usuario.username, luchador.puntos, luchador.victorias, luchador.empates, luchador.derrotas, luchador.peso, luchador.altura, luchador.lateralidad
+    $sql = "SELECT usuario.username, luchador.email, luchador.puntos, luchador.victorias, luchador.empates, luchador.derrotas, luchador.peso, luchador.altura, luchador.lateralidad
             FROM luchador
             JOIN usuario ON luchador.email = usuario.email
             ORDER BY $criterio DESC";
@@ -150,6 +150,7 @@ $cartera = cartera($conn, $user_email);
     <div id="fightPopup" class="popup">
         <h3>Detalles del Luchador</h3>
         <p><strong>Username:</strong> <span id="popupUsername"></span></p>
+        <p><strong>email:</strong> <span id="popupEmail"></span></p>
         <p><strong>Puntos:</strong> <span id="popupPuntos"></span></p>
         <p><strong>Victorias:</strong> <span id="popupVictorias"></span></p>
         <p><strong>Empates:</strong> <span id="popupEmpates"></span></p>
@@ -164,6 +165,7 @@ $cartera = cartera($conn, $user_email);
         function showFightDetails(fight) {
             var fightDetails = JSON.parse(fight);
             document.getElementById("popupUsername").textContent = fightDetails.username;
+            document.getElementById("popupEmail").textContent = fightDetails.email;
             document.getElementById("popupPuntos").textContent = fightDetails.puntos;
             document.getElementById("popupVictorias").textContent = fightDetails.victorias;
             document.getElementById("popupEmpates").textContent = fightDetails.empates;
