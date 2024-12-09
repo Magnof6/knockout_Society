@@ -149,16 +149,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                     $stmtCheckFight->execute();
                     $resultCheckFight = $stmtCheckFight->get_result();
             
-                    if ($resultCheckUser->num_rows > 0) {
+                    if ($resultCheckFight->num_rows > 0) {
                         $errorMessage = "Ya has registrado tu participación en esta pelea.";
-                    } elseif ($resultCheckFight->num_rows == 2) {
+                    } elseif ($resultCheckFight->num_rows == 2 ) {
                         // Validar si los dos registros son consistentes
                         if (validateTwoRecordsForFight($conn, $id_lucha)) {
                             // Finalizar la pelea
                             $afterFight = new AfterFight($conn);
                             $resultEstado = $afterFight->comparadorPeleando($id_lucha);
                             if ($resultEstado) {
-                                $afterFight->afterFightTerminada($id_lucha, $match['id_luchador1'], $match['id_luchador2'], $ganador);
+                                $sql = "SELECT ganador FROM peleando where id_lucha = ?";
+                                $stmtC = $conn->prepare($sql);
+                                $stmtC->bind_param('i', $id_lucha);
+                                $stmtC->execute();
+                                $ganador = $stmtC->get_result();
+
+                                $afterFight->afterFightTerminada($id_lucha, $lucha['id_luchador1'], $lucha['id_luchador2'], $ganador);
                                 $successMessage = "¡Pelea finalizada exitosamente!";
                             } else {
                                 $afterFight->afterFightCancelada($id_lucha);
