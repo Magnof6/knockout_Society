@@ -2,7 +2,6 @@
 require_once dirname(__DIR__) . '/db_connect.php';
 require 'apuestas.php'; 
 require 'elo.php';
-// session_start();
 
 class AfterFight{
    private $conn;
@@ -11,7 +10,17 @@ class AfterFight{
    }
 
    //Importante, el $email_Luchado_1, debe ser el ganador en caso de haberlo.
-   public function afterFightTerminada($id_lucha , $email_Luchador_1 , $email_Luchador_2, $resultado){
+   public function afterFightTerminada($id_lucha , $email_Luchador_1 , $email_Luchador_2, $ganador){
+
+    if($ganador == $email_Luchador_1){
+        $resultado = 1;
+    }else{
+        if($ganador == $email_Luchador_2){
+            $resultado = 0;
+        }else{
+            $resultado = 0.5;
+        }
+    }
 
     //Actualizar los puntos de los luchadores tras el combate
     $elo = new Elo($this->conn);
@@ -52,7 +61,7 @@ class AfterFight{
         }
         $stmt->close();
 
-        if (count($rows) > 1) {
+        if (count($rows) == 2) {
             $firstRow = $rows[0];
             foreach ($rows as $row) {
                 if ($row !== $firstRow) {
