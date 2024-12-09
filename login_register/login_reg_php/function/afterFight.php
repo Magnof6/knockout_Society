@@ -2,7 +2,7 @@
 require_once dirname(__DIR__) . '/db_connect.php';
 require 'apuestas.php'; 
 require 'elo.php';
-session_start();
+// session_start();
 
 class AfterFight{
    private $conn;
