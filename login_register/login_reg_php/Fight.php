@@ -139,8 +139,55 @@ $cartera = cartera($conn, $user_email); // Usar la función cartera
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fight Matchmaking</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        button {
+            padding: 10px 20px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .success {
+            color: #28a745;
+        }
+        .error {
+            color: #dc3545;
+        }
+    </style>
 </head>
 <body>
+    <div class="header">
+        <div class="menu-container">
+            <div id="menu-icon" class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+            <h1>Buscar Pelea</h1>
+        </div>
+        <div class="search-section">
+            <label for="cartera">Cartera:</label>
+            <input type="number" id="cartera" value="<?php echo $cartera; ?>" disabled>
+        </div>
+        <div class="profile-dropdown">
+            <button class="profile-button">Perfil ▼</button>
+            <div class="profile-content">
+                <a href="profile_user.php">Ver Perfil</a>
+                <a href="logout.php">Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+    <div id="menu" class="menu">
+        <ul>
+            <li><a href="index.php">Inicio</a></li>
+            <li><a href="Contacto.php">Contacto</a></li>
+            <li><a href="Watch.php">Ver Peleas</a></li>
+            <li><a href="Ranking.php">Ranking</a></li>
+            <li><a href="apuestaHTML.php">Apuestas</a></li>
+        </ul>
+    </div>
     <div class="matchmaking-container">
         <h2>Hola, <?= htmlspecialchars($user['nombre'] . ' ' . $user['apellido']) ?> (<?= htmlspecialchars($user['username']) ?>)</h2>
         <p>Current status: <strong><?= $currentFightingStatus ? "Active" : "Inactive" ?></strong></p>
@@ -186,5 +233,6 @@ $cartera = cartera($conn, $user_email); // Usar la función cartera
             document.getElementById('finalize-form').style.display = 'none';
         }
     </script>
+    <?php include 'footer.php'; ?>
 </body>
 </html>
