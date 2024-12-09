@@ -32,6 +32,18 @@ function validateTwoRecordsForFight($conn, $id_lucha) {
     return $row['total'] === 2; // Devuelve true si hay exactamente 2 registros
 }
 
+// Sugerencia de GPT
+// Check if user has already finalized the fight
+$sql = "SELECT COUNT(*) as finalized FROM peleando WHERE email_luchador = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('s', $user_email);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+if ($row && $row['finalized'] > 0) {
+    $hasFinalizedFight = true;
+}
+
 // Process POST requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     try {
@@ -121,53 +133,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                     $stmt->execute();
                     $result = $stmt->get_result();
                     $lucha = $result->fetch_assoc();
-                    
-                    if ($lucha) {
-                        $id_lucha = $lucha['id_lucha'];
+
+
+                    // Verificar si el usuario ya está en la tabla peleando
+                    $sqlCheckUser = "SELECT * FROM peleando WHERE email_luchador = ?";
+                    $stmtCheckUser = $conn->prepare($sqlCheckUser);
+                    $stmtCheckUser->bind_param('s', $user_email);
+                    $stmtCheckUser->execute();
+                    $resultCheckUser = $stmtCheckUser->get_result();
             
-                        // Insertar en la tabla peleando
-                        $sql = "INSERT INTO peleando (email_luchador, hora_final, ganador, num_rondas, id_lucha) 
-                                VALUES (?, ?, ?, ?, ?)";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->bind_param('sssii', $user_email, $hora_final, $ganador, $num_rondas, $id_lucha);
-                        $stmt->execute();
+                    // Verificar si ya hay dos registros en la tabla peleando para la lucha
+                    $sqlCheckFight = "SELECT * FROM peleando WHERE id_lucha = ?";
+                    $stmtCheckFight = $conn->prepare($sqlCheckFight);
+                    $stmtCheckFight->bind_param('i', $id_lucha);
+                    $stmtCheckFight->execute();
+                    $resultCheckFight = $stmtCheckFight->get_result();
             
-                        if ($stmt->affected_rows > 0) {
-                            $successMessage = "Datos de la pelea guardados exitosamente.";
+                    if ($resultCheckUser->num_rows > 0) {
+                        $errorMessage = "Ya has registrado tu participación en esta pelea.";
+                    } elseif ($resultCheckFight->num_rows == 2) {
+                        // Validar si los dos registros son consistentes
+                        if (validateTwoRecordsForFight($conn, $id_lucha)) {
+                            // Finalizar la pelea
+                            $afterFight = new AfterFight($conn);
+                            $resultEstado = $afterFight->comparadorPeleando($id_lucha);
+                            if ($resultEstado) {
+                                $afterFight->afterFightTerminada($id_lucha, $match['id_luchador1'], $match['id_luchador2'], $ganador);
+                                $successMessage = "¡Pelea finalizada exitosamente!";
+                            } else {
+                                $afterFight->afterFightCancelada($id_lucha);
+                                $successMessage = "La pelea fue cancelada.";
+                            }
                         } else {
-                            $errorMessage = "Error al guardar los datos de la pelea.";
+                            $errorMessage = "Ambos luchadores deben registrar la misma hora final.";
                         }
                     } else {
-                        $errorMessage = "No se encontró la lucha activa.";
-                    }
-                } catch (Exception $e) {
+                        
+                        // Insertar nuevo registro en la tabla peleando
+                        if ($lucha) {
+                            $id_lucha = $lucha['id_lucha'];
+                
+                            // Insertar en la tabla peleando
+                            $sql = "INSERT INTO peleando (email_luchador, hora_final, ganador, num_rondas, id_lucha) 
+                                    VALUES (?, ?, ?, ?, ?)";
+                            $stmt = $conn->prepare($sql);
+                            $stmt->bind_param('sssii', $user_email, $hora_final, $ganador, $num_rondas, $id_lucha);
+                            $stmt->execute();
+            
+                            if ($stmt->affected_rows > 0) {
+                                $successMessage = "Datos de la pelea guardados exitosamente.";
+                            } else {
+                                $errorMessage = "Error al guardar los datos de la pelea.";
+                            }
+                        } else {
+                            $errorMessage = "No se encontró la lucha activa.";
+                        }
+                }}catch (Exception $e) {
                     $errorMessage = "Error: " . $e->getMessage();
                 }
+            }} catch (Exception $e) {
+                $errorMessage = "Error: " . $e->getMessage();
             }
-            
-        }catch (Exception $e) {
-          
-            $errorMessage = "Error: " . $e->getMessage();
         }
-}/* if ($_POST['action'] === 'finalize_fight') {
-                    // Finalize the fight
-                    $sql = "UPDATE lucha SET estado = 'finalizado' WHERE (id_luchador1 = ? OR id_luchador2 = ?) AND estado = 'luchando'";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->bind_param('ss', $user_email, $user_email);
-                    $stmt->execute();
         
-                    // Update luchador's status
-                    $sql = "UPDATE luchador SET emparejado = 0, buscando_pelea = 0 WHERE email = ?";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->bind_param('s', $user_email);
-                    $stmt->execute();
         
-                    $successMessage = "Pelea finalizada.";
-                    $hasActiveMatch = false;
-                    $activeFight = false;
-                }else */
     
- 
+    
+
+
 
 // Get the current status of "Buscando pelea" and "Emparejado"
 $sql = "SELECT buscando_pelea, emparejado FROM luchador WHERE email = ?";
@@ -295,8 +328,9 @@ $cartera = cartera($conn, $_SESSION['user_email']);
             <button type="button" onclick="showFinalizeForm()">Finalizar</button>
         <?php endif; ?>
 
-<!-- Formulario para finalizar pelea -->
 
+
+<!-- Formulario para finalizar pelea -->
 <div id="finalize-form" style="display: none;">
     <form method="POST">
         <input type="hidden" name="action" value="finalize_fight">
