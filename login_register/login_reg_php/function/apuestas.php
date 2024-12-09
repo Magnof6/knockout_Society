@@ -220,5 +220,24 @@ class Apuestas{
         
         return $result->fetch_assoc();
     }
+
+    public function cancelarApuestas($id_lucha){
+        if (!$this->conn) {
+            throw new Exception("No se pudo conectar a la base de datos.");
+        }
+        $sql = "DELETE FROM cartera WHERE id_lucha = ?";
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) {
+            throw new Exception("No se pudo preparar la consulta.");
+        }
+        $stmt->bind_param("i" , $id_lucha);
+        $stmt->execute();
+        
+        if ($stmt->affected_rows_rows === 0) {
+            throw new Exception("No se encontraron registros para eliminar.");
+        }
+        
+        $stmt->close();
+    }
 }
 

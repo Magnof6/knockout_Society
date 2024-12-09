@@ -11,7 +11,7 @@ class AfterFight{
    }
 
    //Importante, el $email_Luchado_1, debe ser el ganador en caso de haberlo.
-   public function afterFight($id_lucha , $email_Luchador_1 , $email_Luchador_2, $resultado){
+   public function afterFightTerminada($id_lucha , $email_Luchador_1 , $email_Luchador_2, $resultado){
 
     //Actualizar los puntos de los luchadores tras el combate
     $elo = new Elo($this->conn);
@@ -21,5 +21,10 @@ class AfterFight{
     $apuesta = new Apuestas($this->conn);
     $apuesta->ActualizadorGeneralApuestas($id_lucha , $resultado);
     
+   }
+
+   public function afterFightCancelada($id_lucha){
+    $apuestaC = new Apuestas($this->conn);
+    $apuestaC->cancelarApuestas($id_lucha);
    }
 }
