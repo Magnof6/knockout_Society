@@ -56,94 +56,131 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                     $errorMessage = "No se pudo generar un emparejamiento.";
                 }
             }
-        } elseif ($action === 'toggle_status') {
-            $newState = $_POST['new_state'];
+                } elseif ($action === 'toggle_status') {
+                    $newState = $_POST['new_state'];
+                    
+                    // Update the status in the database
+                    $sql = "UPDATE luchador SET buscando_pelea = ?, emparejado = 0 WHERE email = ?";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param('is', $newState, $user_email);
+                    $stmt->execute();
+                
+                    if ($stmt->affected_rows > 0) {
+                        $currentFightingStatus = $newState;
+                
+                        // If "Buscando pelea" is deactivated, delete the active match
+                        if ($newState == 0) {
+                            // Check if the user is in a fight
+                            $sql = "SELECT * FROM lucha WHERE id_luchador1 = ? OR id_luchador2 = ?";
+                            $stmt = $conn->prepare($sql);
+                            $stmt->bind_param('ss', $user_email, $user_email);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+                            $match = $result->fetch_assoc();
+        
+                            if ($match) {
+                                // Get opponent's email
+                                if ($match['id_luchador1'] == $user_email) {
+                                    $opponent_email = $match['id_luchador2'];
+                                } else {
+                                    $opponent_email = $match['id_luchador1'];
+                                }
+        
+                                // Delete the fight
+                                $sql = "DELETE FROM lucha WHERE id_lucha = ?";
+                                $stmt = $conn->prepare($sql);
+                                $stmt->bind_param('i', $match['id_lucha']);
+                                $stmt->execute();
+
+        
+                                // Update both users' emparejado status
+                                $sql = "UPDATE luchador SET emparejado = 0 WHERE email = ? OR email = ?";
+                                $stmt = $conn->prepare($sql);
+                                $stmt->bind_param('ss', $user_email, $opponent_email);
+                                $stmt->execute();
+        
+                                $successMessage = "Has desactivado 'Buscando pelea' y tu lucha activa ha sido eliminada.";
+                            } else {
+                                $successMessage = "Has desactivado 'Buscando pelea'.";
+                            }
+                        
+                            $hasActiveMatch = false; 
+                        }
+                    } else {
+                        $errorMessage = "Could not update the status.";
+                    } 
+            } elseif($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'finalize_fight') {
+                try {
+                    $hora_final = $_POST['hora_final'];
+                    $ganador = $_POST['ganador'];
+                    $num_rondas = $_POST['num_rondas'];
             
-            // Update the status in the database
-            $sql = "UPDATE luchador SET buscando_pelea = ?, emparejado = 0 WHERE email = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param('is', $newState, $user_email);
-            $stmt->execute();
-        
-            if ($stmt->affected_rows > 0) {
-                $currentFightingStatus = $newState;
-        
-                // If "Buscando pelea" is deactivated, delete the active match
-                if ($newState == 0) {
-                    // Check if the user is in a fight
-                    $sql = "SELECT id_lucha, id_luchador1, id_luchador2 FROM lucha WHERE id_luchador1 = ? OR id_luchador2 = ?";
+                    // Obtener el id_lucha actual (puedes adaptarlo según tu lógica)
+                    $sql = "SELECT id_lucha FROM lucha WHERE (id_luchador1 = ? OR id_luchador2 = ?) AND estado = 'luchando'";
                     $stmt = $conn->prepare($sql);
                     $stmt->bind_param('ss', $user_email, $user_email);
                     $stmt->execute();
                     $result = $stmt->get_result();
-                    $match = $result->fetch_assoc();
+                    $lucha = $result->fetch_assoc();
 
-                    if ($match) {
-                        $id_lucha = $match['id_lucha'];
 
-                        // Delete the fight
-                        $sql = "DELETE FROM lucha WHERE id_lucha = ?";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->bind_param('i', $id_lucha);
-                        $stmt->execute();
-
-                        // Update both users' emparejado status
-                        $sql = "UPDATE luchador SET emparejado = 0 WHERE email = ? OR email = ?";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->bind_param('ss', $user_email, $match['id_luchador2']);
-                        $stmt->execute();
-
-                        $successMessage = "Has desactivado 'Buscando pelea' y tu lucha activa ha sido eliminada.";
+                    // Verificar si el usuario ya está en la tabla peleando
+                    $sqlCheckUser = "SELECT * FROM peleando WHERE email_luchador = ?";
+                    $stmtCheckUser = $conn->prepare($sqlCheckUser);
+                    $stmtCheckUser->bind_param('s', $user_email);
+                    $stmtCheckUser->execute();
+                    $resultCheckUser = $stmtCheckUser->get_result();
+            
+                    // Verificar si ya hay dos registros en la tabla peleando para la lucha
+                    $sqlCheckFight = "SELECT * FROM peleando WHERE id_lucha = ?";
+                    $stmtCheckFight = $conn->prepare($sqlCheckFight);
+                    $stmtCheckFight->bind_param('i', $id_lucha);
+                    $stmtCheckFight->execute();
+                    $resultCheckFight = $stmtCheckFight->get_result();
+            
+                    if ($resultCheckUser->num_rows > 0) {
+                        $errorMessage = "Ya has registrado tu participación en esta pelea.";
+                    } elseif ($resultCheckFight->num_rows == 2) {
+                        // Validar si los dos registros son consistentes
+                        if (validateTwoRecordsForFight($conn, $id_lucha)) {
+                            // Finalizar la pelea
+                            $afterFight = new AfterFight($conn);
+                            $resultEstado = $afterFight->comparadorPeleando($id_lucha);
+                            if ($resultEstado) {
+                                $afterFight->afterFightTerminada($id_lucha, $match['id_luchador1'], $match['id_luchador2'], $ganador);
+                                $successMessage = "¡Pelea finalizada exitosamente!";
+                            } else {
+                                $afterFight->afterFightCancelada($id_lucha);
+                                $successMessage = "La pelea fue cancelada.";
+                            }
+                        } else {
+                            $errorMessage = "Ambos luchadores deben registrar la misma hora final.";
+                        }
                     } else {
-                        $successMessage = "Has desactivado 'Buscando pelea'.";
-                    }
+                        
+                        // Insertar nuevo registro en la tabla peleando
+                        if ($lucha) {
+                            $id_lucha = $lucha['id_lucha'];
                 
-                    $hasActiveMatch = false; 
+                            // Insertar en la tabla peleando
+                            $sql = "INSERT INTO peleando (email_luchador, hora_final, ganador, num_rondas, id_lucha) 
+                                    VALUES (?, ?, ?, ?, ?)";
+                            $stmt = $conn->prepare($sql);
+                            $stmt->bind_param('sssii', $user_email, $hora_final, $ganador, $num_rondas, $id_lucha);
+                            $stmt->execute();
+            
+                            if ($stmt->affected_rows > 0) {
+                                $successMessage = "Datos de la pelea guardados exitosamente.";
+                            } else {
+                                $errorMessage = "Error al guardar los datos de la pelea.";
+                            }
+                        } else {
+                            $errorMessage = "No se encontró la lucha activa.";
+                        }
+                }}catch (Exception $e) {
+                    $errorMessage = "Error: " . $e->getMessage();
                 }
-            } else {
-                $errorMessage = "Could not update the status.";
-            } 
-        } elseif ($action === 'finalize_fight') {
-            try {
-                $hora_final = $_POST['hora_final'];
-                $ganador = $_POST['ganador'];
-                $num_rondas = $_POST['num_rondas'];
-                $video_link = $_POST['video_link'] ?? null; // Agregado para capturar el link de video
-
-                // Obtener el id_lucha actual
-                $sql = "SELECT id_lucha FROM lucha WHERE (id_luchador1 = ? OR id_luchador2 = ?) AND estado = 'luchando'";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param('ss', $user_email, $user_email);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                $lucha = $result->fetch_assoc();
-                
-                if ($lucha) {
-                    $id_lucha = $lucha['id_lucha'];
-
-                    // Insertar en la tabla replays
-                    if ($video_link) { // Si se recibe el link, lo guarda en la tabla replays
-                        $sql = "INSERT INTO replays (id_lucha, url) VALUES (?, ?)";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->bind_param('is', $id_lucha, $video_link);
-                        $stmt->execute();
-                    }
-
-                    // Actualizar estado de la pelea
-                    $sql = "UPDATE lucha SET estado = 'finalizada', hora_final = ? WHERE id_lucha = ?";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->bind_param('si', $hora_final, $id_lucha);
-                    $stmt->execute();
-
-                    if ($stmt->affected_rows > 0) {
-                        $successMessage = "Pelea finalizada correctamente.";
-                    } else {
-                        $errorMessage = "Error al actualizar el estado de la pelea.";
-                    }
-                } else {
-                    $errorMessage = "No se encontró la lucha activa.";
-                }
-            } catch (Exception $e) {
+            }} catch (Exception $e) {
                 $errorMessage = "Error: " . $e->getMessage();
             }
         }
