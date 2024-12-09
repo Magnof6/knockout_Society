@@ -49,18 +49,18 @@ class Elo{
         return [$nuevo_elo_a , $nuevo_elo_b];
     }
     public function extraerEloLuchadoresBefore($email_Luchador_1 , $email_Luchador_2){
-        $sql = "SELECT puntos FROM usuario WHERE email = :email_Luchador_1";
+        $sql = "SELECT puntos FROM usuario WHERE email = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt -> bindParam(':email_Luchador_1' , $email_Luchador_1, PDO::PARAM_STR);
+        $stmt -> bind_param('s' , $email_Luchador_1);
         $stmt->execute();
-        $puntosL_1 = $stmt->fetch(PDO::FETCH_ASSOC);
+        $puntosL_1 = $stmt->get_result();
         $puntosL_1 = $puntosL_1['puntos'];
 
-        $sql = "SELECT puntos FROM usuario WHERE email = :email_Luchador_2";
+        $sql = "SELECT puntos FROM usuario WHERE email = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt -> bindParam(':email_Luchador_2' , $email_Luchador_2, PDO::PARAM_STR);
+        $stmt -> bind_param('s' , $email_Luchador_2);
         $stmt->execute();
-        $puntosL_2 = $stmt->fetch(PDO::FETCH_ASSOC);
+        $puntosL_2 = $stmt->get_result();
         $puntosL_2 = $puntosL_2['puntos'];
 
         $puntos = [$puntosL_1 , $puntosL_2];
@@ -71,58 +71,52 @@ class Elo{
 
     public function actualizarLuchadores($email_Luchador_1 , $email_Luchador_2, $resultado, $puntosLn_1 , $puntosLn_2){
         try{
-            $sql = "SELECT puntos FROM luchador WHERE email = :email_Luchador_1";
+            $sql = "SELECT puntos FROM luchador WHERE email = ?";
                 $stmt = $this->conn->prepare($sql);
-                $stmt -> bindParam(':email_Luchador_1' , $email_Luchador_1, PDO::PARAM_STR);
+                $stmt -> bind_param('s' , $email_Luchador_1);
                 $stmt->execute();
 
-                $sql = "SELECT puntos FROM luchador WHERE email = :email_Luchador_2";
+                $sql = "SELECT puntos FROM luchador WHERE email = ?";
                 $stmt = $this->conn->prepare($sql);
-                $stmt -> bindParam(':email_Luchador_2' , $email_Luchador_2, PDO::PARAM_STR);
+                $stmt -> bind_param('s' , $email_Luchador_2);
                 $stmt->execute();
 
             if($resultado == 1){
                 //Luchador 1
-                $sql = "UPDATE luchador SET puntos = :puntosLn_1 , victorias = victorias + 1 WHERE email = :email_Luchador_1";
+                $sql = "UPDATE luchador SET puntos = ? , victorias = victorias + 1 WHERE email = ?";
                 $stmt = $this->conn->prepare($sql);
-                $stmt -> bindParam(':email_Luchador_1' , $email_Luchador_1, PDO::PARAM_STR);
-                $stmt -> bindParam(':puntosLn_1' , $puntosLn_1, PDO::PARAM_INT);
+                $stmt -> bind_param('si' , $email_Luchador_1, $puntosLn_1);
                 $stmt->execute();
                 
                 //Luchador 2
-                $sql = "UPDATE luchador SET puntos = :puntosLn_2 , derrotas = derrotas + 1 WHERE email = :email_Luchador_2";
+                $sql = "UPDATE luchador SET puntos = ? , derrotas = derrotas + 1 WHERE email = ?";
                 $stmt = $this->conn->prepare($sql);
-                $stmt -> bindParam(':email_Luchador_2' , $email_Luchador_2, PDO::PARAM_STR);
-                $stmt -> bindParam(':puntosLn_2' , $puntosLn_2, PDO::PARAM_INT);
+                $stmt -> bind_param('si' , $email_Luchador_2, $puntosLn_2);
                 $stmt->execute();
             }elseif($resultado == 0){
                 //Luchador 1
-                $sql = "UPDATE luchador SET puntos = :puntosLn_1 , derrotas = derrotas + 1 WHERE email = :email_Luchador_1";
+                $sql = "UPDATE luchador SET puntos = ? , derrotas = derrotas + 1 WHERE email = ?";
                 $stmt = $this->conn->prepare($sql);
-                $stmt -> bindParam(':email_Luchador_1' , $email_Luchador_1, PDO::PARAM_STR);
-                $stmt -> bindParam(':puntosLn_1' , $puntosLn_1, PDO::PARAM_INT);
+                $stmt -> bind_param('si' , $email_Luchador_1, $puntosLn_1);
                 $stmt->execute();
 
                 //Luchador 2
-                $sql = "UPDATE luchador SET puntos = :puntosLn_2 , victorias = victorias + 1 WHERE email = :email_Luchador_2";
+                $sql = "UPDATE luchador SET puntos = ? , victorias = victorias + 1 WHERE email = ?";
                 $stmt = $this->conn->prepare($sql);
-                $stmt -> bindParam(':email_Luchador_2' , $email_Luchador_2, PDO::PARAM_STR);
-                $stmt -> bindParam(':puntosLn_2' , $puntosLn_2, PDO::PARAM_INT);
+                $stmt -> bind_param('si' , $email_Luchador_2, $puntosLn_2);
                 $stmt->execute();
 
             }else{
                 //Luchador 1
-                $sql = "UPDATE luchador SET puntos = :puntosLn_1 , empates = empates + 1 WHERE email = :email_Luchador_1";
+                $sql = "UPDATE luchador SET puntos = ? , empates = empates + 1 WHERE email = ?";
                 $stmt = $this->conn->prepare($sql);
-                $stmt -> bindParam(':email_Luchador_1' , $email_Luchador_1, PDO::PARAM_STR);
-                $stmt -> bindParam(':puntosLn_1' , $puntosLn_1, PDO::PARAM_INT);
+                $stmt -> bind_param('si' , $email_Luchador_1, $puntosLn_1);
                 $stmt->execute();
 
                 //Luchador 2
-                $sql = "UPDATE luchador SET puntos = :puntosLn_2 , empates = empates + 1 WHERE email = :email_Luchador_2";
+                $sql = "UPDATE luchador SET puntos = ? , empates = empates + 1 WHERE email = ?";
                 $stmt = $this->conn->prepare($sql);
-                $stmt -> bindParam(':email_Luchador_2' , $email_Luchador_2, PDO::PARAM_STR);
-                $stmt -> bindParam(':puntosLn_2' , $puntosLn_2, PDO::PARAM_INT);
+                $stmt -> bind_param('si' , $email_Luchador_2, $puntosLn_2);
                 $stmt->execute();
             }
 
