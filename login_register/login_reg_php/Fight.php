@@ -22,15 +22,15 @@ $currentFightingStatus = null;
 $hasActiveMatch = false; // Initial state for matched
 $activeFight = false; // To check if in 'luchando' state
 
-function validateTwoRecordsForFight($conn, $id_lucha) {
-    $sql = "SELECT COUNT(*) as total FROM peleando WHERE id_lucha = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param('i', $id_lucha);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $row = $result->fetch_assoc();
-    return $row['total'] === 2; // Devuelve true si hay exactamente 2 registros
-}
+//function validateTwoRecordsForFight($conn, $id_lucha) {
+//    $sql = "SELECT COUNT(*) as total FROM peleando WHERE id_lucha = ?";
+//    $stmt = $conn->prepare($sql);
+//    $stmt->bind_param('i', $id_lucha);
+//    $stmt->execute();
+//    $result = $stmt->get_result();
+//    $row = $result->fetch_assoc();
+//    return $row['total'] === 2; // Devuelve true si hay exactamente 2 registros
+//}
 
 // Process POST requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
@@ -111,15 +111,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 $video_link = $_POST['video_link'] ?? null; // Nuevo campo para el video
 
                 // Obtener el id_lucha actual
-                $sql = "SELECT id_lucha FROM lucha WHERE (id_luchador1 = ? OR id_luchador2 = ?) AND estado = 'luchando'";
+                $sql = "SELECT id_lucha, id_luchador1, id_luchador2 FROM lucha WHERE (id_luchador1 = ? OR id_luchador2 = ?) AND estado = 'luchando'";
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param('ss', $user_email, $user_email);
                 $stmt->execute();
                 $result = $stmt->get_result();
                 $lucha = $result->fetch_assoc();
-                
+
                 if ($lucha) {
                     $id_lucha = $lucha['id_lucha'];
+                    $fighter1 = $lucha['id_luchador1'];
+                    $fighter2 = $lucha['id_luchador2'];
 
                     // Insertar en la tabla replays
                     if ($video_link) {
@@ -130,13 +132,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                     }
 
                     // Actualizar estado de la pelea
-                    $sql = "UPDATE lucha SET estado = 'finalizada', hora_final = ? WHERE id_lucha = ?";
+                    $sql = "UPDATE lucha SET estado = 'finalizada', hora_final = ?, id_ganador = ? WHERE id_lucha = ?";
                     $stmt = $conn->prepare($sql);
-                    $stmt->bind_param('si', $hora_final, $id_lucha);
+                    $stmt->bind_param('ssi', $hora_final, $ganador, $id_lucha);
                     $stmt->execute();
 
                     if ($stmt->affected_rows > 0) {
-                        $successMessage = "Pelea finalizada correctamente.";
+                        // Trigger chain reaction
+                        require_once 'function/afterFight.php';
+                        $afterFight = new AfterFight($conn);
+                        $afterFight->afterFightTerminada($id_lucha, $fighter1, $fighter2, $ganador);
+
+                        $successMessage = "Pelea finalizada correctamente. Elo, historial y apuestas actualizadas.";
                     } else {
                         $errorMessage = "Error al actualizar el estado de la pelea.";
                     }

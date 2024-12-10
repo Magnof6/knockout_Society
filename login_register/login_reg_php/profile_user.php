@@ -61,7 +61,7 @@ while ($row = $result->fetch_assoc()) {
     $bets[] = $row;
 }
 
-// Handle AJAX request to increase 'cartera'
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'increase') {
     $amount = intval($_POST['amount']);
     $sql = "UPDATE usuario SET cartera = cartera + ? WHERE email = ?";
@@ -241,10 +241,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             <?php else: ?>
                 <table class="fights-table">
                     <tr>
-                        [...]
+                        <th>ID Lucha</th>
+                        <th>ID Ganador</th>
+                        <th>Número de Rondas</th>
+                        <th>Ubicación</th>
+                        <th>Fecha</th>
                     </tr>
                     <?php foreach ($fights as $fight): ?>
-                        [...]
+                        <tr onclick="showFightDetails('<?php echo htmlspecialchars(json_encode($fight)); ?>')">
+                            <td><?php echo htmlspecialchars($fight['id_lucha']); ?></td>
+                            <td><?php echo htmlspecialchars($fight['id_ganador']); ?></td>
+                            <td><?php echo htmlspecialchars($fight['num_rondas']); ?></td>
+                            <td><?php echo htmlspecialchars($fight['ubicacion']); ?></td>
+                            <td><?php echo htmlspecialchars($fight['fecha']); ?></td>
+                        </tr>
                     <?php endforeach; ?>
                 </table>
             <?php endif; ?>
@@ -265,7 +275,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 </tr>
                 <?php foreach ($bets as $bet): ?>
                     <tr onclick="showBetDetails('<?php echo htmlspecialchars(json_encode($bet)); ?>')">
-                        [...]
+                        <td><?php echo htmlspecialchars($bet['id_lucha']); ?></td>
+                        <td><?php echo htmlspecialchars($bet['luchador_apostado']); ?></td>
+                        <td><?php echo htmlspecialchars($bet['w']); ?></td>
+                        <td><?php echo htmlspecialchars($bet['l']); ?></td>
+                        <td><?php echo htmlspecialchars($bet['d']); ?></td>
+                        <td><?php echo htmlspecialchars($bet['total']); ?></td>
                     </tr>
                 <?php endforeach; ?>
             </table>

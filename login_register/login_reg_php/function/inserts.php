@@ -9,6 +9,7 @@
  */
 // session_start();
 require_once dirname(__DIR__) . '/db_connect.php';
+require_once dirname(__DIR__) . '/function/apuestas.php';
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -95,53 +96,62 @@ Class Inserts{
     }
 
     // Crear una apuesta
-    public function crearApuesta($email_usuario, $id_lucha, $luchador_apostado, $w = 0, $l = 0, $d = 0) {
-        require 'apuestas.php';
-        // Validar los campos obligatorios
-        if (empty($email_usuario) || empty($id_lucha) || empty($luchador_apostado)) {
-            throw new Exception("Missing required fields.");
-        }
+    private function checkWalletBalance($email_usuario) {
+        try {
+            $sql = "SELECT cartera FROM usuario WHERE email = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param('s', $email_usuario);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
-        //Revisamos la cartera del usuario
-        $disponible = new Apuestas($this->conn);
-        $cartera = $disponible->comprobarCartera($email_usuario);
-        $cartera = $cartera['cartera'];
-
-        //Comparamos la cantidad apostada con la cartera inicial del usuario
-        if(($w + $l + $d) < $cartera){
-            $new_cartera = $cartera - ($w + $l + $d);
-            // Preparar la consulta
-            $insert_apuesta = $this->conn->prepare(
-                "INSERT INTO apuesta (email_usuario, id_lucha, luchador_apostado, w, l, d, total) 
-                VALUES (?, ?, ?, ?, ?, ?, NULL)"
-            );
-            // Verificar si la consulta se preparó correctamente
-            if (!$insert_apuesta) {
-                throw new Exception("Failed to prepare the statement: " . $this->conn->error);
-            }
-            // Enlazar parámetros
-            $insert_apuesta->bind_param("sisiii", $email_usuario, $id_lucha, $luchador_apostado, $w, $l, $d);
-
-            $actu_cartera = $this->conn->prepare(
-                "UPDATE usuario SET cartera = ? WHERE email = ?"
-            );
-            // Verificar si la consulta se preparó correctamente
-            if (!$actu_cartera) {
-                throw new Exception("Failed to prepare the statement: " . $this->conn->error);
-            }
-            // Enlazar parámetros
-            $actu_cartera->bind_param("is", $new_cartera, $email_usuario);
-
-            // Ejecutar la consulta
-            if ($insert_apuesta->execute() & $actu_cartera->execute()) {
-                return true; // Inserción exitosa
+            if ($result && $row = $result->fetch_assoc()) {
+                return ["success" => true, "cartera" => $row['cartera']];
             } else {
-                return ["success" => false, "message" => "No se encontró información para el usuario."];
+                error_log("ERROR: Wallet balance not found for user: $email_usuario");
+                return ["success" => false, "message" => "Wallet balance not found."];
             }
-        }else{
-            return ["success" => false, "message" => "No se tienen los fondos suficientes para realizar esta apuesta."];
+        } catch (Exception $e) {
+            error_log("ERROR: Exception while checking wallet balance. Message: " . $e->getMessage());
+            return ["success" => false, "message" => "Error checking wallet balance."];
         }
-    
+    }
+
+    public function crearApuesta($email_usuario, $id_lucha, $luchador_apostado, $w, $l, $d) {
+        try {
+            // Check user wallet balance
+            $cartera_response = $this->checkWalletBalance($email_usuario);
+
+            if (!$cartera_response['success']) {
+                // Handle error (e.g., insufficient funds or query failure)
+                return ["success" => false, "message" => $cartera_response['message']];
+            }
+
+            $cartera = $cartera_response['cartera'];
+
+            // Compare the bet amount with the user's wallet balance
+            if (($w + $l + $d) <= $cartera) {
+                // Insert bet into the database
+                $sql = "INSERT INTO apuesta (email_usuario, id_lucha, luchador_apostado, w, l, d) VALUES (?, ?, ?, ?, ?, ?)";
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bind_param('sisiid', $email_usuario, $id_lucha, $luchador_apostado, $w, $l, $d);
+                $stmt->execute();
+
+                if ($stmt->affected_rows > 0) {
+                    error_log("DEBUG: Bet created successfully for user: $email_usuario, fight ID: $id_lucha");
+                    return ["success" => true, "message" => "Bet created successfully."];
+                } else {
+                    error_log("ERROR: Failed to create bet. SQL Error: " . $this->conn->error);
+                    return ["success" => false, "message" => "Failed to create bet."];
+                }
+            } else {
+                error_log("ERROR: Insufficient funds for user: $email_usuario");
+                return ["success" => false, "message" => "Insufficient funds."];
+            }
+        } catch (Exception $e) {
+            error_log("ERROR: Exception in crearApuesta: " . $e->getMessage());
+            return ["success" => false, "message" => "An error occurred while placing the bet."];
+        }
+
     }
     
 
