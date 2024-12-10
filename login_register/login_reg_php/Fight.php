@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                     $stmt->bind_param('s', $user_email);
                     $stmt->execute();
                     $successMessage = "Matchmaking completed successfully!";
-                    $hasActiveMatch = true; // Mark as matched
+                    $hasActiveMatch = true; 
                 } else {
                     $errorMessage = "No se pudo generar un emparejamiento.";
                 }
@@ -59,10 +59,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         } elseif ($action === 'toggle_status') {
             $newState = $_POST['new_state'];
             
-            // Update the status in the database
-            $sql = "UPDATE luchador SET buscando_pelea = ?, emparejado = 0 WHERE email = ?";
+            $sql = "UPDATE luchador SET buscando_pelea = ?, emparejado = 0 WHERE email = ? OR email = (SELECT CASE WHEN id_luchador1 = ? THEN id_luchador2 ELSE id_luchador1 END FROM lucha WHERE id_luchador1 = ? OR id_luchador2 = ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param('is', $newState, $user_email);
+            $stmt->bind_param('issss', $newState, $user_email, $user_email, $user_email, $user_email);
             $stmt->execute();
         
             if ($stmt->affected_rows > 0) {
