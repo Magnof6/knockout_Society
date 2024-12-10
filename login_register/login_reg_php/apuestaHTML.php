@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $id_apuesta = uniqid('apuesta_', true); // Generar un ID único
         $id_lucha = filter_input(INPUT_POST, 'id_lucha', FILTER_SANITIZE_NUMBER_INT);
-        $luchador_apostado = filter_input(INPUT_POST, 'luchador_apostado', FILTER_SANITIZE_STRING);
+        $luchador_apostado = filter_input(INPUT_POST, 'luchador_apostado', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $w = filter_input(INPUT_POST, 'ganadas', FILTER_VALIDATE_INT);
         $l = filter_input(INPUT_POST, 'perdidas', FILTER_VALIDATE_INT);
         $d = filter_input(INPUT_POST, 'empates', FILTER_VALIDATE_INT);

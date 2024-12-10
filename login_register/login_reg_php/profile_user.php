@@ -280,7 +280,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                         <td><?php echo htmlspecialchars($bet['w']); ?></td>
                         <td><?php echo htmlspecialchars($bet['l']); ?></td>
                         <td><?php echo htmlspecialchars($bet['d']); ?></td>
-                        <td><?php echo htmlspecialchars($bet['total']); ?></td>
+                        <td><?php echo htmlspecialchars($bet['total'] ?? ''); ?></td>
                     </tr>
                 <?php endforeach; ?>
             </table>
